@@ -17,11 +17,14 @@ $(function ($) {
     initializeMap();
 });
 
+/**
+ *
+ */
 // noinspection JSUnresolvedFunction
-$('#langSelect').on('change', function () {
+$('a.js-langanchor').on('click', function () {
     // location.reload();
     // noinspection JSUnresolvedFunction
-    lang = $(this).val();
+    lang = $(this).data('lang');
     localStorage.setItem('lang', lang);
     console.log(lang);
     // noinspection JSUnresolvedFunction
@@ -29,6 +32,7 @@ $('#langSelect').on('change', function () {
         // noinspection JSUnresolvedFunction
         $(this).text(langData['languages'][lang]['keys'][$(this).data('key')])
     });
+
 });
 
 let langData = {
