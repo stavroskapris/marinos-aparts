@@ -6,15 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Classic - Blog Page</title>
-<!--
-Classic Template
-http://www.templatemo.com/tm-488-classic
--->
+    <!--
+        Classic Template
+        http://www.templatemo.com/tm-488-classic
+        -->
     <!-- load stylesheets -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400">  <!-- Google web font "Open Sans" -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400">
+    <!-- Google web font "Open Sans" -->
     <link rel="stylesheet" href="css/bootstrap.min.css">                                      <!-- Bootstrap style -->
     <link rel="stylesheet" href="css/templatemo-style.css">                                   <!-- Templatemo style -->
+    <!-- Core CSS file -->
+    <link rel="stylesheet" href="css/photoswipe.css">
 
+    <!-- Skin CSS file (styling of UI - buttons, caption, etc.)
+         In the folder of skin CSS file there are also:
+         - .png and .svg icons sprite,
+         - preloader.gif (for browsers that do not support CSS animations) -->
+    <link rel="stylesheet" href="css/default-skin.css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -24,7 +32,7 @@ http://www.templatemo.com/tm-488-classic
 </head>
 
     <body>
-       
+    <input type="hidden" id="whichPage" value="irida">
         <div class="tm-header">
             <div class="container-fluid">
                 <div class="tm-header-inner">
@@ -36,24 +44,26 @@ http://www.templatemo.com/tm-488-classic
                         <button class="navbar-toggler hidden-md-up" type="button" data-toggle="collapse" data-target="#tmNavbar">
                             &#9776;
                         </button>
-                        
+
                         <div class="collapse navbar-toggleable-sm" id="tmNavbar">
                             <ul class="nav navbar-nav">
                                 <li class="nav-item">
-                                    <a href="index.html" class="nav-link">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="about.html" class="nav-link">About</a>
+                                    <a href="index.html" class="nav-link lang" data-key="home">Home</a>
                                 </li>
                                 <li class="nav-item active">
-                                    <a href="blog.html" class="nav-link">Blog</a>
+                                    <a href="about.html" class="nav-link lang">Kimon Resort</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="contact.html" class="nav-link">Contact</a>
+                                    <a href="blog.html" class="nav-link lang">Irida Resort</a>
                                 </li>
-                            </ul>                        
+                                <li class="nav-item">
+                                    <a href="contact.html" class="nav-link lang" data-key="contact">Contact</a>
+                                </li>
+                            </ul>
                         </div>
-                        
+                        <ul class="languagepicker roundborders">
+                            <div id="js-langmenu"></div>
+                        </ul>
                     </nav>  
 
                 </div>                                  
@@ -268,10 +278,17 @@ http://www.templatemo.com/tm-488-classic
             </div>
         </footer>
 
-        <!-- load JS files -->
         <script src="js/jquery-1.11.3.min.js"></script>             <!-- jQuery (https://jquery.com/download/) -->
-        <script src="https://www.atlasestateagents.co.uk/javascript/tether.min.js"></script> <!-- Tether for Bootstrap, http://stackoverflow.com/questions/34567939/how-to-fix-the-error-error-bootstrap-tooltips-require-tether-http-github-h --> 
-        <script src="js/bootstrap.min.js"></script>                 <!-- Bootstrap (http://v4-alpha.getbootstrap.com/) -->
-       
+        <script src="https://www.atlasestateagents.co.uk/javascript/tether.min.js"></script>
+        <!-- Tether for Bootstrap, http://stackoverflow.com/questions/34567939/how-to-fix-the-error-error-bootstrap-tooltips-require-tether-http-github-h -->
+
+        <script src="js/bootstrap.min.js"></script><!-- Bootstrap (http://v4-alpha.getbootstrap.com/) -->
+        <script src="js/custom.js"></script>
+        <script src="js/lang.js"></script>
+        <!-- Core JS file -->
+        <script src="js/photoswipe.min.js"></script>
+
+        <!-- UI JS file -->
+        <script src="js/photoswipe-ui-default.min.js"></script>
 </body>
 </html>

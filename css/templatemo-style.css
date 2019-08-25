@@ -7,7 +7,8 @@ http://www.templatemo.com/tm-488-classic
 -----------------------------*/
 
 body {
-	color: #8c8c8c;
+	background-color: #F8F8F8;
+	color: #707070;
 	font-family: 'Open Sans', Helvetica, Arial, sans-serif;
 	font-size: 18px;
 	font-weight: 300;
@@ -158,7 +159,7 @@ h4 {
 .tm-btn-gray { background-color: #666666; }
 .tm-btn-gray:hover,
 .tm-btn-gray:focus {
-	background-color: #515050;	
+	background-color: #515050;
 }
 
 .tm-margin-b-15 { margin-bottom: 15px; }
@@ -221,7 +222,7 @@ hr { border-top: 1px solid #CCCCCC; }
 p { line-height: 1.9; }
 
 .tm-gray-bg { 
-	background-color: #CCCCCC; 
+	background-color: #CCCCCC;
 	color: black;
 	padding: 30px 20px 20px;
 }
@@ -441,7 +442,7 @@ p { line-height: 1.9; }
 	.tm-margin-t-mid { margin-top: 30px; }
 	.tm-footer-content-box { margin-bottom: 40px; }
 	.tm-footer-content-box-title { margin-bottom: 15px; }
-	#google-map { margin-top: 25px; }
+	#osm-map{ margin-top: 25px; }
 	.tm-map-section { margin-top: 50px; }
 
 	.tm-contact-related-posts-container {
@@ -452,7 +453,7 @@ p { line-height: 1.9; }
 }
 
 .languagepicker {
-	background-color: #FFF;
+	background-color: #F8F8F8;
 	display: inline-block;
 	padding: 0px;
 	height: 40px;
@@ -474,21 +475,27 @@ p { line-height: 1.9; }
 	color: #000;
 	text-decoration: none;
 }
+.languagepicker a:hover {
+	text-decoration: none;
+	outline: none;
+	background-color: #F8F8F8;
+}
+
 
 .languagepicker li {
 	display: block;
 	padding: 0px 20px;
 	line-height: 40px;
-	border-top: 1px solid #EEE;
+	border-top: 1px solid #F8F8F8;
 }
 
 .languagepicker li:hover {
-	background-color: #EEE;
+	background-color: #F8F8F8;
 }
 
 .languagepicker a:first-child li {
 	border: none;
-	background: #FFF !important;
+	background: #F8F8F8 !important;
 }
 
 .languagepicker li img {
@@ -498,3 +505,14 @@ p { line-height: 1.9; }
 .roundborders {
 	border-radius: 5px;
 }
+/*swipe*/
+/*body {font-family: 'Bitter', Georgia, Times, sans-serif;}*/
+h1 {margin: 2em;}
+.pswp__caption__center {text-align: center;}
+figure {
+	display: inline-block;
+	width: 33.333%;
+	float: left;
+}
+/*img {width: 100%;}*/
+.spacer {height: 5em;}

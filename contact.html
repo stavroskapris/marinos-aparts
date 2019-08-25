@@ -24,7 +24,7 @@ http://www.templatemo.com/tm-488-classic
 </head>
 
     <body>
-       
+    <input type="hidden" id="whichPage" value="contact">
         <div class="tm-header">
             <div class="container-fluid">
                 <div class="tm-header-inner">
@@ -51,13 +51,11 @@ http://www.templatemo.com/tm-488-classic
                                 <li class="nav-item active">
                                     <a href="contact.html" class="nav-link lang" data-key="contact">Contact</a>
                                 </li>
-                                <select name="langmenu" id="langSelect">
-                                    <option selected="selected">en</option>
-                                    <option>gr</option>
-                                </select>
                             </ul>
                         </div>
-                        
+                        <ul class="languagepicker roundborders">
+                            <div id="js-langmenu"></div>
+                        </ul>
                     </nav>  
 
                 </div>                                  
@@ -316,6 +314,7 @@ http://www.templatemo.com/tm-488-classic
         <script src="https://www.atlasestateagents.co.uk/javascript/tether.min.js"></script> <!-- Tether for Bootstrap, http://stackoverflow.com/questions/34567939/how-to-fix-the-error-error-bootstrap-tooltips-require-tether-http-github-h --> 
         <script src="js/bootstrap.min.js"></script>                 <!-- Bootstrap (http://v4-alpha.getbootstrap.com/) -->
         <script src="js/custom.js"></script>
+        <script src="js/lang.js"></script>
         <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
         <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
         <link href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" rel="stylesheet"/>
