@@ -52,7 +52,7 @@ h2 { font-size: 2.2rem; }
 	height: 100px;
 }
 
-.tm-site-name {
+.tm-site-logo {
 	color: #006994;
 	display: block;
 	font-size: 2.6rem;
@@ -83,40 +83,31 @@ h2 { font-size: 2.2rem; }
 }
 
 .tm-home-img-container {
-	/*background-image: url('../img/tm-home-img.jpg');*/
 	background-image: url('../img/destination-sivota-mpela-vraka.jpg');
-	/*background-size: auto;*/
-	/*background-size: contain;*/
+}
+
+.tm-kimon-img-container {
+	background-image: url('../img/sivota-harbor.jpg');
+}
+
+.tm-irida-img-container {
+	background-image: url('../img/sivota-high.jpg');
+}
+
+.tm-contact-img-container {
+	background-image: url('../img/pisina-bg.jpg');
+}
+
+.tm-home-img-container,
+.tm-kimon-img-container,
+.tm-irida-img-container,
+.tm-contact-img-container {
 	background-size: 100% 100%;
 	background-position: center;
 	background-repeat: no-repeat;
-	height: 500px;
+	height: 400px;
 	margin-top: 6px;
 }
-
-
-.tm-about-img-container { background-image: url('../img/tm-about-img.jpg');	}
-.tm-blog-img-container { background-image: url('../img/tm-blog-img.jpg'); }
-.tm-contact-img-container { background-image: url('../img/tm-contact-img.jpg'); }
-
-.tm-about-img-container,
-.tm-blog-img-container,
-.tm-contact-img-container {
-	background-size: auto 200px;
-	background-position: center;
-	background-repeat: no-repeat;
-	height: 200px;
-}
-.nav-item-img{
-	/*padding-right: 70px;*/
-}
-/*.logo-img{*/
-/*	width: 150px;*/
-/*	height: 150px;*/
-/*	background-image: url('../img/logo_marinos.png');*/
-/*	background-repeat: no-repeat;*/
-/*	background-position: center;*/
-/*}*/
 
 .tm-title {
 	margin-bottom: 1rem;
@@ -151,7 +142,7 @@ h4 {
 
 .tm-btn:hover,
 .tm-btn:focus {
-	background-color: #906E09;
+	background-color: #515050;
 	color: white;
 	outline: none;
 }
@@ -159,7 +150,7 @@ h4 {
 .tm-btn-gray { background-color: #666666; }
 .tm-btn-gray:hover,
 .tm-btn-gray:focus {
-	background-color: #515050;
+	background-color: #F8F8F8;
 }
 
 .tm-margin-b-15 { margin-bottom: 15px; }
@@ -243,11 +234,6 @@ p { line-height: 1.9; }
 .tm-form-description { margin-top: 30px; }
 .tm-contact-form { padding-top: 20px; }
 
-#google-map {
-    height: 333px;
-    width: 100%;
-    margin-top: 40px;
-}
 #osm-map {
     height: 333px;
     width: 100%;
@@ -274,7 +260,7 @@ p { line-height: 1.9; }
 
 	.tm-home-img-container {
 		background:none;
-		/*height: auto;*/
+		height: auto;
 	}
 
 	.tm-subtitle { margin-bottom: 40px; }
@@ -505,8 +491,8 @@ p { line-height: 1.9; }
 .roundborders {
 	border-radius: 5px;
 }
-/*swipe*/
-/*body {font-family: 'Bitter', Georgia, Times, sans-serif;}*/
+
+/*photoSwipe*/
 h1 {margin: 2em;}
 .pswp__caption__center {text-align: center;}
 figure {

@@ -6,11 +6,12 @@ let lang;
 
 /**
  * Holds current page
+ *
  */
 let page;
 
 /**
- *Language menu
+ * Language menu
  *
  * @type {string}
  */
@@ -21,7 +22,7 @@ let langMenuEn = '<a href="javascript:void(0)" data-lang="en" class="js-langanch
     '                                <li><img src="img/2r7t05j.jpg" height="13" width="18"></li>\n' +
     '                            </a>';
 /**
- *Language menu
+ * Language menu
  *
  * @type {string}
  */
@@ -31,25 +32,30 @@ let langMenuGr = ' <a href="javascript:void(0)" data-lang="gr" class="js-langanc
     '                            <a href="javascript:void(0)" data-lang="en" class="js-langanchor" id="anchoren">\n' +
     '                                <li><img src="img/f1ky10.jpg.gif" height="13" width="18"></li>\n' +
     '                            </a>';
+
 /**
  * On page load
+ *
  */
 $(function ($) {
-    //get lang if exists
+    // get lang if exists
     lang = localStorage.getItem('lang') || 'en';
-    //get current page
+    // get current page
     page = $('#whichPage').val();
-    //configure language menu
+    // configure language menu
     configureLangMenu(lang);
-    //translate current page
+    // translate current page
     translate(page);
-    //initialize map if in contact page
-    page === 'contact' ? initializeMap() : '';
-    //$("#mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
+    // initialize map if in contact page
+    // page === 'contact' ? initializeMap() : '';
+    initializeMap();
+    // initialize photo galley
+    galleryInit();
 });
 
 /**
- *Language menu on click function
+ * Language menu on click function
+ *
  */
 $("#js-langmenu").on('click', '.js-langanchor', function () {
     // noinspection JSUnresolvedFunction
@@ -70,23 +76,22 @@ $("#js-langmenu").on('click', '.js-langanchor', function () {
  *
  */
 function initializeMap() {
-
     // Create Leaflet map on map element.
     let map = L.map(document.getElementById('osm-map'));
 
-// Add OSM tile leayer to the Leaflet map.
+    // Add OSM tile leayer to the Leaflet map.
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-// Target's GPS coordinates.
+    // Target's GPS coordinates.
     let target1 = L.latLng('39.410562', '20.239852');
     let target2 = L.latLng('39.409889', '20.240984');
-// Set map's center to target with zoom 14.
+    // Set map's center to target with zoom 14.
     map.setView(target1, 15);
     map.setView(target2, 15);
 
-// Place a marker on the same location.
+    // Place a marker on the same location.
     L.marker(target1).addTo(map);
     L.marker(target2).addTo(map);
 }
@@ -102,6 +107,7 @@ function configureLangMenu(lang) {
 }
 
 /**
+ * Handles page translation
  *
  * @param page
  */
@@ -110,21 +116,20 @@ function translate(page) {
         //navbar
         $(this).text(langData['languages'][lang]['pages'][page]['navbar'][$(this).data('key')]);
         //rest of the page
-        $(this).text(langData['languages'][lang]['pages'][page][$(this).data('key')])
+        $(this).text(langData['languages'][lang]['pages'][page][$(this).data('key')]);
     });
 }
 
-
-/* global jQuery, PhotoSwipe, PhotoSwipeUI_Default, console */
-
+/**
+ * Initialize photo gallery
+ *
+ */
 function galleryInit() {
-
     // Init empty gallery array
-    var container = [];
-
+    let container = [];
     // Loop over gallery items and push it to the array
     $('#gallery').find('figure').each(function () {
-        var $link = $(this).find('a'),
+        let $link = $(this).find('a'),
             item = {
                 src: $link.attr('href'),
                 w: $link.data('width'),
@@ -136,12 +141,11 @@ function galleryInit() {
 
     // Define click event on gallery item
     $('.gallery').on('click', 'a', function (event) {
-
         // Prevent location change
         event.preventDefault();
 
         // Define object and gallery options
-        var $pswp = $('.pswp')[0],
+        let $pswp = $('.pswp')[0],
             options = {
                 index: $(this).parent('figure').index(),
                 bgOpacity: 0.85,
@@ -149,8 +153,7 @@ function galleryInit() {
             };
 
         // Initialize PhotoSwipe
-        var gallery = new PhotoSwipe($pswp, PhotoSwipeUI_Default, container, options);
+        let gallery = new PhotoSwipe($pswp, PhotoSwipeUI_Default, container, options);
         gallery.init();
     });
-
 }

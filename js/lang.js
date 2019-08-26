@@ -23,6 +23,12 @@ let langData = {
                         'irida': 'Irida Resort',
                         'contact': 'Contact',
                     },
+                    'gallery': 'Gallery',
+                    'title': 'Kimon Resort',
+                    'main' : 'KIMON RESORT, completely renovated in 2013, is the oldest of our accommodations. Situated in an idyllic ' +
+                        'location amidst olive groves, it offers tranquility and beauty to holidaymakers.' +
+                        'Only 200 meters from the port and 200 meters from the beach of French Molos, KIMON RESORT is the ideal place for ' +
+                        'anyone who wants to spend his vacation in what we call a "center center".'
                 },
                 'irida': {
                     'navbar': {
@@ -66,6 +72,12 @@ let langData = {
                         'irida': 'Irida Resort',
                         'contact': 'Επικοικωνία',
                     },
+                    'gallery': 'Φωτογραφίες',
+                    'title': 'Kimon Resort',
+                    'main': 'To KIMON RESORT, πλήρως ανακαινισμένο το 2013, είναι το παλαιότερο από τα καταλύματα μας. ' +
+                        'Βρίσκεται σε μια ειδυλλιακή τοποθεσία, ανάμεσα σε ελαιώνες και προσφέρει ησυχία και ομορφιά στους παραθεριστές.' +
+                        'Απέχοντας μόνο 200 μέτρα μόνο από το λιμάνι και 200 μέτρα από την παραλία Γαλλικός Μώλος, το KIMON RESORT είναι ' +
+                        'ιδανικό κάποιον που θέλει να περάσει τις διακοπές του σ\' αυτό που λέμε "κέντρο απόκεντρο".',
                 },
                 'irida': {
                     'navbar': {
@@ -83,8 +95,7 @@ let langData = {
                         'contact': 'Επικοικωνία',
                     },
                 },
-            },
-
+            }
         }
     }
-};
+}
