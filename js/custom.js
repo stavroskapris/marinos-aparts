@@ -16,10 +16,10 @@ let page;
  * @type {string}
  */
 let langMenuEn = '<a href="javascript:void(0)" data-lang="en" class="js-langanchor" id="anchoren">\n' +
-    '                                <li><img src="img/f1ky10.jpg.gif" height="13" width="18"></li>\n' +
+    '                                <li><img src="img/nav/f1ky10.jpg.gif" height="13" width="18"></li>\n' +
     '                            </a>\n' +
     '                            <a href="javascript:void(0)" data-lang="gr" class="js-langanchor" id="anchorgr">\n' +
-    '                                <li><img src="img/2r7t05j.jpg" height="13" width="18"></li>\n' +
+    '                                <li><img src="img/nav/2r7t05j.jpg" height="13" width="18"></li>\n' +
     '                            </a>';
 /**
  * Language menu
@@ -27,10 +27,10 @@ let langMenuEn = '<a href="javascript:void(0)" data-lang="en" class="js-langanch
  * @type {string}
  */
 let langMenuGr = ' <a href="javascript:void(0)" data-lang="gr" class="js-langanchor" id="anchorgr">\n' +
-    '                                <li><img src="img/2r7t05j.jpg" height="13" width="18"></li>\n' +
+    '                                <li><img src="img/nav/2r7t05j.jpg" height="13" width="18"></li>\n' +
     '                            </a>\n' +
     '                            <a href="javascript:void(0)" data-lang="en" class="js-langanchor" id="anchoren">\n' +
-    '                                <li><img src="img/f1ky10.jpg.gif" height="13" width="18"></li>\n' +
+    '                                <li><img src="img/nav/f1ky10.jpg.gif" height="13" width="18"></li>\n' +
     '                            </a>';
 
 /**
@@ -38,6 +38,9 @@ let langMenuGr = ' <a href="javascript:void(0)" data-lang="gr" class="js-langanc
  *
  */
 $(function ($) {
+   //getCurrentWeather();
+    handleScrollToTop();
+
     // get lang if exists
     lang = localStorage.getItem('lang') || 'en';
     // get current page
@@ -46,9 +49,8 @@ $(function ($) {
     configureLangMenu(lang);
     // translate current page
     translate(page);
-    // initialize map if in contact page
-    // page === 'contact' ? initializeMap() : '';
-    initializeMap();
+   //if error everything from here breaks
+     initializeMap();
     // initialize photo galley
     galleryInit();
 });
@@ -85,15 +87,32 @@ function initializeMap() {
     }).addTo(map);
 
     // Target's GPS coordinates.
-    let target1 = L.latLng('39.410562', '20.239852');
-    let target2 = L.latLng('39.409889', '20.240984');
-    // Set map's center to target with zoom 14.
-    map.setView(target1, 15);
-    map.setView(target2, 15);
+    let kimonPin = L.latLng('39.410562', '20.239852');
 
-    // Place a marker on the same location.
-    L.marker(target1).addTo(map);
-    L.marker(target2).addTo(map);
+    let iridaPin = L.latLng('39.409889', '20.240984');
+
+    switch (page) {
+        case  'kimon' :
+            // Set map's center to target with zoom 14.
+            map.setView(kimonPin, 15);
+            // Place a marker on the same location.
+            L.marker(kimonPin).addTo(map);
+            break;
+        case 'irida' :
+            // Set map's center to target with zoom 14.
+            map.setView(iridaPin, 15);
+            // Place a marker on the same location.
+            L.marker(iridaPin).addTo(map);
+            break;
+        default :
+            // Set map's center to target with zoom 14.
+            map.setView(kimonPin, 15);
+            map.setView(iridaPin, 15);
+            // Place a marker on the same location.
+            L.marker(kimonPin).addTo(map);
+            L.marker(iridaPin).addTo(map);
+            break;
+    }
 }
 
 /**
@@ -157,3 +176,41 @@ function galleryInit() {
         gallery.init();
     });
 }
+//scroll to top
+$("a.scroll-top").on('click', function (e) {
+    // e.preventDefault();
+    $('html,body').animate({ scrollTop: 0 }, 350);
+    return false;
+});
+
+/**
+ * Handles scroll to top button
+ */
+function handleScrollToTop() {
+    $('.scroll-top').hide();
+    // Check to see if the window is top if not then display button
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 1000) {
+            $('.scroll-top').fadeIn();
+        } else {
+            $('.scroll-top').fadeOut();
+        }
+    });
+}
+
+function getCurrentWeather() {
+    var proxy = 'https://cors-anywhere.herokuapp.com/';
+    var apiLInk = 'https://www.metaweather.com/api/location/946738/';
+// send the ajax request
+    $.ajax({
+        type: "GET",
+        url: proxy + apiLInk,
+        success: function (data) {
+            console.log(data)
+        },
+        error: function (data) {
+            console.log(data)
+        }
+    })
+}
+

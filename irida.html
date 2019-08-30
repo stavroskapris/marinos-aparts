@@ -25,270 +25,333 @@
     <link rel="stylesheet" href="css/default-skin.css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-          <![endif]-->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="https://kit.fontawesome.com/3fad1b2de2.js"></script>
 </head>
 
-    <body>
-    <input type="hidden" id="whichPage" value="irida">
-        <div class="tm-header">
-            <div class="container-fluid">
-                <div class="tm-header-inner">
-                    <a href="home.html" class="navbar-left tm-site-logo"><img src="img/logo_marinos.png"></a>
-                    
-                    <!-- navbar -->
-                    <nav class="navbar tm-main-nav">
+<body>
+<input type="hidden" id="whichPage" value="irida">
+<div class="tm-header">
+    <div class="container-fluid">
+        <div class="tm-header-inner">
+            <a href="home.html" class="navbar-left tm-site-logo"><img src="img/nav/logo_marinos.png"></a>
 
-                        <button class="navbar-toggler hidden-md-up" type="button" data-toggle="collapse" data-target="#tmNavbar">
-                            &#9776;
-                        </button>
+            <!-- navbar -->
+            <nav class="navbar tm-main-nav">
 
-                        <div class="collapse navbar-toggleable-sm" id="tmNavbar">
-                            <ul class="nav navbar-nav">
-                                <li class="nav-item">
-                                    <a href="home.html" class="nav-link lang" data-key="home">Home</a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a href="kimon.html" class="nav-link lang">Kimon Resort</a>
-                                </li>
-                                <li class="nav-item active">
-                                    <a href="irida.html" class="nav-link lang">Irida Resort</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="contact.html" class="nav-link lang" data-key="contact">Contact</a>
-                                </li>
-                            </ul>
+                <button class="navbar-toggler hidden-md-up" type="button" data-toggle="collapse" data-target="#tmNavbar">
+                    &#9776;
+                </button>
+
+                <div class="collapse navbar-toggleable-sm" id="tmNavbar">
+                    <ul class="nav navbar-nav">
+                        <li class="nav-item">
+                            <a href="home.html" class="nav-link lang" data-key="home">Home</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a href="kimon.html" class="nav-link lang">Kimon Resort</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a href="irida.html" class="nav-link lang">Irida Resort</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="contact.html" class="nav-link lang" data-key="contact">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+                <ul class="languagepicker roundborders">
+                    <div id="js-langmenu"></div>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+</div>
+
+<div class="tm-irida-img-container">
+
+</div>
+
+<div class="header-bottom">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="contact-top">
+                <span><strong>Reservations : </strong>+30 6934 80 36 95</span>
+            </div>
+            <div class="fb-top">
+                <span><strong>Find us </strong></span>
+                <a href="http://www.facebook.com" target="_blank" class="facebook">
+                    <i class="fab fa-facebook"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="tm-section">
+    <div class="container-fluid">
+        <div class="row tm-2-rows-sm-swap">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3 class="tm-gold-text lang" data-key="title">Irida Resort</h3>
+                    <p class="lang" data-key="main">IRIDA RESORT, our newest home, fully refurbished in 2013, is in the center. At 30 meters
+                        from the port, it is ideal for vacationers who want to enjoy the life of Sivota.
+
+                        Just 200 meters from the beach of French Molos, IRIDA RESORT offers you the opportunity to enjoy a swim without the
+                        need for a car.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row  tm-margin-t-mid">
+            <h3 class="lang" data-key="gallery">Gallery</h3>
+
+            <!-- Galley wrapper that contains all items -->
+            <div id="gallery" class="gallery">
+                <figure class="kimon" itemprop="associatedMedia">
+                    <!-- Link to the big image, not mandatory, but usefull when there is no JS -->
+                    <a href="img/marinos1.jpg" data-caption="Sea side, south shore<br><em class='text-muted'>© Dominik Schröder</em>"
+                       data-width="1200" data-height="900" itemprop="contentUrl">
+                        <!-- Thumbnail -->
+                        <img src="img/marinos1.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                    </a>
+                </figure>
+
+                <figure class="kimon" itemprop="associatedMedia">
+                    <a href="img/marinos2.jpg" data-caption="Sunset in the wheat field<br><em class='text-muted'>© Jordan McQueen</em>"
+                       data-width="1200" data-height="900" itemprop="contentUrl">
+                        <img src="img/marinos2.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                    </a>
+                </figure>
+                <figure class="kimon" itemprop="associatedMedia">
+                    <a href="img/marinos3.jpg" data-caption="Mysterious ocean<br><em class='text-muted'>© Barn Images</em>"
+                       data-width="1200" data-height="900" itemprop="contentUrl">
+                        <img src="img/marinos3.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                    </a>
+                </figure>
+                <figure class="kimon" itemprop="associatedMedia">
+                    <a href="img/marinos4.jpg" data-caption="Cloud over the mountains<br><em class='text-muted'>© James Pritchett</em>"
+                       data-width="1200" data-height="900" itemprop="contentUrl">
+                        <img src="img/marinos4.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                    </a>
+                </figure>
+                <figure class="kimon" itemprop="associatedMedia">
+                    <a href="img/marinos15.jpg" data-caption="Icelandic horses<br><em class='text-muted'>© Bethany Legg</em>"
+                       data-width="1200" data-height="900" itemprop="contentUrl">
+                        <img src="img/marinos15.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                    </a>
+                </figure>
+                <figure class="kimon" itemprop="associatedMedia">
+                    <a href="img/marinos6.jpg" data-caption="Sea side, south shore<br><em class='text-muted'>© Julien Lavallée</em>"
+                       data-width="1200" data-height="900" itemprop="contentUrl">
+                        <img src="img/marinos6.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                    </a>
+                </figure>
+                <figure class="kimon" itemprop="associatedMedia">
+                    <a href="img/marinos6.jpg" data-caption="Sunset on the highland road<br><em class='text-muted'>© Forrest Cavale</em>"
+                       data-width="1200" data-height="900" itemprop="contentUrl">
+                        <img src="img/marinos6.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                    </a>
+                </figure>
+                <figure class="kimon" itemprop="associatedMedia">
+                    <a href="img/marinos9.jpg" data-caption="Seljalandsfoss waterfall<br><em class='text-muted'>© Jeff Sheldon</em>"
+                       data-width="1200" data-height="900" itemprop="contentUrl">
+                        <img src="img/marinos9.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                    </a>
+                </figure>
+                <figure class="kimon" itemprop="associatedMedia">
+                    <a href="img/marinos12.jpg"
+                       data-caption="Fjadrarglufur canyon, south shore<br><em class='text-muted'>© Jeff Sheldon</em>" data-width="1200"
+                       data-height="900" itemprop="contentUrl">
+                        <img src="img/marinos12.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                    </a>
+                </figure>
+                <figure class="kimon" itemprop="associatedMedia">
+                    <a href="img/marinos15.jpg"
+                       data-caption="Eerie wreckage of a crashed U.S. Navy aircraft<br><em class='text-muted'>© Jeff Sheldon</em>"
+                       data-width="1200" data-height="900" itemprop="contentUrl">
+                        <img src="img/marinos15.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                    </a>
+                </figure>
+                <figure class="kimon" itemprop="associatedMedia">
+                    <a href="img/marinos12.jpg" data-caption="Blue Lagoon<br><em class='text-muted'>© Jeff Sheldon</em>" data-width="1200"
+                       data-height="900" itemprop="contentUrl">
+                        <img src="img/marinos12.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                    </a>
+                </figure>
+                <figure class="kimon" itemprop="associatedMedia">
+                    <a href="img/marinos25.jpg" data-caption="Sunny Reykjavik street<br><em class='text-muted'>© Jeff Sheldon</em>"
+                       data-width="1200" data-height="900" itemprop="contentUrl">
+                        <img src="img/marinos25.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                    </a>
+                </figure>
+            </div>
+        </div>
+        <!--        &lt;!&ndash; Some spacing 😉 &ndash;&gt;-->
+        <!--        <div class="spacer"></div>-->
+
+        <!-- Root element of PhotoSwipe. Must have class pswp. -->
+        <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+            <!-- Background of PhotoSwipe.
+                     It's a separate element as animating opacity is faster than rgba(). -->
+            <div class="pswp__bg"></div>
+            <!-- Slides wrapper with overflow:hidden. -->
+            <div class="pswp__scroll-wrap">
+                <!-- Container that holds slides.
+                          PhotoSwipe keeps only 3 of them in the DOM to save memory.
+                          Don't modify these 3 pswp__item elements, data is added later on. -->
+                <div class="pswp__container">
+                    <div class="pswp__item"></div>
+                    <div class="pswp__item"></div>
+                    <div class="pswp__item"></div>
+                </div>
+                <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+                <div class="pswp__ui pswp__ui--hidden">
+                    <div class="pswp__top-bar">
+                        <!--  Controls are self-explanatory. Order can be changed. -->
+                        <div class="pswp__counter"></div>
+                        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                        <button class="pswp__button pswp__button--share" title="Share"></button>
+                        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                        <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                        <!-- element will get class pswp__preloader--active when preloader is running -->
+                        <div class="pswp__preloader">
+                            <div class="pswp__preloader__icn">
+                                <div class="pswp__preloader__cut">
+                                    <div class="pswp__preloader__donut"></div>
+                                </div>
+                            </div>
                         </div>
-                        <ul class="languagepicker roundborders">
-                            <div id="js-langmenu"></div>
+                    </div>
+                    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                        <div class="pswp__share-tooltip"></div>
+                    </div>
+                    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                    </button>
+                    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                    </button>
+                    <div class="pswp__caption">
+                        <div class="pswp__caption__center"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="footer-top">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 col-sm-3 col-ms-6">
+                <div class="f_top_inner">
+                    <a href="">
+                        <h4>Free Wi-Fi internet</h4>
+                    </a>
+                    <span class="icon">
+                        <i class="fas fa-wifi"></i>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-3 col-ms-6">
+                <div class="f_top_inner">
+                    <a href="">
+                        <h4>Free Private Parking</h4>
+                        <span class="icon">
+                        <i class="fas fa-car"></i>
+                    </span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-3 col-ms-6 ">
+                <div class="f_top_inner">
+                    <a href="">
+                        <h4>Air conditioning</h4>
+                        <span class="icon">
+                        <i class="fas fa-fan"></i>
+                    </span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-3 col-ms-6">
+                <div class="f_top_inner">
+                    <a href="">
+                        <h4>Deluxe Bedroom</h4>
+                        <span class="icon">
+                        <i class="fas fa-bed"></i>
+                    </span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<footer class="tm-footer">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
+                <div class="tm-footer-content-box tm-footer-links-container">
+                    <h3 class="tm-title tm-footer-content-box-title">Contact</h3>
+                    <nav>
+                        <ul class="nav">
+                            <li class="tm-footer-link"><i class="fas fa-map-marker"></i> Sivota, Igoumenitsa 46100 Thesprotia</li>
+                            <li class="tm-footer-link"><i class="fa fa-phone"></i> +30 26650 93 456</li>
+                            <li class="tm-footer-link"><i class="fa fa-mobile"></i> +30 697 3473413</li>
+                            <li class="tm-footer-link"><i class="fa fa-envelope"></i> iro21@hotmail.com</li>
                         </ul>
-                    </nav>  
-
-                </div>                                  
-            </div>            
-        </div>
-
-        <div class="tm-irida-img-container">
-            
-        </div>
-
-        <section class="tm-section">
-            <div class="container-fluid">
-                <div class="row">
-
-                    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-9 col-xl-9">
-                        <div class="tm-blog-post">
-                            <h3 class="tm-gold-text">Pellentesque fermentum mauris</h3>
-                            <p>Vivamus accumsan blandit ligula. Sed lobortis efficitur sapien</p>
-                            <img src="img/tm-img-1010x336-1.jpg" alt="Image" class="img-fluid tm-img-post">
-                            
-                            <p>You can help templatemo by telling your friends about our HTML CSS templates. Praesent velit ante, congue ac dignissim in, vehicula sit amet urna. Fusce in dapibus quam, eget finibus velit. Nullam erat odio, vulputate id est ut, consequat rutrum justo. Vivamus vel leo vel nunc tincidunt mattis. Sed neque diam, semper suscipit dictum a, sodales ac metus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
-
-                            <p>Morbi vel pharetra massa, non iaculis tortor. Nulla porttitor tincidunt felis et feugiat. Vivamus fermentum ligula justo, sit amet blandit nisl volutpat id. Fusce sagittis ultricies felis, non luctus mauris lacinia quis. Ut fringilla lacus ac tempor ullamcorper. Mauris iaculis placerat ex et mattis.</p>
-
-                            <p>Quisque vel sem eu turpis ullamcorper euismod. Praesent quis nisi ac augue luctus viverra. Sed et dui nisi. Fusce vitae dapibus justo. Pellentesque accumsan est ac posuere imperdiet. Curabitur eros mi, lacinia at euismod quis, dapibus vel ligula. Ut sodales erat vitae nunc tempor mollis. Donec tempor lobortis tortor, in feugiat massa facilisis sed. Ut dignissim viverra pretium. In eu justo maximus turpis feugiat finibus scelerisque nec eros. Cras nec lectus tempor nibh vestibulum eleifend et ac elit.</p>
-
-                            <p>Sed vitae luctus libero. Nam sem neque, finibus id sem pharetra, cursus porttitor ligula. Praesent aliquam fermentum dui, vitae venenatis libero vulputate ac. Fusce bibendum scelerisque magna eget iaculis. Phasellus non arcu eu sem convallis semper. Duis vulputate dignissim rhoncus.</p>
-                        </div>
-                        
-                        <div class="row tm-margin-t-big">
-                            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-
-                                <div class="tm-content-box">
-                                    <img src="img/tm-img-310x180-1.jpg" alt="Image" class="tm-margin-b-30 img-fluid">
-                                    <h4 class="tm-margin-b-20 tm-gold-text">Lorem ipsum dolor #1</h4>
-                                    <p class="tm-margin-b-20">Aenean cursus tellus mauris, quis
-                                    consequat mauris dapibus id. Donec
-                                    scelerisque porttitor pharetra</p>
-                                    <a href="#" class="tm-btn text-uppercase">Detail</a>    
-                                </div>  
-
-                            </div>
-
-                            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-
-                                <div class="tm-content-box">
-                                    <img src="img/tm-img-310x180-2.jpg" alt="Image" class="tm-margin-b-30 img-fluid">
-                                    <h4 class="tm-margin-b-20 tm-gold-text">Lorem ipsum dolor #2</h4>
-                                    <p class="tm-margin-b-20">Aenean cursus tellus mauris, quis
-                                    consequat mauris dapibus id. Donec
-                                    scelerisque porttitor pharetra</p>
-                                    <a href="#" class="tm-btn text-uppercase">Read More</a>    
-                                </div>  
-
-                            </div>
-
-                            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
-
-                                <div class="tm-content-box">
-                                    <img src="img/tm-img-310x180-3.jpg" alt="Image" class="tm-margin-b-30 img-fluid">
-                                    <h4 class="tm-margin-b-20 tm-gold-text">Lorem ipsum dolor #3</h4>
-                                    <p class="tm-margin-b-20">Aenean cursus tellus mauris, quis
-                                    consequat mauris dapibus id. Donec
-                                    scelerisque porttitor pharetra</p>
-                                    <a href="#" class="tm-btn text-uppercase">Detail</a>    
-                                </div>  
-
-                            </div>    
-                        </div>
-                        
-                    </div>
-
-                    <aside class="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 tm-aside-r">
-
-                        <div class="tm-aside-container">
-                            <h3 class="tm-gold-text tm-title">
-                                Categories
-                            </h3>
-                            <nav>
-                                <ul class="nav">
-                                    <li><a href="#" class="tm-text-link">Lorem ipsum dolor sit</a></li>
-                                    <li><a href="#" class="tm-text-link">Tincidunt non faucibus placerat</a></li>
-                                    <li><a href="#" class="tm-text-link">Vestibulum tempor ac lectus</a></li>
-                                    <li><a href="#" class="tm-text-link">Elementum egestas dui</a></li>
-                                    <li><a href="#" class="tm-text-link">Nam in augue consectetur</a></li>
-                                    <li><a href="#" class="tm-text-link">Fusce non turpis euismod</a></li>
-                                    <li><a href="#" class="tm-text-link">Text Link Color #006699</a></li>
-                                </ul>
-                            </nav>
-                            <hr class="tm-margin-t-small">   
-                            <h3 class="tm-gold-text tm-title tm-margin-t-small">
-                                Useful Links
-                            </h3>
-                            <nav>   
-                                <ul class="nav">
-                                    <li><a href="#" class="tm-text-link">Suspendisse sed dui nulla</a></li>
-                                    <li><a href="#" class="tm-text-link">Lorem ipsum dolor sit</a></li>
-                                    <li><a href="#" class="tm-text-link">Duiss nec purus et eros</a></li>
-                                    <li><a href="#" class="tm-text-link">Etiam pulvinar et ligula sed</a></li>
-                                    <li><a href="#" class="tm-text-link">Proin egestas eu felis et iaculis</a></li>
-                                </ul>
-                            </nav>   
-                            <hr class="tm-margin-t-small"> 
-
-                            <div class="tm-content-box tm-margin-t-small">
-                                <a href="#" class="tm-text-link"><h4 class="tm-margin-b-20 tm-thin-font">Duis sit amet tristique #1</h4></a>
-                                <p class="tm-margin-b-30">Vestibulum arcu erat, lobortis sit amet tellus ut, semper tristique nibh. Nunc in molestie elit.</p>
-                            </div>
-                            <hr class="tm-margin-t-small">
-                            <div class="tm-content-box tm-margin-t-small">
-                                <a href="#" class="tm-text-link"><h4 class="tm-margin-b-20 tm-thin-font">Duis sit amet tristique #2</h4></a>
-                                <p>Vestibulum arcu erat, lobortis sit amet tellus ut, semper tristique nibh. Nunc in molestie elit.</p>
-                            </div>  
-                            <hr class="tm-margin-t-small">
-                            <div class="tm-content-box tm-margin-t-small">
-                                <a href="#" class="tm-text-link"><h4 class="tm-margin-b-20 tm-thin-font">Duis sit amet tristique #3</h4></a>
-                                <p>Vestibulum arcu erat, lobortis sit amet tellus ut, semper tristique nibh. Nunc in molestie elit.</p>
-                            </div>      
-                        </div>
-                        
-                        
-                    </aside>
-
+                    </nav>
                 </div>
-                
             </div>
-        </section>
-        
-        <footer class="tm-footer">
-            <div class="container-fluid">
-                <div class="row">
-                    
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
-                        
-                        <div class="tm-footer-content-box">
-                            <h3 class="tm-gold-text tm-title tm-footer-content-box-title">Proin eu posuere felis</h3>
-                            <div class="tm-gray-bg">
-                                <p>Aenean cursus tellus mauris, quis consequat mauris dapibus id. Donec scelerisque porttitor pharetra.</p>
-                                <p>Aenean cursus tellus mauris, quis consequat mauris dapibus id. Donec scelerisque porttitor pharetra.</p>
-                                <p><strong>Danny Egg (Executive)</strong></p>    
-                            </div>    
-                        </div>
-                                                
-                    </div>
-
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
-                        <div class="tm-footer-content-box tm-footer-links-container">
-                        
-                            <h3 class="tm-gold-text tm-title tm-footer-content-box-title">Nulla tortor dolor</h3>
-                            <nav>
-                                <ul class="nav">
-                                    <li><a href="#" class="tm-footer-link">Tincidunt non faucibus</a></li>
-                                    <li><a href="#" class="tm-footer-link">Vestibulum tempor</a></li>
-                                    <li><a href="#" class="tm-footer-link">Fusce non turpis euismod</a></li>
-                                    <li><a href="#" class="tm-footer-link">Lorem ipsum dolor sit</a></li>
-                                    <li><a href="#" class="tm-footer-link">Nam in augue consectetur</a></li>
-                                    <li><a href="#" class="tm-footer-link">Text Link Color #CCCC66</a></li>
-                                </ul>
-                            </nav>
-
-                        </div>
-                        
-                    </div>
-
-                    <!-- Add the extra clearfix for only the required viewport 
-                        http://stackoverflow.com/questions/24590222/bootstrap-3-grid-with-different-height-in-each-item-is-it-solvable-using-only
-                    -->
-                    <div class="clearfix hidden-lg-up"></div>
-
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
-
-                        <div class="tm-footer-content-box">
-                        
-                            <h3 class="tm-gold-text tm-title tm-footer-content-box-title">Etiam mollis ornare</h3>
-                            <p class="tm-margin-b-30">Aenean cursus tellus mauris, quis consequat mauris dapibus id. Donec scelerisque porttitor pharetra.</p><hr class="tm-margin-b-30">
-                            <p class="tm-margin-b-30">Aenean cursus tellus mauris, quis consequat mauris dapibus id. Donec scelerisque porttitor pharetra.</p><hr class="tm-margin-b-30">
-                            <p class="tm-margin-b-30">Aenean cursus tellus mauris, quis consequat mauris dapibus id. Donec scelerisque porttitor pharetra.</p>
-                            <a href="#" class="tm-btn tm-btn-gray text-uppercase">Read More</a>
-
-                        </div>
-                        
-                    </div>
-
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
-
-                        <div class="tm-footer-content-box">
-                        
-                            <h3 class="tm-gold-text tm-title tm-footer-content-box-title">Fusce non turpis</h3>
-                            <div class="tm-margin-b-30">
-                                <img src="img/tm-img-100x100-1.jpg" alt="Image" class="tm-footer-thumbnail">
-                                <img src="img/tm-img-100x100-2.jpg" alt="Image" class="tm-footer-thumbnail">
-                                <img src="img/tm-img-100x100-3.jpg" alt="Image" class="tm-footer-thumbnail">
-                                <img src="img/tm-img-100x100-4.jpg" alt="Image" class="tm-footer-thumbnail">
-                                <img src="img/tm-img-100x100-5.jpg" alt="Image" class="tm-footer-thumbnail">
-                                <img src="img/tm-img-100x100-6.jpg" alt="Image" class="tm-footer-thumbnail">
-                            </div>
-                            <p class="tm-margin-b-20">Curabitur dui massa, aliquam quis mi sed, tempor vulputate tellus. Sed vestibulum non neque.</p>
-                            <a href="#" class="tm-btn tm-btn-gray text-uppercase">Browse</a>
-
-                        </div>
-                        
-                    </div>
-
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
+                <div class="tm-footer-content-box tm-footer-links-container">
+                    <h3 class="tm-title tm-footer-content-box-title">Menu</h3>
+                    <nav>
+                        <ul class="nav">
+                            <li><a href="home.html" class="tm-footer-link">Home</a></li>
+                            <li><a href="kimon.html" class="tm-footer-link">Kimon Resort</a></li>
+                            <li><a href="irida.html" class="tm-footer-link">Irida Resort</a></li>
+                            <li><a href="contact.html" class="tm-footer-link">Contact</a></li>
+                        </ul>
+                    </nav>
 
                 </div>
-
-                <div class="row">
-                    <div class="col-xs-12 tm-copyright-col">
-                        <p class="tm-copyright-text">Copyright 2016 Your Company Name</p>
+            </div>
+            <!-- Add the extra clearfix for only the required viewport
+                http://stackoverflow.com/questions/24590222/bootstrap-3-grid-with-different-height-in-each-item-is-it-solvable-using-only
+            -->
+            <div class="clearfix hidden-lg-up"></div>
+            <div class="tm-footer-content-box tm-footer-links-container">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                    <div class="tm-2-col-left " id="osm-map">
                     </div>
                 </div>
             </div>
-        </footer>
+        </div>
+        <div class="row">
+            <div class="tm-copyright-col">
+                <p class="tm-copyright-text">Copyright 2019 Marinos-Aparts</p>
+            </div>
+            <p class="tm-created-text"><small>developed by <a href="https://github.com/" target="_blank">stavrosK</a></small></p>
+        </div>
+        <a href="javascript:void(0)" class="scroll-top"><i class="fa fa-angle-up"></i></a>
+    </div>
+</footer>
 
-        <script src="js/jquery-1.11.3.min.js"></script>             <!-- jQuery (https://jquery.com/download/) -->
-        <script src="https://www.atlasestateagents.co.uk/javascript/tether.min.js"></script>
-        <!-- Tether for Bootstrap, http://stackoverflow.com/questions/34567939/how-to-fix-the-error-error-bootstrap-tooltips-require-tether-http-github-h -->
+<!-- load JS files -->
+<script src="js/jquery-1.11.3.min.js"></script>             <!-- jQuery (https://jquery.com/download/) -->
+<script src="https://www.atlasestateagents.co.uk/javascript/tether.min.js"></script>
+<!-- Tether for Bootstrap, http://stackoverflow.com/questions/34567939/how-to-fix-the-error-error-bootstrap-tooltips-require-tether-http-github-h -->
 
-        <script src="js/bootstrap.min.js"></script><!-- Bootstrap (http://v4-alpha.getbootstrap.com/) -->
-        <script src="js/custom.js"></script>
-        <script src="js/lang.js"></script>
-        <!-- Core JS file -->
-        <script src="js/photoswipe.min.js"></script>
-
-        <!-- UI JS file -->
-        <script src="js/photoswipe-ui-default.min.js"></script>
+<script src="js/bootstrap.min.js"></script><!-- Bootstrap (http://v4-alpha.getbootstrap.com/) -->
+<script src="js/custom.js"></script>
+<script src="js/lang.js"></script>
+<!-- Core JS file -->
+<script src="js/photoswipe.min.js"></script>
+<!-- UI JS file -->
+<script src="js/photoswipe-ui-default.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+<script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+<link href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" rel="stylesheet"/>
 </body>
 </html>
