@@ -7,12 +7,13 @@ and [Route 53](https://aws.amazon.com/route53/).
 <!-- ACKNOWLEDGEMENTS -->
 ## Resources
 * [Template](https://templatemo.com/tm-488-classic)
+* [Bootstrap](https://getbootstrap.com/)
+* [jQuery](https://jquery.com/)
 * [PhotoSwipe](https://photoswipe.com)
 * [Leaflet](https://leafletjs.com)
 * [Openlayers](http://www.openlayers.org/api/OpenLayers.js)
 * [Open Street Maps](https://www.openstreetmap.org)
 * [Font Awesome](https://fontawesome.com)
-
 
 
 
