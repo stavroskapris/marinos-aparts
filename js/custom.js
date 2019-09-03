@@ -93,12 +93,8 @@ $("#js-langmenu").on('click', '.js-langanchor', function () {
     lang = $(this).data('lang');
     // store selected lang
     localStorage.setItem('lang', lang);
-    // configure lang menu
-    configureLangMenu(lang);
-    // decide which weather widget to show(gr|en)
-    configureWeatherWidget(lang);
-    // translate page
-    translate(page);
+    //reload
+    location.reload();
 });
 
 
@@ -169,11 +165,17 @@ function configureWeatherWidget(lang) {
  * @param page
  */
 function translate(page) {
+    //lang items
     $('.lang').each(function () {
         //navbar
         $(this).text(langData['languages'][lang]['pages'][page]['navbar'][$(this).data('key')]);
         //rest of the page
         $(this).text(langData['languages'][lang]['pages'][page][$(this).data('key')]);
+    });
+    //gallery images description
+    $('a.js-descdata').each(function () {
+        $(this).attr('data-caption', langData['languages'][lang]['pages'][page]
+            ['galleryDescriptions'][$(this).parents('.location').find('h4').data('key')]);
     });
 }
 
@@ -232,7 +234,7 @@ function handleScrollToTop() {
     $('.scroll-top').hide();
     // Check to see if the window is top if not then display button
     $(window).scroll(function () {
-        if ($(this).scrollTop() > 1000) {
+        if ($(this).scrollTop() > 500) {
             $('.scroll-top').fadeIn();
         } else {
             $('.scroll-top').fadeOut();
