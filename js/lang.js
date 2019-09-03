@@ -22,7 +22,9 @@ let langData = {
                     'iridaSubTitle': 'Spacious two bedroom family apartments with huge single space that can accommodate from 2 to 5 persons.' +
                         ' Colorful, tastefully furnished, large verandas and a completely homely atmosphere, our apartments are surrounded by ' +
                         'lush gardens. Fully equipped with: TV in both rooms, A/C, fridge, coffee maker, kitchen, WC, free wireless internet.',
-                    "readMore": 'Read More',
+                    'readMore': 'Read More',
+                    'footerMenu': 'Menu',
+                    'footerAddress': 'Sivota, Igoumenitsa 46100 Thesprotia'
                 },
                 'kimon': {
                     'navbar': {
@@ -36,7 +38,9 @@ let langData = {
                     'main': 'KIMON RESORT, completely renovated in 2013, is the oldest of our accommodations. Situated in an idyllic ' +
                         'location amidst olive groves, it offers tranquility and beauty to holidaymakers.' +
                         'Only 200 meters from the port and 200 meters from the beach of French Molos, KIMON RESORT is the ideal place for ' +
-                        'anyone who wants to spend his vacation in what we call a "center center".'
+                        'anyone who wants to spend his vacation in what we call a "center center".',
+                    'footerMenu': 'Menu',
+                    'footerAddress': 'Sivota, Igoumenitsa 46100 Thesprotia'
                 },
                 'irida': {
                     'navbar': {
@@ -49,7 +53,9 @@ let langData = {
                     'title': 'Irida Resort',
                     'main': 'IRIDA RESORT, our newest home, fully refurbished in 2013, is in the center. At 30 meters from the port, ' +
                         'it is ideal for vacationers who want to enjoy the life of Sivota.Just 200 meters from the beach of French Molos, ' +
-                        'IRIDA RESORT offers you the opportunity to enjoy a swim without the need for a car.'
+                        'IRIDA RESORT offers you the opportunity to enjoy a swim without the need for a car.',
+                    'footerMenu': 'Menu',
+                    'footerAddress': 'Sivota, Igoumenitsa 46100 Thesprotia'
                 },
                 'location': {
                     'navbar': {
@@ -133,7 +139,9 @@ let langData = {
                     },
                     'title': 'Contact Form',
                     'gallery': 'Beaches',
-                    'main': 'Check for availability. We will contact you as soon as possible.'
+                    'main': 'Check for availability. We will contact you as soon as possible.',
+                    'footerMenu': 'Menu',
+                    'footerAddress': 'Sivota, Igoumenitsa 46100 Thesprotia'
                 },
             },
         }
@@ -144,7 +152,7 @@ let langData = {
                         'home': 'Αρχική',
                         'kimon': 'Kimon Resort',
                         'irida': 'Irida Resort',
-                        'contact': 'Επικοικωνία',
+                        'contact': 'Επικοινωνία',
                     },
                     'welcome': 'Καλωσορίσατε στα ενοικιαζόμενα δωμάτια Marinos apartments, στα Σύβοτα, όπου η απόλυτη ' +
                         'ικανοποίηση σας είναι προτεραιότητα μας.' +
@@ -161,14 +169,16 @@ let langData = {
                         'Πολύχρωμα, με καλαίσθητη επίπλωση, μεγάλες βεράντες και εντελώς σπιτική ατμόσφαιρα, τα διαμερίσματα μας περιβάλλονται ' +
                         'από καταπράσινους κήπους. Πλήρως εξοπλισμένα με: TV και στους δυο χώρους, A/C, ψυγείο, καφετιέρα, κουζίνα, WC, ' +
                         'δωρεάν ασύρματο internet.',
-                    "readMore": 'Περισσότερα',
+                    'readMore': 'Περισσότερα',
+                    'footerMenu': 'Μενού',
+                    'footerAddress': 'Σύβοτα, Ηγουμενίτσα 46100 Θεσπρωτία'
                 },
                 'kimon': {
                     'navbar': {
                         'home': 'Αρχική',
                         'kimon': 'Kimon Resort',
                         'irida': 'Irida Resort',
-                        'contact': 'Επικοικωνία',
+                        'contact': 'Επικοινωνία',
                     },
                     'gallery': 'Φωτογραφίες',
                     'title': 'Kimon Resort',
@@ -176,20 +186,24 @@ let langData = {
                         'Βρίσκεται σε μια ειδυλλιακή τοποθεσία, ανάμεσα σε ελαιώνες και προσφέρει ησυχία και ομορφιά στους παραθεριστές.' +
                         'Απέχοντας μόνο 200 μέτρα μόνο από το λιμάνι και 200 μέτρα από την παραλία Γαλλικός Μώλος, το KIMON RESORT είναι ' +
                         'ιδανικό κάποιον που θέλει να περάσει τις διακοπές του σ\' αυτό που λέμε "κέντρο απόκεντρο".',
+                    'footerMenu': 'Μενού',
+                    'footerAddress': 'Σύβοτα, Ηγουμενίτσα 46100 Θεσπρωτία'
                 },
                 'irida': {
                     'navbar': {
                         'home': 'Αρχική',
                         'kimon': 'Kimon Resort',
                         'irida': 'Irida Resort',
-                        'contact': 'Επικοικωνία',
+                        'contact': 'Επικοινωνία',
                     },
                     'gallery': 'Φωτογραφίες',
                     'title': 'Irida Resort',
                     'main': 'Το IRIDA RESORT, το νεότερο κατάλυμα μας, πλήρως ανακαινισμένο το 2013 και αυτό, βρίσκεται στο κέντρο. ' +
                         'Στα 30 μέτρα από το λιμάνι, είναι ιδανικό για παραθεριστές που θέλουν να απολαύσουν την ζωή των Συβότων.' +
                         'Απέχοντας μόνο 200 μέτρα από την παραλία Γαλλικός Μώλος, το IRIDA RESORT σας προσφέρει τη δυνατότητα να απολαύσετε ' +
-                        'το μπάνιο σας χωρίς να χρειαστείτε αυτοκίνητο.'
+                        'το μπάνιο σας χωρίς να χρειαστείτε αυτοκίνητο.',
+                    'footerMenu': 'Μενού',
+                    'footerAddress': 'Σύβοτα, Ηγουμενίτσα 46100 Θεσπρωτία'
                 },
                 'location': {
                     'navbar': {
@@ -275,13 +289,15 @@ let langData = {
                         'home': 'Αρχική',
                         'kimon': 'Kimon Resort',
                         'irida': 'Irida Resort',
-                        'contact': 'Επικοικωνία',
+                        'contact': 'Επικοινωνία',
                     },
                     'title': 'Φόρμα επικοινωνίας',
                     'gallery': 'Παραλίες',
-                    'main': 'Έλεγχος διαθεσιμότητας. Θα επικοινωνήσουμε μαζί σας το συντομότερο.'
+                    'main': 'Έλεγχος διαθεσιμότητας. Θα επικοινωνήσουμε μαζί σας το συντομότερο.',
+                    'footerMenu': 'Μενού',
+                    'footerAddress': 'Σύβοτα, Ηγουμενίτσα 46100 Θεσπρωτία'
                 },
             }
         }
     }
-}
+};

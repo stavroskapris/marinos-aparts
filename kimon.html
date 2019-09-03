@@ -30,6 +30,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script src="https://kit.fontawesome.com/3fad1b2de2.js"></script>
+    <link rel="stylesheet" href="node_modules/animate.css/animate.min.css">
 </head>
 
 <body>
@@ -113,83 +114,91 @@
 
             <!-- Galley wrapper that contains all items -->
             <div id="gallery" class="gallery">
-                <figure class="kimon" itemprop="associatedMedia">
-                    <!-- Link to the big image, not mandatory, but usefull when there is no JS -->
-                    <a href="img/marinos1.jpg" data-caption="Sea side, south shore<br><em class='text-muted'>© Dominik Schröder</em>"
-                       data-width="1200" data-height="900" itemprop="contentUrl">
-                        <!-- Thumbnail -->
-                        <img src="img/marinos1.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
-                    </a>
-                </figure>
+                <div class="animated fadeInLeft">
+                    <figure class="kimon" itemprop="associatedMedia">
+                        <!-- Link to the big image, not mandatory, but usefull when there is no JS -->
+                        <a href="img/marinos1.jpg" data-caption="Sea side, south shore<br><em class='text-muted'>© Dominik Schröder</em>"
+                           data-width="1200" data-height="900" itemprop="contentUrl">
+                            <!-- Thumbnail -->
+                            <img src="img/marinos1.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                        </a>
+                    </figure>
 
-                <figure class="kimon" itemprop="associatedMedia">
-                    <a href="img/marinos2.jpg" data-caption="Sunset in the wheat field<br><em class='text-muted'>© Jordan McQueen</em>"
-                       data-width="1200" data-height="900" itemprop="contentUrl">
-                        <img src="img/marinos2.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
-                    </a>
-                </figure>
-                <figure class="kimon" itemprop="associatedMedia">
-                    <a href="img/marinos3.jpg" data-caption="Mysterious ocean<br><em class='text-muted'>© Barn Images</em>"
-                       data-width="1200" data-height="900" itemprop="contentUrl">
-                        <img src="img/marinos3.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
-                    </a>
-                </figure>
-                <figure class="kimon" itemprop="associatedMedia">
-                    <a href="img/marinos4.jpg" data-caption="Cloud over the mountains<br><em class='text-muted'>© James Pritchett</em>"
-                       data-width="1200" data-height="900" itemprop="contentUrl">
-                        <img src="img/marinos4.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
-                    </a>
-                </figure>
-                <figure class="kimon" itemprop="associatedMedia">
-                    <a href="img/marinos15.jpg" data-caption="Icelandic horses<br><em class='text-muted'>© Bethany Legg</em>"
-                       data-width="1200" data-height="900" itemprop="contentUrl">
-                        <img src="img/marinos15.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
-                    </a>
-                </figure>
-                <figure class="kimon" itemprop="associatedMedia">
-                    <a href="img/marinos6.jpg" data-caption="Sea side, south shore<br><em class='text-muted'>© Julien Lavallée</em>"
-                       data-width="1200" data-height="900" itemprop="contentUrl">
-                        <img src="img/marinos6.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
-                    </a>
-                </figure>
-                <figure class="kimon" itemprop="associatedMedia">
-                    <a href="img/marinos6.jpg" data-caption="Sunset on the highland road<br><em class='text-muted'>© Forrest Cavale</em>"
-                       data-width="1200" data-height="900" itemprop="contentUrl">
-                        <img src="img/marinos6.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
-                    </a>
-                </figure>
-                <figure class="kimon" itemprop="associatedMedia">
-                    <a href="img/marinos9.jpg" data-caption="Seljalandsfoss waterfall<br><em class='text-muted'>© Jeff Sheldon</em>"
-                       data-width="1200" data-height="900" itemprop="contentUrl">
-                        <img src="img/marinos9.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
-                    </a>
-                </figure>
-                <figure class="kimon" itemprop="associatedMedia">
-                    <a href="img/marinos12.jpg"
-                       data-caption="Fjadrarglufur canyon, south shore<br><em class='text-muted'>© Jeff Sheldon</em>" data-width="1200"
-                       data-height="900" itemprop="contentUrl">
-                        <img src="img/marinos12.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
-                    </a>
-                </figure>
-                <figure class="kimon" itemprop="associatedMedia">
-                    <a href="img/marinos15.jpg"
-                       data-caption="Eerie wreckage of a crashed U.S. Navy aircraft<br><em class='text-muted'>© Jeff Sheldon</em>"
-                       data-width="1200" data-height="900" itemprop="contentUrl">
-                        <img src="img/marinos15.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
-                    </a>
-                </figure>
-                <figure class="kimon" itemprop="associatedMedia">
-                    <a href="img/marinos12.jpg" data-caption="Blue Lagoon<br><em class='text-muted'>© Jeff Sheldon</em>" data-width="1200"
-                       data-height="900" itemprop="contentUrl">
-                        <img src="img/marinos12.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
-                    </a>
-                </figure>
-                <figure class="kimon" itemprop="associatedMedia">
-                    <a href="img/marinos25.jpg" data-caption="Sunny Reykjavik street<br><em class='text-muted'>© Jeff Sheldon</em>"
-                       data-width="1200" data-height="900" itemprop="contentUrl">
-                        <img src="img/marinos25.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
-                    </a>
-                </figure>
+                    <figure class="kimon" itemprop="associatedMedia">
+                        <a href="img/marinos2.jpg" data-caption="Sunset in the wheat field<br><em class='text-muted'>© Jordan McQueen</em>"
+                           data-width="1200" data-height="900" itemprop="contentUrl">
+                            <img src="img/marinos2.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                        </a>
+                    </figure>
+                    <figure class="kimon" itemprop="associatedMedia">
+                        <a href="img/marinos3.jpg" data-caption="Mysterious ocean<br><em class='text-muted'>© Barn Images</em>"
+                           data-width="1200" data-height="900" itemprop="contentUrl">
+                            <img src="img/marinos3.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                        </a>
+                    </figure>
+                    <figure class="kimon" itemprop="associatedMedia">
+                        <a href="img/marinos4.jpg" data-caption="Cloud over the mountains<br><em class='text-muted'>© James Pritchett</em>"
+                           data-width="1200" data-height="900" itemprop="contentUrl">
+                            <img src="img/marinos4.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                        </a>
+                    </figure>
+                </div>
+                <div class="animated fadeIn">
+                    <figure class="kimon" itemprop="associatedMedia">
+                        <a href="img/marinos15.jpg" data-caption="Icelandic horses<br><em class='text-muted'>© Bethany Legg</em>"
+                           data-width="1200" data-height="900" itemprop="contentUrl">
+                            <img src="img/marinos15.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                        </a>
+                    </figure>
+                    <figure class="kimon" itemprop="associatedMedia">
+                        <a href="img/marinos6.jpg" data-caption="Sea side, south shore<br><em class='text-muted'>© Julien Lavallée</em>"
+                           data-width="1200" data-height="900" itemprop="contentUrl">
+                            <img src="img/marinos6.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                        </a>
+                    </figure>
+                    <figure class="kimon" itemprop="associatedMedia">
+                        <a href="img/marinos6.jpg"
+                           data-caption="Sunset on the highland road<br><em class='text-muted'>© Forrest Cavale</em>"
+                           data-width="1200" data-height="900" itemprop="contentUrl">
+                            <img src="img/marinos6.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                        </a>
+                    </figure>
+                    <figure class="kimon" itemprop="associatedMedia">
+                        <a href="img/marinos9.jpg" data-caption="Seljalandsfoss waterfall<br><em class='text-muted'>© Jeff Sheldon</em>"
+                           data-width="1200" data-height="900" itemprop="contentUrl">
+                            <img src="img/marinos9.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                        </a>
+                    </figure>
+                </div>
+                <div class="animated fadeInRight">
+                    <figure class="kimon" itemprop="associatedMedia">
+                        <a href="img/marinos12.jpg"
+                           data-caption="Fjadrarglufur canyon, south shore<br><em class='text-muted'>© Jeff Sheldon</em>" data-width="1200"
+                           data-height="900" itemprop="contentUrl">
+                            <img src="img/marinos12.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                        </a>
+                    </figure>
+                    <figure class="kimon" itemprop="associatedMedia">
+                        <a href="img/marinos15.jpg"
+                           data-caption="Eerie wreckage of a crashed U.S. Navy aircraft<br><em class='text-muted'>© Jeff Sheldon</em>"
+                           data-width="1200" data-height="900" itemprop="contentUrl">
+                            <img src="img/marinos15.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                        </a>
+                    </figure>
+                    <figure class="kimon" itemprop="associatedMedia">
+                        <a href="img/marinos12.jpg" data-caption="Blue Lagoon<br><em class='text-muted'>© Jeff Sheldon</em>"
+                           data-width="1200"
+                           data-height="900" itemprop="contentUrl">
+                            <img src="img/marinos12.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                        </a>
+                    </figure>
+                    <figure class="kimon" itemprop="associatedMedia">
+                        <a href="img/marinos25.jpg" data-caption="Sunny Reykjavik street<br><em class='text-muted'>© Jeff Sheldon</em>"
+                           data-width="1200" data-height="900" itemprop="contentUrl">
+                            <img src="img/marinos25.jpg" height="165" width="250" itemprop="thumbnail" alt="Image description">
+                        </a>
+                    </figure>
+                </div>
             </div>
         </div>
         <!--        &lt;!&ndash; Some spacing 😉 &ndash;&gt;-->
@@ -296,10 +305,13 @@
         <div class="row">
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
                 <div class="tm-footer-content-box tm-footer-links-container">
-                    <h3 class="tm-title tm-footer-content-box-title">Contact</h3>
+                    <h3 class="tm-title tm-footer-content-box-title lang" data-key="contact">Contact</h3>
                     <nav>
                         <ul class="nav">
-                            <li class="tm-footer-link"><i class="fas fa-map-marker"></i> Sivota, Igoumenitsa 46100 Thesprotia</li>
+                            <li class="tm-footer-link"><i class="fas fa-map-marker"></i>
+                                <span class="lang" data-key="footerAddress">Sivota, Igoumenitsa
+                                46100 Thesprotia</span>
+                            </li>
                             <li class="tm-footer-link"><i class="fa fa-phone"></i> +30 26650 93 456</li>
                             <li class="tm-footer-link"><i class="fa fa-mobile"></i> +30 697 3473413</li>
                             <li class="tm-footer-link"><i class="fa fa-envelope"></i> iro21@hotmail.com</li>
@@ -309,13 +321,13 @@
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
                 <div class="tm-footer-content-box tm-footer-links-container">
-                    <h3 class="tm-title tm-footer-content-box-title">Menu</h3>
+                    <h3 class="tm-title tm-footer-content-box-title lang" data-key="footerMenu">Menu</h3>
                     <nav>
                         <ul class="nav">
-                            <li><a href="home.html" class="tm-footer-link">Home</a></li>
+                            <li><a href="home.html" class="tm-footer-link lang" data-key="home">Home</a></li>
                             <li><a href="kimon.html" class="tm-footer-link">Kimon Resort</a></li>
                             <li><a href="irida.html" class="tm-footer-link">Irida Resort</a></li>
-                            <li><a href="contact.html" class="tm-footer-link">Contact</a></li>
+                            <li><a href="contact.html" class="tm-footer-link lang" data-key="contact">Contact</a></li>
                         </ul>
                     </nav>
 
@@ -325,10 +337,14 @@
                 http://stackoverflow.com/questions/24590222/bootstrap-3-grid-with-different-height-in-each-item-is-it-solvable-using-only
             -->
             <div class="clearfix hidden-lg-up"></div>
-            <div class="tm-footer-content-box tm-footer-links-container">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                    <div class="tm-2-col-left " id="osm-map">
-                    </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
+                <div class="tm-footer-content-box tm-footer-links-container">
+                    <div id="osm-map"></div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
+                <div class="tm-footer-content-box tm-footer-links-container">
+                    <div id="weather-widget"></div>
                 </div>
             </div>
         </div>

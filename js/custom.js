@@ -11,34 +11,62 @@ let lang;
 let page;
 
 /**
- * Language menu
+ * En language menu
  *
  * @type {string}
  */
 let langMenuEn = '<a href="javascript:void(0)" data-lang="en" class="js-langanchor" id="anchoren">\n' +
-    '                                <li><img src="img/nav/f1ky10.jpg.gif" height="13" width="18"></li>\n' +
+    '                                <li><img src="img/nav/en.png" height="13" width="18"></li>\n' +
     '                            </a>\n' +
     '                            <a href="javascript:void(0)" data-lang="gr" class="js-langanchor" id="anchorgr">\n' +
-    '                                <li><img src="img/nav/2r7t05j.jpg" height="13" width="18"></li>\n' +
+    '                                <li><img src="img/nav/gr.jpg" height="13" width="18"></li>\n' +
     '                            </a>';
+
 /**
- * Language menu
+ * Gr language menu
  *
  * @type {string}
  */
 let langMenuGr = ' <a href="javascript:void(0)" data-lang="gr" class="js-langanchor" id="anchorgr">\n' +
-    '                                <li><img src="img/nav/2r7t05j.jpg" height="13" width="18"></li>\n' +
+    '                                <li><img src="img/nav/gr.jpg" height="13" width="18"></li>\n' +
     '                            </a>\n' +
     '                            <a href="javascript:void(0)" data-lang="en" class="js-langanchor" id="anchoren">\n' +
-    '                                <li><img src="img/nav/f1ky10.jpg.gif" height="13" width="18"></li>\n' +
+    '                                <li><img src="img/nav/en.png" height="13" width="18"></li>\n' +
     '                            </a>';
+
+/**
+ * En weather widget
+ *
+ * @type {string}
+ */
+let weatherWidgetEn = '<div id="c_228566d27061cf3918f08479a88a7daa" class="completo"><h2\n' +
+    'style="color: #cfcfcf; margin: 0 0 3px; padding: 2px; font: bold 13px/1.2 Arial; text-align: center; width=100%">\n' +
+    '<a href="https://www.okairos.gr/%CF%83%CF%8D%CE%B2%CE%BF%CF%84%CE%B1.html"\n' +
+    'style="color: #cfcfcf; text-decoration: none; font: bold 13px/1.2 Arial;">Sivota Weather</a></h2>\n' +
+    '<div id="w_228566d27061cf3918f08479a88a7daa" class="completo" style="height:100%"></div>\n' +
+    '</div>\n' +
+    '<script type="text/javascript" src="http://www.okairos.gr/widget/loader/228566d27061cf3918f08479a88a7daa"></script>';
+
+/**
+ * Gr weather widget
+ *
+ * @type {string}
+ */
+let weatherWidgetGr = '<div id="c_f21dc8791fa9a5d228373b93621a21e1" class="completo"><h2\n' +
+    'style="color: #cfcfcf; margin: 0 0 3px; padding: 2px; font: bold 13px/1.2 Arial; text-align: center; width:100%">\n' +
+    '<a href="https://www.okairos.gr/%CF%83%CF%8D%CE%B2%CE%BF%CF%84%CE%B1.html"\n' +
+    'style="color: #cfcfcf; text-decoration: none; font: bold 13px/1.2 Arial;">Σύβοτα Καιρός</a></h2>\n' +
+    '<div id="w_f21dc8791fa9a5d228373b93621a21e1" class="completo" style="height:100%"></div>\n' +
+    '</div>\n' +
+    '<script type="text/javascript" src="http://www.okairos.gr/widget/loader/f21dc8791fa9a5d228373b93621a21e1"></script>';
+
 
 /**
  * On page load
  *
  */
 $(function ($) {
-    //getCurrentWeather();
+    // scroll to top button
     handleScrollToTop();
     // get lang if exists
     lang = localStorage.getItem('lang') || 'en';
@@ -46,9 +74,11 @@ $(function ($) {
     page = $('#whichPage').val();
     // configure language menu
     configureLangMenu(lang);
+    // decide which weather widget to show(en|gr)
+    configureWeatherWidget(lang)
     // translate current page
     translate(page);
-    //if error everything from here breaks
+    // map
     initializeMap();
     // initialize photo galley
     galleryInit();
@@ -59,10 +89,9 @@ $(function ($) {
  *
  */
 $("#js-langmenu").on('click', '.js-langanchor', function () {
-    // noinspection JSUnresolvedFunction
-    //get selected lang
+    // get selected lang
     lang = $(this).data('lang');
-    //store selected lang
+    // store selected lang
     localStorage.setItem('lang', lang);
     //reload
     location.reload();
@@ -119,6 +148,15 @@ function initializeMap() {
 function configureLangMenu(lang) {
     let langMenu = $('#js-langmenu');
     lang === 'en' ? langMenu.html(langMenuEn) : langMenu.html(langMenuGr);
+}
+
+/**
+ * Decide which weather widget to show(gr|en)
+ *
+ * @param lang
+ */
+function configureWeatherWidget(lang) {
+    lang === 'en' ? $('#weather-widget').html(weatherWidgetEn) : $('#weather-widget').html(weatherWidgetGr);
 }
 
 /**
@@ -179,7 +217,10 @@ function galleryInit() {
     });
 }
 
-//scroll to top
+/**
+ * Scroll to top button
+ *
+ */
 $("a.scroll-top").on('click', function (e) {
     // e.preventDefault();
     $('html,body').animate({scrollTop: 0}, 350);
