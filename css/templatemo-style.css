@@ -31,6 +31,12 @@ h2 { font-size: 2.2rem; }
 	max-width: 1390px;
 }
 
+figure{
+	display: inline-block;
+	width: 25%;
+	float: left;
+}
+
 @media (max-width: 1390px) {
 	.container-fluid {
 		padding-left: 5%;
@@ -161,7 +167,7 @@ h4 {
 .tm-margin-t-mid { margin-top: 60px; }
 .tm-margin-t-small { margin-top: 30px; }
 
-.tm-text-link { 
+.tm-text-link {
 	color: #006699; 
 	line-height: 2.8;
 	text-decoration: underline;
@@ -324,6 +330,10 @@ p { line-height: 1.9; }
 		padding-left: 15px; 
 		padding-top: 40px;
 	}
+	figure{
+		display: inline-block;
+		width: 50%;
+	}
 }
 
 @media (max-width: 897px) {
@@ -343,7 +353,7 @@ p { line-height: 1.9; }
 	#tmNavbar .navbar-nav .nav-item { float: none; }
 	#tmNavbar .navbar-nav .nav-link { padding: 10px 35px; }
 	#tmNavbar {
-		background: white; 
+		background: white;
 		border-radius: 6px;
 	}
 	#tmNavbar .navbar-nav .nav-item+.nav-item { margin-left: 0; }
@@ -440,8 +450,13 @@ p { line-height: 1.9; }
 		margin-left: auto;
 		margin-right: auto;
 	}
+	figure{
+		display: inline-block;
+		width: 100%;
+		margin: 0 50px 1rem;
+	}
 }
-
+/*LANGUAGE PICKER*/
 .languagepicker {
 	background-color: #F8F8F8;
 	display: inline-block;
@@ -465,16 +480,16 @@ p { line-height: 1.9; }
 	color: #000;
 	text-decoration: none;
 }
+
 .languagepicker a:hover {
 	text-decoration: none;
 	outline: none;
 	background-color: #F8F8F8;
 }
 
-
 .languagepicker li {
 	display: block;
-	padding: 0px 20px;
+	padding: 0px 10px;
 	line-height: 40px;
 	border-top: 1px solid #F8F8F8;
 }
@@ -496,24 +511,13 @@ p { line-height: 1.9; }
 	border-radius: 5px;
 }
 
-/*photoSwipe*/
+/*PHOTOSWIPE*/
 h1 {margin: 2em;}
 .pswp__caption__center {text-align: center;}
 
-figure.kimon{
-	display: inline-block;
-	width: 25%;
-	float: left;
-}
-figure.contact{
-	display: inline-block;
-	width: 33%;
-	float: left;
-}
-/*img {width: 100%;}*/
 .spacer {height: 5em;}
 
-/*footer top*/
+/*FOOTER TOP*/
 .footer-top {
 	width: 100%;
 	border-top: 1px solid #00BFFF;
@@ -526,6 +530,7 @@ figure.contact{
 	position: relative;
 	background: #00BFFF;
 }
+
 .f_top_inner h4 {
 	text-decoration: none;
 	color: #fff;
@@ -542,7 +547,7 @@ figure.contact{
 	color: #fff;
 }
 
-/*scroll to top*/
+/*SCROLL TO TOP*/
 .scroll-top {
     background: #006994;
     box-shadow: 0 0 2px rgba(0,0,0,0.4);
@@ -557,13 +562,14 @@ figure.contact{
     overflow: hidden;
     z-index: 9999;
 }
+
 .scroll-top i {
     font-size: 22px;
     line-height: 40px;
     color: #fff !important;
 }
 
-/*header bottom*/
+/*BOTTOM HEADER*/
 .header-bottom {
 	width: 100%;
 	background-color: #00BFFF;
@@ -595,6 +601,7 @@ figure.contact{
 	color: #fff;
 	/*letter-spacing: 1px;*/
 }
+
 .fb-top{
 	float: right;
 }

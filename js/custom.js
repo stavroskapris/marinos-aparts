@@ -38,9 +38,8 @@ let langMenuGr = ' <a href="javascript:void(0)" data-lang="gr" class="js-langanc
  *
  */
 $(function ($) {
-   //getCurrentWeather();
+    //getCurrentWeather();
     handleScrollToTop();
-
     // get lang if exists
     lang = localStorage.getItem('lang') || 'en';
     // get current page
@@ -49,8 +48,8 @@ $(function ($) {
     configureLangMenu(lang);
     // translate current page
     translate(page);
-   //if error everything from here breaks
-     initializeMap();
+    //if error everything from here breaks
+    initializeMap();
     // initialize photo galley
     galleryInit();
 });
@@ -65,11 +64,8 @@ $("#js-langmenu").on('click', '.js-langanchor', function () {
     lang = $(this).data('lang');
     //store selected lang
     localStorage.setItem('lang', lang);
-    //configure lang menu
-    configureLangMenu(lang);
-    // noinspection JSUnresolvedFunction
-    //replace with appropriate lang items
-    translate(page);
+    //reload
+    location.reload();
 });
 
 
@@ -131,11 +127,17 @@ function configureLangMenu(lang) {
  * @param page
  */
 function translate(page) {
+    //lang items
     $('.lang').each(function () {
         //navbar
         $(this).text(langData['languages'][lang]['pages'][page]['navbar'][$(this).data('key')]);
         //rest of the page
         $(this).text(langData['languages'][lang]['pages'][page][$(this).data('key')]);
+    });
+    //gallery images description
+    $('a.js-descdata').each(function () {
+        $(this).attr('data-caption', langData['languages'][lang]['pages'][page]
+            ['galleryDescriptions'][$(this).parents('.location').find('h4').data('key')]);
     });
 }
 
@@ -176,10 +178,11 @@ function galleryInit() {
         gallery.init();
     });
 }
+
 //scroll to top
 $("a.scroll-top").on('click', function (e) {
     // e.preventDefault();
-    $('html,body').animate({ scrollTop: 0 }, 350);
+    $('html,body').animate({scrollTop: 0}, 350);
     return false;
 });
 
@@ -190,7 +193,7 @@ function handleScrollToTop() {
     $('.scroll-top').hide();
     // Check to see if the window is top if not then display button
     $(window).scroll(function () {
-        if ($(this).scrollTop() > 1000) {
+        if ($(this).scrollTop() > 500) {
             $('.scroll-top').fadeIn();
         } else {
             $('.scroll-top').fadeOut();
