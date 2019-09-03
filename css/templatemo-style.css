@@ -202,7 +202,8 @@ h4 {
 }
 .tm-footer-thumbnail { margin-bottom: 5px; }
 
-.tm-copyright-text { 
+.tm-copyright-text {
+	/*font-size: 12px;*/
 	color: #999999; 
 	margin-bottom: 0;
 	margin-top: 20px;
@@ -241,8 +242,9 @@ p { line-height: 1.9; }
 
 #osm-map {
     height: 280px;
-    width: 100%;
+    width: 150%;
 	size: 100px;
+	float: right;
 }
 
 .tm-contact-right { padding-left: 30px; }

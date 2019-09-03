@@ -292,10 +292,13 @@
         <div class="row">
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
                 <div class="tm-footer-content-box tm-footer-links-container">
-                    <h3 class="tm-title tm-footer-content-box-title">Contact</h3>
+                    <h3 class="tm-title tm-footer-content-box-title lang" data-key="contact">Contact</h3>
                     <nav>
                         <ul class="nav">
-                            <li class="tm-footer-link"><i class="fas fa-map-marker"></i> Sivota, Igoumenitsa 46100 Thesprotia</li>
+                            <li class="tm-footer-link" ><i class="fas fa-map-marker"></i>
+                                <span class="lang" data-key="footerAddress">Sivota, Igoumenitsa
+                                46100 Thesprotia</span>
+                            </li>
                             <li class="tm-footer-link"><i class="fa fa-phone"></i> +30 26650 93 456</li>
                             <li class="tm-footer-link"><i class="fa fa-mobile"></i> +30 697 3473413</li>
                             <li class="tm-footer-link"><i class="fa fa-envelope"></i> iro21@hotmail.com</li>
@@ -305,13 +308,13 @@
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
                 <div class="tm-footer-content-box tm-footer-links-container">
-                    <h3 class="tm-title tm-footer-content-box-title">Menu</h3>
+                    <h3 class="tm-title tm-footer-content-box-title lang" data-key="footerMenu">Menu</h3>
                     <nav>
                         <ul class="nav">
-                            <li><a href="home.html" class="tm-footer-link">Home</a></li>
+                            <li><a href="home.html" class="tm-footer-link lang" data-key="home">Home</a></li>
                             <li><a href="kimon.html" class="tm-footer-link">Kimon Resort</a></li>
                             <li><a href="irida.html" class="tm-footer-link">Irida Resort</a></li>
-                            <li><a href="contact.html" class="tm-footer-link">Contact</a></li>
+                            <li><a href="contact.html" class="tm-footer-link lang" data-key="contact">Contact</a></li>
                         </ul>
                     </nav>
 
@@ -321,10 +324,14 @@
                 http://stackoverflow.com/questions/24590222/bootstrap-3-grid-with-different-height-in-each-item-is-it-solvable-using-only
             -->
             <div class="clearfix hidden-lg-up"></div>
-            <div class="tm-footer-content-box tm-footer-links-container">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                    <div class="tm-2-col-left " id="osm-map">
-                    </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
+                <div class="tm-footer-content-box tm-footer-links-container">
+                    <div id="osm-map"></div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
+                <div class="tm-footer-content-box tm-footer-links-container">
+                    <div id="weather-widget"></div>
                 </div>
             </div>
         </div>
