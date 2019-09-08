@@ -181,9 +181,9 @@ function translate(page) {
     //lang items
     $('.lang').each(function () {
         //navbar
-        $(this).text(langData['languages'][lang]['pages'][page]['navbar'][$(this).data('key')]);
+        $(this).html(langData['languages'][lang]['pages'][page]['navbar'][$(this).data('key')]);
         //rest of the page
-        $(this).text(langData['languages'][lang]['pages'][page][$(this).data('key')]);
+        $(this).html(langData['languages'][lang]['pages'][page][$(this).data('key')]);
     });
     //gallery images description
     $('a.js-descdata').each(function () {

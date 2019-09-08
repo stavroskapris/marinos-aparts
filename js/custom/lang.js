@@ -9,6 +9,8 @@ let langData = {
                         'irida': 'Irida Resort',
                         'contact': 'Contact',
                     },
+                    'reservations': '<strong>Reservations : </strong>+30 26650 93 456',
+                    'findus': '<strong>Find us</strong>',
                     'welcome': 'Welcome to Marinos-aparts Rooms in Sivota, where your ultimate satisfaction is our only goal. ' +
                         'Marinos-aparts, with 30 years of hospitality, consist of 2 separate accommodation, KIMON RESORT and IRIDA RESORT.' +
                         ' We make sure that all our customers find exactly what suits them for their vacation. So we have single ' +
@@ -28,7 +30,7 @@ let langData = {
                         'lush gardens. Fully equipped with: TV in both rooms, A/C, fridge, coffee maker, kitchen, WC, free wireless internet.',
                     'readMore': 'Read More',
                     'footerMenu': 'Menu',
-                    'footerAddress': 'Sivota, Igoumenitsa 46100 Thesprotia'
+                    'footerAddress': 'Sivota, Thesprotia'
                 },
                 'kimon': {
                     'navbar': {
@@ -37,7 +39,8 @@ let langData = {
                         'irida': 'Irida Resort',
                         'contact': 'Contact',
                     },
-
+                    'reservations': '<strong>Reservations : </strong>+30 26650 93 456',
+                    'findus': '<strong>Find us</strong>',
                     'main': 'Only 200 meters from the port and 200 meters from the beach of French Molos, KIMON RESORT is ' +
                         'ideal for anyone wishing to stay in a quiet accommodation but at the same time not be deprived of the ' +
                         'opportunity to leave the car and do everything on foot. It is an elegant two-storey building with ten ' +
@@ -49,7 +52,7 @@ let langData = {
                     'gallery': 'Gallery',
                     'title': 'Kimon Resort',
                     'footerMenu': 'Menu',
-                    'footerAddress': 'Sivota, Igoumenitsa 46100 Thesprotia'
+                    'footerAddress': 'Sivota, Thesprotia'
                 },
                 'irida': {
                     'navbar': {
@@ -58,6 +61,8 @@ let langData = {
                         'irida': 'Irida Resort',
                         'contact': 'Contact',
                     },
+                    'reservations': '<strong>Reservations : </strong>+30 26650 93 456',
+                    'findus': '<strong>Find us</strong>',
                     'main': 'IRIDA RESORT, completely renovated in 2015, is ideally located in the center of the village. ' +
                         'Located 30 meters from the port, it is ideal for vacationers who want to enjoy the life of Sivota. ' +
                         'At the same time it is only 200 meters from the beach of French Molos, giving you the opportunity to ' +
@@ -70,7 +75,7 @@ let langData = {
                     'gallery': 'Gallery',
                     'title': 'Irida Resort',
                     'footerMenu': 'Menu',
-                    'footerAddress': 'Sivota, Igoumenitsa 46100 Thesprotia'
+                    'footerAddress': 'Sivota, Thesprotia'
                 },
                 'location': {
                     'navbar': {
@@ -80,8 +85,10 @@ let langData = {
                         'location': 'Location',
                         'contact': 'Contact',
                     },
+                    'reservations': '<strong>Reservations : </strong>+30 26650 93 456',
+                    'findus': '<strong>Find us</strong>',
                     'sivotaTitle': 'Sivota',
-                    'mainText': 'Sivota is a special destination, as one of the most picturesque villages of Epirus. ' +
+                    'main': 'Sivota is a special destination, as one of the most picturesque villages of Epirus. ' +
                         'It is an ideal combination of blue and green as the hills are joined with the crystal waters of ' +
                         'the Ionian Sea. The village of Sivota has a unique cluster of islands with the names "Mavro Oros", ' +
                         '"Ag. Nikolaos" and "Mourtemeno", which consist of beaches and small bays that stand out for their diversity. ' +
@@ -144,8 +151,8 @@ let langData = {
                             'preferable for families with children as it is particularly shallow. Clearly easy to reach the beach is ' +
                             'very accessible and has parking space. Finally you can rent a boat to visit the nearby beaches.',
                     },
-                    'footerMenu': 'Μενού',
-                    'footerAddress': 'Σύβοτα, Ηγουμενίτσα 46100 Θεσπρωτία'
+                    'footerMenu': 'Menu',
+                    'footerAddress': 'Sivota, Thesprotia'
                 },
                 'contact': {
                     'navbar': {
@@ -154,11 +161,13 @@ let langData = {
                         'irida': 'Irida Resort',
                         'contact': 'Contact',
                     },
+                    'reservations': '<strong>Reservations : </strong>+30 26650 93 456',
+                    'findus': '<strong>Find us</strong>',
                     'title': 'Contact Form',
                     'gallery': 'Beaches',
                     'main': 'Check for availability. We will contact you as soon as possible.',
                     'footerMenu': 'Menu',
-                    'footerAddress': 'Sivota, Igoumenitsa 46100 Thesprotia'
+                    'footerAddress': 'Sivota, Thesprotia'
                 },
             },
         }
@@ -172,6 +181,8 @@ let langData = {
                         'location': 'Τοποθεσία',
                         'contact': 'Επικοινωνία',
                     },
+                    'reservations': '<strong>Κρατήσεις : </strong>+30 26650 93 456',
+                    'findus': '<strong>Βρείτε μας</strong>',
                     'welcome': 'Καλωσορίσατε στα ενοικιαζόμενα δωμάτια Marinos-aparts, στα Σύβοτα, όπου η απόλυτη ικανοποίηση ' +
                         'σας είναι ο μόνος στόχος μας. Τα Marinos-aparts, με 30 χρόνια παρουσίας στον χώρο της φιλοξενίας, αποτελούνται ' +
                         'από 2 ξεχωριστά καταλύματα, το KIMON RESORT και το IRIDA RESORT. Έχουμε φροντίσει ώστε όλοι οι πελάτες μας να βρουν ' +
@@ -193,7 +204,7 @@ let langData = {
                         'δωρεάν ασύρματο internet.',
                     'readMore': 'Περισσότερα',
                     'footerMenu': 'Μενού',
-                    'footerAddress': 'Σύβοτα, Ηγουμενίτσα 46100 Θεσπρωτία'
+                    'footerAddress': 'Σύβοτα, Θεσπρωτία'
                 },
                 'kimon': {
                     'navbar': {
@@ -203,6 +214,8 @@ let langData = {
                         'location': 'Τοποθεσία',
                         'contact': 'Επικοινωνία',
                     },
+                    'reservations': '<strong>Κρατήσεις : </strong>+30 26650 93 456',
+                    'findus': '<strong>Βρείτε μας</strong>',
                     'main': 'To KIMON RESORT, πλήρως ανακαινισμένο το 2015, βρίσκεται σε μια ειδυλλιακή τοποθεσία, ανάμεσα ' +
                         'σε ελαιώνες και προσφέρει ησυχία και ομορφιά στους παραθεριστές.' +
                         'Απέχοντας μόνο 200 μέτρα μόνο από το λιμάνι και 200 μέτρα από την παραλία Γαλλικός Μώλος, ' +
@@ -217,7 +230,7 @@ let langData = {
                     'gallery': 'Φωτογραφίες',
                     'title': 'Kimon Resort',
                     'footerMenu': 'Μενού',
-                    'footerAddress': 'Σύβοτα, Ηγουμενίτσα 46100 Θεσπρωτία'
+                    'footerAddress': 'Σύβοτα, Θεσπρωτία'
                 },
                 'irida': {
                     'navbar': {
@@ -227,7 +240,8 @@ let langData = {
                         'location': 'Τοποθεσία',
                         'contact': 'Επικοινωνία',
                     },
-
+                    'reservations': '<strong>Κρατήσεις : </strong>+30 26650 93 456',
+                    'findus': '<strong>Βρείτε μας</strong>',
                     'main': 'Το IRIDA RESORT, πλήρως ανακαινισμένο το 2015, βρίσκεται σε ιδανική τοποθεσία, στο κέντρο του χωριού. ' +
                         'Στα 30 μέτρα από το λιμάνι, είναι ιδανικό για παραθεριστές που θέλουν να απολαύσουν την ζωή των Συβότων. ' +
                         'Ταυτόχρονα απέχει μόνο 200 μέτρα από την παραλία Γαλλικός Μώλος, προσφέροντάς σας τη δυνατότητα να απολαύσετε ' +
@@ -240,7 +254,7 @@ let langData = {
                     'gallery': 'Φωτογραφίες',
                     'title': 'Irida Resort',
                     'footerMenu': 'Μενού',
-                    'footerAddress': 'Σύβοτα, Ηγουμενίτσα 46100 Θεσπρωτία'
+                    'footerAddress': 'Σύβοτα, Θεσπρωτία'
                 },
                 'location': {
                     'navbar': {
@@ -250,8 +264,10 @@ let langData = {
                         'location': 'Τοποθεσία',
                         'contact': 'Επικοικωνία',
                     },
+                    'reservations': '<strong>Κρατήσεις : </strong>+30 26650 93 456',
+                    'findus': '<strong>Βρείτε μας</strong>',
                     'sivotaTitle': 'Σύβοτα',
-                    'mainText':
+                    'main':
                         'Τα Σύβοτα αποτελούν ένα ιδιαίτερο προορισμό, ως ένα από τα γραφικότερα χωριά της Ηπείρου. Πρόκειται ' +
                         'για ιδανικό συνδυασμό γαλάζιου και πράσινου, καθώς οι λόφοι ενώνονται με τα κρυστάλλινα νερά του ιονίου. ' +
                         'Το χωριό των Συβότων διαθέτει ένα μοναδικό σύμπλεγμα νησίδων με τις ονομασίες ‘’Μαύρο Όρος’’, ' +
@@ -321,7 +337,7 @@ let langData = {
                             '                       για να επισκεφθείτε τις διπλανές παραλίες.',
                     },
                     'footerMenu': 'Μενού',
-                    'footerAddress': 'Σύβοτα, Ηγουμενίτσα 46100 Θεσπρωτία'
+                    'footerAddress': 'Σύβοτα, Θεσπρωτία'
                 },
                 'contact': {
                     'navbar': {
@@ -331,11 +347,13 @@ let langData = {
                         'location': 'Τοποθεσία',
                         'contact': 'Επικοινωνία',
                     },
+                    'reservations': '<strong>Κρατήσεις : </strong>+30 26650 93 456',
+                    'findus': '<strong>Βρείτε μας</strong>',
                     'title': 'Φόρμα επικοινωνίας',
                     'gallery': 'Παραλίες',
                     'main': 'Έλεγχος διαθεσιμότητας. Θα επικοινωνήσουμε μαζί σας το συντομότερο.',
                     'footerMenu': 'Μενού',
-                    'footerAddress': 'Σύβοτα, Ηγουμενίτσα 46100 Θεσπρωτία'
+                    'footerAddress': 'Σύβοτα, Θεσπρωτία'
                 },
             }
         }
