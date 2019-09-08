@@ -40,9 +40,9 @@ let langMenuGr = ' <a href="javascript:void(0)" data-lang="gr" class="js-langanc
  * @type {string}
  */
 let weatherWidgetEn = '<div id="c_228566d27061cf3918f08479a88a7daa" class="completo"><h2\n' +
-    'style="color: #cfcfcf; margin: 0 0 3px; padding: 2px; font: bold 13px/1.2 Arial; text-align: center; width=100%">\n' +
+    'style="color: #999999; margin: 0 0 3px; padding: 2px; font: bold 13px/1.2 Arial; text-align: center; width=100%">\n' +
     '<a href="https://www.okairos.gr/%CF%83%CF%8D%CE%B2%CE%BF%CF%84%CE%B1.html"\n' +
-    'style="color: #cfcfcf; text-decoration: none; font: bold 13px/1.2 Arial;">Sivota Weather</a></h2>\n' +
+    'style="color: #999999; text-decoration: none; font: bold 13px/1.2 Arial;">Sivota Weather</a></h2>\n' +
     '<div id="w_228566d27061cf3918f08479a88a7daa" class="completo" style="height:100%"></div>\n' +
     '</div>\n' +
     '<script type="text/javascript" src="http://www.okairos.gr/widget/loader/228566d27061cf3918f08479a88a7daa"></script>';
@@ -53,9 +53,9 @@ let weatherWidgetEn = '<div id="c_228566d27061cf3918f08479a88a7daa" class="compl
  * @type {string}
  */
 let weatherWidgetGr = '<div id="c_f21dc8791fa9a5d228373b93621a21e1" class="completo"><h2\n' +
-    'style="color: #cfcfcf; margin: 0 0 3px; padding: 2px; font: bold 13px/1.2 Arial; text-align: center; width:100%">\n' +
+    'style="color: #999999; margin: 0 0 3px; padding: 2px; font: bold 13px/1.2 Arial; text-align: center; width:100%">\n' +
     '<a href="https://www.okairos.gr/%CF%83%CF%8D%CE%B2%CE%BF%CF%84%CE%B1.html"\n' +
-    'style="color: #cfcfcf; text-decoration: none; font: bold 13px/1.2 Arial;">Σύβοτα Καιρός</a></h2>\n' +
+    'style="color: #999999; text-decoration: none; font: bold 13px/1.2 Arial;">Σύβοτα Καιρός</a></h2>\n' +
     '<div id="w_f21dc8791fa9a5d228373b93621a21e1" class="completo" style="height:100%"></div>\n' +
     '</div>\n' +
     '<script type="text/javascript" src="http://www.okairos.gr/widget/loader/f21dc8791fa9a5d228373b93621a21e1"></script>';
