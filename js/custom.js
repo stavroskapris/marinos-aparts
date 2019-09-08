@@ -97,6 +97,19 @@ $("#js-langmenu").on('click', '.js-langanchor', function () {
     location.reload();
 });
 
+/**
+ * Language menu on click function
+ *
+ */
+$("#toggle-js-langmenu").on('click', '.js-langanchor', function () {
+    // get selected lang
+    lang = $(this).data('lang');
+    // store selected lang
+    localStorage.setItem('lang', lang);
+    //reload
+    location.reload();
+});
+
 
 /**
  * Populate map div with osm map

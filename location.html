@@ -322,11 +322,12 @@
         <div class="row">
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
                 <div class="tm-footer-content-box tm-footer-links-container">
-                    <h3 class="tm-title tm-footer-content-box-title">Contact</h3>
+                    <h3 class="tm-title tm-footer-content-box-title lang" data-key="contact">Contact</h3>
                     <nav>
                         <ul class="nav">
-                            <li class="tm-footer-link"><i class="fas fa-map-marker"></i> Sivota, Igoumenitsa 46100
-                                Thesprotia
+                            <li class="tm-footer-link"><i class="fas fa-map-marker"></i>
+                                <span class="lang" data-key="footerAddress">Sivota, Igoumenitsa
+                                46100 Thesprotia</span>
                             </li>
                             <li class="tm-footer-link"><i class="fa fa-phone"></i> +30 26650 93 456</li>
                             <li class="tm-footer-link"><i class="fa fa-mobile"></i> +30 697 3473413</li>
@@ -335,35 +336,36 @@
                     </nav>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
-                <div class="tm-footer-content-box tm-footer-links-container">
-                    <h3 class="tm-title tm-footer-content-box-title">Menu</h3>
-                    <nav>
-                        <ul class="nav">
-                            <li><a href="home.html" class="tm-footer-link">Home</a></li>
-                            <li><a href="kimon.html" class="tm-footer-link">Kimon Resort</a></li>
-                            <li><a href="irida.html" class="tm-footer-link">Irida Resort</a></li>
-                            <li><a href="contact.html" class="tm-footer-link">Contact</a></li>
-                        </ul>
-                    </nav>
-
+            <div class="hide-footer-menu">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-2">
+                    <div class="tm-footer-content-box tm-footer-links-container">
+                        <h3 class="tm-title tm-footer-content-box-title lang" data-key="footerMenu">Menu</h3>
+                        <nav>
+                            <ul class="nav">
+                                <li><a href="home.html" class="tm-footer-link lang" data-key="home">Home</a></li>
+                                <li><a href="kimon.html" class="tm-footer-link">Kimon Resort</a></li>
+                                <li><a href="irida.html" class="tm-footer-link">Irida Resort</a></li>
+                                <li><a href="location.html" class="tm-footer-link lang" data-key="location">Location</a>
+                                </li>
+                                <li><a href="contact.html" class="tm-footer-link lang" data-key="contact">Contact</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
-            <!-- Add the extra clearfix for only the required viewport
-                http://stackoverflow.com/questions/24590222/bootstrap-3-grid-with-different-height-in-each-item-is-it-solvable-using-only
-            -->
-            <div class="clearfix hidden-lg-up"></div>
-            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-5 col-xl-4">
                 <div class="tm-footer-content-box tm-footer-links-container">
                     <div id="osm-map"></div>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
                 <div class="tm-footer-content-box tm-footer-links-container">
                     <div id="weather-widget"></div>
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="tm-copyright-col">
                 <p class="tm-copyright-text">Copyright 2019 Marinos-Aparts</p>
