@@ -255,19 +255,3 @@ function handleScrollToTop() {
     });
 }
 
-function getCurrentWeather() {
-    var proxy = 'https://cors-anywhere.herokuapp.com/';
-    var apiLInk = 'https://www.metaweather.com/api/location/946738/';
-// send the ajax request
-    $.ajax({
-        type: "GET",
-        url: proxy + apiLInk,
-        success: function (data) {
-            console.log(data)
-        },
-        error: function (data) {
-            console.log(data)
-        }
-    })
-}
-

@@ -7,7 +7,8 @@ http://www.templatemo.com/tm-488-classic
 -----------------------------*/
 
 body {
-	background-color: #F8F8F8;
+	background-color: #F0F0F0;
+	/*background-color: #F8F8F8;*/
 	color: #707070;
 	font-family: 'Open Sans', Helvetica, Arial, sans-serif; !important;
 	font-size: 18px;
@@ -99,7 +100,8 @@ figure{
 }
 
 .tm-contact-img-container {
-	background-image: url('../img/pisina-bg.jpg');
+	/*background-image: url('../img/pisina-bg.jpg');*/
+	background-image: url('../img/sutter_test2.jpg');
 }
 
 .tm-home-img-container,
@@ -265,7 +267,8 @@ p { line-height: 1.9; }
 
 /*LANGUAGE PICKER*/
 .languagepicker {
-    background-color: #F8F8F8;
+    background-color: #F0F0F0;
+    /*background-color: #F8F8F8;*/
     display: inline-block;
     padding: 0px;
     height: 40px;
@@ -291,23 +294,27 @@ p { line-height: 1.9; }
 .languagepicker a:hover {
     text-decoration: none;
     outline: none;
-    background-color: #F8F8F8;
+    background-color: #F0F0F0;
+    /*background-color: #F8F8F8;*/
 }
 
 .languagepicker li {
     display: block;
     padding: 0px 10px;
     line-height: 40px;
-    border-top: 1px solid #F8F8F8;
+    border-top: 1px solid #F0F0F0;
+    /*border-top: 1px solid #F8F8F8;*/
 }
 
 .languagepicker li:hover {
-    background-color: #F8F8F8;
+    background-color: #F0F0F0;
+    /*background-color: #F8F8F8;*/
 }
 
 .languagepicker a:first-child li {
     border: none;
-    background: #F8F8F8 !important;
+    /*background: #F8F8F8 !important;*/
+    background: #F0F0F0 !important;
 }
 
 .languagepicker li img {
@@ -316,6 +323,9 @@ p { line-height: 1.9; }
 
 .roundborders {
     border-radius: 5px;
+}
+.hide-lang-nav-items{
+	display:none;
 }
 
 @media (max-width: 1199px) {
@@ -368,20 +378,32 @@ p { line-height: 1.9; }
 		.navbar-toggleable-sm.collapse {display:none !important}
 		.navbar-toggleable-sm.collapse.in {display:block !important}
 
-	.hide-footer-menu{
+	.hide-footer-menu {
 		display: none;
+	}
+	.hide-lang-menu {
+		display: none;
+	}
+	.hide-lang-nav-items {
+		display: flex;
 	}
 }
 
 @media (max-width: 991px){
-
-	.tm-home-img-container {
-		background:none;
-		height: auto;
-	}
+	/*TODO
+	   decide weather to show
+	    header pictures or not
+	    on small screens.Here
+	    homepage main image is
+	    hidden
+	   */
+	/*.tm-home-img-container {*/
+	/*	background:none;*/
+	/*	height: auto;*/
+	/*}*/
 
 	.tm-subtitle { margin-bottom: 40px; }
-	
+	.tm-title{margin-top: 1rem}
 	/*#tmNavbar .navbar-nav .nav-link { padding: 10px 25px; }*/
 	.media { max-width: 240px; }
 	.media-left {
@@ -397,7 +419,7 @@ p { line-height: 1.9; }
 	    padding-bottom: 60px;
 	}
 
-	.tm-2-col-left, .tm-2-col-right { 
+	.tm-2-col-left, .tm-2-col-right {
 		margin: 0 auto;
 		max-width: 660px; 
 	}
@@ -450,7 +472,7 @@ p { line-height: 1.9; }
 	}
 }
 
-@media (max-width: 768px) {
+@media (max-width: 769px) {
 
 	.tm-content-box { margin-bottom: 50px; }
 	
@@ -505,7 +527,7 @@ p { line-height: 1.9; }
 
 	#weather-widget {
 		margin-top: 25px;
-		padding-left: 160px;
+		/*padding-left: 160px;*/
 	}
 }
 
