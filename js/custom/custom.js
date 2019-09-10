@@ -93,12 +93,12 @@ $(function ($) {
     App.translate = page => {
         //lang items
         $('.lang').each(function () {
-            //navbar
+            // navbar
             $(this).html(App.langData['languages'][lang]['pages'][page]['navbar'][$(this).data('key')]);
             //rest of the page
             $(this).html(App.langData['languages'][lang]['pages'][page][$(this).data('key')]);
         });
-        //gallery images description
+        // gallery images description
         $('a.js-descdata').each(function () {
             $(this).attr('data-caption', App.langData['languages'][lang]['pages'][page]
                 ['galleryDescriptions'][$(this).parents('.location').find('h4').data('key')]);
@@ -192,7 +192,7 @@ $(function ($) {
         });
 
         // Define click event on gallery item
-        $('.gallery').on('click', 'a', event => {
+        $('.gallery').on('click', 'a', function(event) {
             // Prevent location change
             event.preventDefault();
 
@@ -250,7 +250,7 @@ $("#toggle-js-langmenu").on('click', '.js-langanchor', function () {
     lang = $(this).data('lang');
     // store selected lang
     localStorage.setItem('lang', lang);
-    //reload
+    // reload
     location.reload();
 });
 
