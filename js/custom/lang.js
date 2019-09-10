@@ -1,4 +1,4 @@
-let langData = {
+App.langData = {
     'languages': {
         'en': {
             'pages': {
