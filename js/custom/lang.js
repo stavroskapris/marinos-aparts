@@ -164,8 +164,17 @@ App.langData = {
                     'reservations': '<strong>Reservations : </strong>+30 26650 93 456',
                     'findus': '<strong>Find us</strong>',
                     'title': 'Contact Form',
-                    'gallery': 'Beaches',
                     'main': 'Check for availability. We will contact you as soon as possible.',
+                    'form': {
+                        'errorMessages': {
+                            'required': 'This field is required',
+                            'validEmail': 'Please enter a valid email address',
+                            'minlength10': 'Please enter at least 10 characters',
+                            'minlength5': 'Please enter at least 5 characters',
+                            'minlength3': 'Please enter at least 3 characters',
+                        },
+                    },
+                    'submit': 'Submit',
                     'footerMenu': 'Menu',
                     'footerAddress': 'Sivota, Thesprotia'
                 },
@@ -350,8 +359,17 @@ App.langData = {
                     'reservations': '<strong>Κρατήσεις : </strong>+30 26650 93 456',
                     'findus': '<strong>Βρείτε μας</strong>',
                     'title': 'Φόρμα επικοινωνίας',
-                    'gallery': 'Παραλίες',
                     'main': 'Έλεγχος διαθεσιμότητας. Θα επικοινωνήσουμε μαζί σας το συντομότερο.',
+                    'form': {
+                        'errorMessages': {
+                            'required': 'Υποχρεωτικο πεδίο',
+                            'validEmail': 'Παρακαλώ εισαγάγετε μια έγκυρη διεύθυνση ηλεκτρονικού ταχυδρομείου',
+                            'minlength10': 'Παρακαλώ εισαγάγετε τουλάχιστον 10 χαρακτήρες',
+                            'minlength5': 'Παρακαλώ εισαγάγετε τουλάχιστον 5 χαρακτήρες',
+                            'minlength3': 'Παρακαλώ εισαγάγετε τουλάχιστον 3 χαρακτήρες',
+                        },
+                    },
+                    'submit': 'Αποστολή',
                     'footerMenu': 'Μενού',
                     'footerAddress': 'Σύβοτα, Θεσπρωτία'
                 },
