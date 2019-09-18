@@ -1,4 +1,5 @@
 const App = window.App || {};
+
 /**
  * Holds selected language
  *
@@ -32,6 +33,13 @@ $(function ($) {
     App.initializeMap();
     // initialize photo galley
     App.galleryInit();
+    // reset and validate contact form
+    if (page === 'contact') {
+        // reset contact form
+        App.resetContactForm();
+        // contact form field validation
+        App.validateContactForm();
+    }
 });
 
 (function scopeWrapper($) {
@@ -192,7 +200,7 @@ $(function ($) {
         });
 
         // Define click event on gallery item
-        $('.gallery').on('click', 'a', function(event) {
+        $('.gallery').on('click', 'a', function (event) {
             // Prevent location change
             event.preventDefault();
 
@@ -213,6 +221,7 @@ $(function ($) {
 
     /**
      * Handles scroll to top button
+     *
      */
     App.handleScrollToTop = () => {
         $('.scroll-top').hide();
@@ -223,6 +232,176 @@ $(function ($) {
                 $('.scroll-top').fadeIn();
             } else {
                 $('.scroll-top').fadeOut();
+            }
+        });
+    };
+
+
+    /**
+     * Flushes success/error messages
+     *
+     * @param message
+     */
+    App.flushMessage = (message) => {
+        $('#' + message).fadeIn();
+
+        setTimeout(function () {
+            $('#' + message).fadeOut("slow");
+        }, 1500);
+    };
+
+
+    /**
+     * Resets contact form
+     *
+     */
+    App.resetContactForm = () => {
+        $("form#contact-form")[0].reset();
+    };
+
+    /**
+     * Hides loader
+     *
+     */
+    App.hideLoader = () => {
+        $('#generic-loader').hide();
+    };
+
+    /**
+     * Shows loader
+     *
+     */
+    App.showLoader = () => {
+        $('#generic-loader').show();
+    };
+
+
+    /**
+     * Validates reCaptcha check
+     *
+     * @param e
+     * @returns {boolean}
+     */
+    App.checkRecaptcha = (e) => {
+        // get captcha response
+        let captchaResponse = grecaptcha.getResponse();
+        let result = false;
+        // validate response
+        if (captchaResponse.length === 0) {
+            e.preventDefault();
+            App.flushMessage('recaptcha_message');
+            return false;
+        }
+        // wait for apis response to proceed
+        return $.when(App.verifyCaptcha(captchaResponse));
+    };
+
+    /**
+     * Ajax call to api gateway captcha verify endpoint
+     *
+     * @param captchaResponse
+     */
+    App.verifyCaptcha = (captchaResponse) => {
+        // verify captcha endpoint
+        let apiRecaptchaEndPoint = App.apiEndPoints.recaptcha;
+
+        let verifyData = {
+            captchaResponse: captchaResponse,
+        };
+        // verify captcha
+        $.post(apiRecaptchaEndPoint, JSON.stringify(verifyData)).done(function (data) {
+            console.log(data.statusCode)
+            console.log(data.body)
+            return true;
+        }).fail(function (data) {
+
+            return false;
+        });
+    };
+
+    /**
+     * Ajax call to api gateway contact endpoint
+     *
+     * @param e
+     */
+    App.submitToAPI = e => {
+        if ($("form#contact-form").valid()) {
+            e.preventDefault();
+            if (!App.checkRecaptcha(e)) {
+
+                return;
+            }
+            App.showLoader();
+            // get api contact endpoint
+            let apiContactEndPoint = App.apiEndPoints.contact;
+            let contact_name = $("#contact_name").val();
+            let contact_email = $("#contact_email").val();
+            let contact_subject = $("#contact_subject").val();
+            let contact_message = $("#contact_message").val();
+            let emailData = {
+                name: contact_name,
+                email: contact_email,
+                subject: contact_subject,
+                message: contact_message
+            };
+            // send the email
+            $.post(apiContactEndPoint, JSON.stringify(emailData)).done(function (data) {
+
+                App.hideLoader();
+                // clear form and show a success message
+                App.resetContactForm();
+                App.flushMessage('success_message');
+                // reset captcha
+                grecaptcha.reset()
+            }).fail(function (data) {
+                App.hideLoader();
+                App.flushMessage('error_message')
+            });
+        }
+    };
+
+
+    /**
+     * Contact form field validation
+     *
+     */
+    App.validateContactForm = () => {
+        $("form#contact-form").validate({
+            rules: {
+                contact_name: {
+                    required: true,
+                    minlength: 3
+                },
+                contact_email: {
+                    required: true,
+                    email: true
+                },
+                contact_subject: {
+                    required: true,
+                    minlength: 5
+                },
+                contact_message: {
+                    required: true,
+                    minlength: 10
+                },
+            },
+            messages: {
+                contact_name: {
+                    required: App.langData['languages'][lang]['pages']['contact']['form']['errorMessages']['required'],
+                    minlength: App.langData['languages'][lang]['pages']['contact']['form']['errorMessages']['minlength3'],
+                },
+                contact_email: {
+                    required: App.langData['languages'][lang]['pages']['contact']['form']['errorMessages']['required'],
+                    email: App.langData['languages'][lang]['pages']['contact']['form']['errorMessages']['validEmail'],
+                },
+                contact_subject: {
+                    required: App.langData['languages'][lang]['pages']['contact']['form']['errorMessages']['required'],
+                    minlength: App.langData['languages'][lang]['pages']['contact']['form']['errorMessages']['minlength5'],
+                },
+                contact_message: {
+                    required: App.langData['languages'][lang]['pages']['contact']['form']['errorMessages']['required'],
+                    minlength: App.langData['languages'][lang]['pages']['contact']['form']['errorMessages']['minlength10'],
+                },
             }
         });
     };
@@ -242,7 +421,7 @@ $("#js-langmenu").on('click', '.js-langanchor', function () {
 });
 
 /**
- * Language menu on click function
+ * Toggled navbar Language menu on click function
  *
  */
 $("#toggle-js-langmenu").on('click', '.js-langanchor', function () {
