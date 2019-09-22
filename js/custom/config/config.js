@@ -1,5 +1,5 @@
 /**
- * Api Gateway endpoint
+ * Api Gateway endpoints
  *
  * @type {string}
  */

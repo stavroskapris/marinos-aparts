@@ -40,6 +40,8 @@ $(function ($) {
         // contact form field validation
         App.validateContactForm();
     }
+    //TODO
+    App.handleAnimations();
 });
 
 (function scopeWrapper($) {
@@ -103,6 +105,8 @@ $(function ($) {
         $('.lang').each(function () {
             // navbar
             $(this).html(App.langData['languages'][lang]['pages'][page]['navbar'][$(this).data('key')]);
+            // if in kimon.html or irida.html translate facilities
+            (page === 'irida' || page === 'kimon') ? $(this).html(App.langData['languages'][lang]['pages'][page]['facilities'][$(this).data('key')]) : '';
             //rest of the page
             $(this).html(App.langData['languages'][lang]['pages'][page][$(this).data('key')]);
         });
@@ -236,13 +240,27 @@ $(function ($) {
         });
     };
 
+    /**
+     * TODO are we doing it???
+     */
+    App.handleAnimations = () => {
+        // animated fadeInLeft,animated fadeIn,animated fadeInRight
+        $(window).scroll(function () {
+
+            if ($(this).scrollTop() > 600) {
+                $('.leftanimation').addClass('animated fadeInLeft');
+                $('.rightanimation').addClass('animated fadeInRight');
+                $('.inanimation').addClass('animated fadeIn');
+            }
+        });
+    };
 
     /**
      * Flushes success/error messages
      *
      * @param message
      */
-    App.flushMessage = (message) => {
+    App.flushMessage = message => {
         $('#' + message).fadeIn();
 
         setTimeout(function () {
@@ -282,7 +300,7 @@ $(function ($) {
      * @param e
      * @returns {boolean}
      */
-    App.checkRecaptcha = (e) => {
+    App.checkRecaptcha = e => {
         // get captcha response
         let captchaResponse = grecaptcha.getResponse();
         let result = false;
@@ -300,8 +318,9 @@ $(function ($) {
      * Ajax call to api gateway captcha verify endpoint
      *
      * @param captchaResponse
+     * @return boolean
      */
-    App.verifyCaptcha = (captchaResponse) => {
+    App.verifyCaptcha = captchaResponse => {
         // verify captcha endpoint
         let apiRecaptchaEndPoint = App.apiEndPoints.recaptcha;
 
@@ -310,8 +329,9 @@ $(function ($) {
         };
         // verify captcha
         $.post(apiRecaptchaEndPoint, JSON.stringify(verifyData)).done(function (data) {
-            console.log(data.statusCode)
-            console.log(data.body)
+            console.log(data.statusCode);
+            console.log(data.body);
+            //TODO HANDLE BOT;
             return true;
         }).fail(function (data) {
 
