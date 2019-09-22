@@ -1,3 +1,4 @@
+//TODO MINIFY JS AND CSS BEFORE FINAL COMMIT
 const App = window.App || {};
 
 /**
@@ -131,12 +132,9 @@ $(function ($) {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        //TODO correct pins;
-
         // Target's GPS coordinates.
-        let kimonPin = L.latLng('39.410562', '20.239852');
-
-        let iridaPin = L.latLng('39.409889', '20.240984');
+        let kimonPin = L.latLng('39.410685', '20.239593');
+        let iridaPin = L.latLng('39.408755', '20.240425');
 
         switch (page) {
             case  'kimon' :

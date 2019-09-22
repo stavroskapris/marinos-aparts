@@ -1,10 +1,6 @@
-/* 
-
-Classic Template
-
-http://www.templatemo.com/tm-488-classic
-
------------------------------*/
+/**
+TODO MINIFY BEFORE FINAL COMMIT
+ */
 
 body {
 	/*background-color: #F0F0F0;*/
@@ -34,7 +30,7 @@ h2 { font-size: 2.2rem; }
 
 figure{
 	display: inline-block;
-	width: 25%;
+	width: 20%;
 	float: left;
 }
 
@@ -451,21 +447,19 @@ p { line-height: 1.9; }
 }
 
 @media (max-width: 991px){
-	/*TODO
-	   decide weather to show
-	    header pictures or not
-	    on small screens.Here
-	    homepage main image is
-	    hidden
-	   */
-	/*.tm-home-img-container {*/
-	/*	background:none;*/
-	/*	height: auto;*/
-	/*}*/
+
+	.tm-kimon-img-container,
+	.tm-irida-img-container,
+	.tm-location-img-container,
+	.tm-contact-img-container
+	.tm-home-img-container {
+		background:none;
+		height: auto;
+	}
 
 	.tm-subtitle { margin-bottom: 40px; }
 	.tm-title{margin-top: 1rem}
-	/*#tmNavbar .navbar-nav .nav-link { padding: 10px 25px; }*/
+	#tmNavbar .navbar-nav .nav-link { padding: 10px 25px; }
 	.media { max-width: 240px; }
 	.media-left {
 		display: block;
@@ -522,7 +516,7 @@ p { line-height: 1.9; }
 	}
 	figure{
 		display: inline-block;
-		width: 50%;
+		width: 33%;
 	}
 	.contact-form{margin-left: unset}
 }
@@ -592,6 +586,12 @@ p { line-height: 1.9; }
 		/*padding-left: 160px;*/
 	}
 }
+@media (max-width: 700px) {
+	figure{
+		display: inline-block;
+		width: 50%;
+	}
+}
 
 @media (max-width: 543px) {
 	.tm-footer-links-container { padding-left: 0; }
@@ -619,7 +619,6 @@ p { line-height: 1.9; }
 	.tm-footer-content-box { margin-bottom: 40px; }
 	.tm-footer-content-box-title { margin-bottom: 15px; }
 	#osm-map{ margin-top: 25px; }
-	/*.tm-map-section { margin-top: 50px; }*/
 	#weather-widget {padding-left:unset;}
 	.tm-contact-related-posts-container {
 		max-width: 240px;
