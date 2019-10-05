@@ -85,7 +85,7 @@ figure{
 
 .tm-home-img-container {
 	/*background-image: url('../img/destination-sivota-mpela-vraka.jpg');*/
-	background-image: url('../img/shutterImages/5.jpg');
+    background-image: url('../img/sivota-high.jpg');
 }
 
 .tm-kimon-img-container {
@@ -97,11 +97,10 @@ figure{
 }
 
 .tm-location-img-container {
-	/*background-image: url('../img/shutterImages/1.jpg');*/
-	background-image: url('../img/shutterImages/4.jpg');
+	background-image: url('../img/sivota-harbor.jpg');
 
 }.tm-contact-img-container {
-	 background-image: url('../img/shutterImages/6.jpg');
+	 background-image: url('../img/sivota-high.jpg');
 }
 
 .tm-home-img-container,
@@ -598,6 +597,7 @@ p { line-height: 1.9; }
 	.tm-xs-m-t { margin-top: 20px; }
 	.tm-btn { padding: 10px 30px; }
 	#weather-widget {padding-left: 25px;}
+	.g-recaptcha{margin-left: 15%;}
 }
 
 @media(max-width: 510px) {
@@ -633,9 +633,8 @@ p { line-height: 1.9; }
 }
 
 @media (max-width: 360px) {
-	.fb-top {
-		float: left;
-	}
+	.fb-top {float: left;}
+	.g-recaptcha{margin-left: unset}
 }
 
 
