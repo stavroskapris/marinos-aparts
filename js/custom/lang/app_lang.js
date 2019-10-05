@@ -18,7 +18,7 @@ App.langData = {
                         'on the floor or on the ground floor.All of our apartments are spacious and fully refurbished in 2015, with stylish ' +
                         'furnishings and a private balcony. Feel free to contact us to discuss what is ideal for you to ensure you the most beautiful ' +
                         'and easy vacation in Sivota.',
-                    kimonTitle: 'KIMON RESORT, completely renovated in 2013, is the oldest of our accommodations.',
+                    kimonTitle: 'KIMON RESORT, completely renovated in 2015, is the oldest of our accommodations.',
                     iridaTitle: 'IRIDA RESORT, our newest accommodation, fully refurbished in 2013 and located in ' +
                         'the center, 30 meters from the port.',
                     kimonSubTitle: 'Spacious two bedroom family apartments with huge single space that can accommodate from 2 to 5 persons. ' +
@@ -36,14 +36,14 @@ App.langData = {
                     navbar: App.navbar_lang.en,
                     reservations: App.header_bottom_lang.en.reservations,
                     findus: App.header_bottom_lang.en.findus,
-                    main: 'Only 200 meters from the port and 200 meters from the beach of French Molos, KIMON RESORT is ' +
-                        'ideal for anyone wishing to stay in a quiet accommodation but at the same time not be deprived of the ' +
-                        'opportunity to leave the car and do everything on foot. It is an elegant two-storey building with ten ' +
-                        'studios and a beautiful stone-built communal courtyard, ideal for children and an afternoon coffee.Completely ' +
-                        'refurbished in 2015, KIMON RESORT is set in an idyllic setting amidst olive groves, offering tranquility and beauty to holidaymakers.' +
-                        'All of our apartments are spacious and fully refurbished in 2015, with stylish furnishings and a private ' +
-                        'balcony. Feel free to contact us to discuss what is ideal for you to ensure you the most beautiful ' +
-                        'and easy vacation in Sivota. At KIMON RESORT, even the most demanding vacationer will feel good and enjoy his vacation.',
+                    main: 'Completely renovated in 2015, KIMON RESORT is set in an idyllic location, surrounded by olive groves, ' +
+                        'offering tranquility and beauty to holidaymakers. Only 200 meters from the port and 200 meters from the ' +
+                        'beach of French Molos, KIMON RESORT is ideal for anyone wants to stay in a quiet accommodation but at the ' +
+                        'same time is not deprived of the ability to leave the car and do everything on foot. It is an elegant two-storey ' +
+                        'building with ten studios and a beautiful stone-built communal courtyard, ideal for children and an afternoon coffee. ' +
+                        'The studios are spacious, renovated and all have air conditioning, a fully equipped kitchen, a bathroom and a private balcony. ' +
+                        'Furthermore, our private covered parking lot right opposite the property helps you to walk on foot without any worry about your car. ' +
+                        'At KIMON RESORT, even the most demanding vacationer will feel good and enjoy his vacation.',
                     facilities_title:'Facilities',
                     facilities: App.facilities_lang.en,
                     gallery: 'Gallery',
@@ -57,7 +57,7 @@ App.langData = {
                     findus: App.header_bottom_lang.en.findus,
                     main: 'IRIDA RESORT, completely renovated in 2015, is ideally located in the center of the village. ' +
                         'Located 30 meters from the port, it is ideal for vacationers who want to enjoy the life of Sivota. ' +
-                        'At the same time it is only 200 meters from the beach of French Molos, giving you the opportunity to ' +
+                        ' At the same time it is only 200 meters from the beach of French Molos, giving you the opportunity to ' +
                         'enjoy your swim without your car. The studios, all on the first floor of the property, offer moments ' +
                         'of relaxation and total peace of mind. Spacious, bright, cool, with elegant décor and private balconies, ' +
                         'they feature the entire package and cater to all holiday needs. A fully equipped kitchen and a renovated ' +
@@ -177,7 +177,7 @@ App.langData = {
                         'Όλα τα διαμερίσματα μας είναι ευρύχωρα και πλήρως ανακαινισμένα το 2015, διαθέτουν καλαίσθητη επίπλωση και ιδιωτικό μπαλκόνι. ' +
                         'Μην διστάσετε να επικοινωνήσετε μαζί μας για να συζητήσουμε ποιό είναι το ιδανικό για εσάς για να σας εξασφαλίσουμε ' +
                         'τις πιο όμορφες και εύκολες διακοπές στα Σύβοτα.',
-                    kimonTitle: 'To KIMON RESORT, πλήρως ανακαινισμένο το 2013, είναι το παλαιότερο από τα καταλύματα μας.',
+                    kimonTitle: 'To KIMON RESORT, πλήρως ανακαινισμένο το 2015, είναι το παλαιότερο από τα καταλύματα μας.',
                     iridaTitle: 'Το IRIDA RESORT, το νεότερο κατάλυμα μας, πλήρως ανακαινισμένο το 2013 και αυτό, ' +
                         'βρίσκεται στο κέντρο, 30 μέτρα απο το λιμάνι.',
                     kimonSubTitle: 'Δίχωρα οικογενεικά διαμερίσματα με τεράστιο ενιαίο χώρο που μπορεί να φιλοξενήσει από 2–5 άτομα. ' +
@@ -198,7 +198,7 @@ App.langData = {
                     findus: App.header_bottom_lang.gr.findus,
                     main: 'To KIMON RESORT, πλήρως ανακαινισμένο το 2015, βρίσκεται σε μια ειδυλλιακή τοποθεσία, ανάμεσα ' +
                         'σε ελαιώνες και προσφέρει ησυχία και ομορφιά στους παραθεριστές.' +
-                        'Απέχοντας μόνο 200 μέτρα μόνο από το λιμάνι και 200 μέτρα από την παραλία Γαλλικός Μώλος, ' +
+                        ' Απέχοντας μόνο 200 μέτρα μόνο από το λιμάνι και 200 μέτρα από την παραλία Γαλλικός Μώλος, ' +
                         'το KIMON RESORT είναι ιδανικό για όποιον θέλει να μένει σε ένα ήσυχο κατάλυμα αλλά  ταυτόχρονα να ' +
                         'μη του στερείται η δυνατότητα να αφήσει το αυτοκίνητο και να κάνει τα πάντα πεζός. Πρόκειται για ένα ' +
                         'καλαίσθητο διώροφο κτίριο, που διαθέτει δέκα studios και μια πανέμορφη πετρόκτιση κοινόχρηστη αυλή, ' +

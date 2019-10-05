@@ -30,6 +30,12 @@ h2 { font-size: 2.2rem; }
 
 figure{
 	display: inline-block;
+	width: 25%;
+	float: left;
+}
+
+figure.kimon{
+	display: inline-block;
 	width: 20%;
 	float: left;
 }
@@ -394,12 +400,18 @@ p { line-height: 1.9; }
 		padding-left: 4%;
 		padding-right: 4%;
 	}
+	figure.kimon{
+		width: 25%;
+	}
 }
 @media (max-width: 1100px) {
 	.navbar-nav .nav-link {
 		border-radius: 6px;
 		color: black;
 		padding: 10px 20px;
+	}
+	figure{
+		width: 33%;
 	}
 }
 
@@ -513,10 +525,7 @@ p { line-height: 1.9; }
 		padding-left: 15px; 
 		padding-top: 40px;
 	}
-	figure{
-		display: inline-block;
-		width: 33%;
-	}
+
 	.contact-form{margin-left: unset}
 }
 
@@ -524,6 +533,9 @@ p { line-height: 1.9; }
 	.tm-btn {
 		padding: 10px 15px;
 		font-size: 1rem;
+	}
+	figure.kimon{
+		width: 33.3333%;
 	}
 }
 
@@ -584,10 +596,13 @@ p { line-height: 1.9; }
 		margin-top: 25px;
 		/*padding-left: 160px;*/
 	}
-}
-@media (max-width: 700px) {
 	figure{
-		display: inline-block;
+		width: 50%;
+	}
+}
+
+@media (max-width: 675px) {
+	figure.kimon{
 		width: 50%;
 	}
 }
@@ -626,7 +641,6 @@ p { line-height: 1.9; }
 		margin-right: auto;
 	}
 	figure{
-		display: inline-block;
 		width: 100%;
 		margin: 0 50px 1rem;
 	}

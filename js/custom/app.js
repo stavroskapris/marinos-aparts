@@ -41,8 +41,8 @@ $(function ($) {
         // contact form field validation
         App.validateContactForm();
     }
-    //TODO
-    App.handleAnimations();
+    //comment out for now
+    // App.handleAnimations();
 });
 
 (function scopeWrapper($) {
