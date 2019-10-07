@@ -1,6 +1,6 @@
 /**
  * Navbar lang items
- * @type {{en: {parking: string, yard: string, tv: string, fridge: string, tableChairs: string, balcony: string, spaciousRooms: string, closets: string, screens: string, safe: string, iron: string, kitchen: string, airCondition: string, hotWater: string, hairDryer: string}, gr: {parking: string, yard: string, tv: string, fridge: string, tableChairs: string, balcony: string, spaciousRooms: string, closets: string, screens: string, safe: string, iron: string, kitchen: string, airCondition: string, hotWater: string, hairDryer: string}}}
+ * @type {{en: {parking: string, yard: string, tv: string, fridge: string, tableChairs: string, balcony: string, spaciousRooms: string, largeClosets: string, screens: string, safe: string, iron: string, kitchen: string, airCondition: string, hotWater: string, hairDryer: string}, gr: {parking: string, yard: string, tv: string, fridge: string, tableChairs: string, balcony: string, spaciousRooms: string, closets: string, screens: string, safe: string, iron: string, kitchen: string, airCondition: string, hotWater: string, hairDryer: string}}}
  */
 App.facilities_lang = {
     en:
@@ -13,7 +13,8 @@ App.facilities_lang = {
             safe: 'Safe',
             yard: 'Big yard',
             hotWater: '24h hot water (solar water heater & boiler)',
-            closets: 'Large closets',
+            largeClosets: 'Large closets',
+            builtInClosets: 'Built-in closets',
             tv: 'Plasma TV',
             iron: 'Iron and ironing board',
             balcony: 'Private balcony',
@@ -31,7 +32,8 @@ App.facilities_lang = {
         safe: 'Χρηματοκιβώτιο',
         yard: 'Μεγάλη αυλή',
         hotWater: 'Ζεστό νερό όλο το 24ωρο (ηλιακός θερμοσίφωνας & μπόιλερ)',
-        closets: 'Μεγάλες ντουλάπες',
+        largeClosets: 'Μεγάλες ντουλάπες',
+        builtInClosets: 'Εντοιχισμένες ντουλάπες',
         tv: 'Plasma Τηλεόραση',
         iron: 'Σίδερο & σιδερώστα',
         balcony: 'Ιδιωτικό Μπαλκόνι',

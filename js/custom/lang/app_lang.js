@@ -18,16 +18,15 @@ App.langData = {
                         'on the floor or on the ground floor.All of our apartments are spacious and fully refurbished in 2015, with stylish ' +
                         'furnishings and a private balcony. Feel free to contact us to discuss what is ideal for you to ensure you the most beautiful ' +
                         'and easy vacation in Sivota.',
-                    kimonTitle: 'KIMON RESORT, completely renovated in 2015, is the oldest of our accommodations.',
-                    iridaTitle: 'IRIDA RESORT, our newest accommodation, fully refurbished in 2013 and located in ' +
-                        'the center, 30 meters from the port.',
-                    kimonSubTitle: 'Spacious two bedroom family apartments with huge single space that can accommodate from 2 to 5 persons. ' +
-                        'Colorful, tastefully furnished, large verandas and a completely homely atmosphere, our apartments are surrounded by ' +
-                        'lush gardens. Fully equipped with: TV in both rooms, A/C, fridge, coffee maker, kitchen, WC, free wireless internet.',
-
-                    iridaSubTitle: 'Spacious two bedroom family apartments with huge single space that can accommodate from 2 to 5 persons.' +
-                        ' Colorful, tastefully furnished, large verandas and a completely homely atmosphere, our apartments are surrounded by ' +
-                        'lush gardens. Fully equipped with: TV in both rooms, A/C, fridge, coffee maker, kitchen, WC, free wireless internet.',
+                    kimonTitle: 'Completely refurbished in 2015, KIMON RESORT is set in an idyllic setting amidst olive groves, ' +
+                        'offering tranquility and beauty to holidaymakers.',
+                    iridaTitle: 'Completely refurbished in 2015 and located only 30 meters from the port, Irida Resort is ideal for vacationers who want to enjoy ' +
+                        'the life of Sivota.',
+                    kimonSubTitle: 'Only 200 meters from the port and 200 meters from the beach of French Molos, KIMON RESORT is ideal ' +
+                        'for anyone wishing to stay in a quiet accommodation but at the same time not be deprived of the opportunity to leave the car ' +
+                        'and do everything on foot.',
+                    iridaSubTitle: 'The studios, all on the first floor of the property, offer moments of relaxation and total peace of mind. ' +
+                        'Spacious, bright, cool, with elegant décor and private balconies, they feature the entire package and cater to all holiday needs.',
                     readMore: 'Read More',
                     footerMenu: 'Menu',
                     footerAddress: 'Sivota, Thesprotia'
@@ -44,7 +43,7 @@ App.langData = {
                         'The studios are spacious, renovated and all have air conditioning, a fully equipped kitchen, a bathroom and a private balcony. ' +
                         'Furthermore, our private covered parking lot right opposite the property helps you to walk on foot without any worry about your car. ' +
                         'At KIMON RESORT, even the most demanding vacationer will feel good and enjoy his vacation.',
-                    facilities_title:'Facilities',
+                    facilities_title: 'Facilities',
                     facilities: App.facilities_lang.en,
                     gallery: 'Gallery',
                     title: 'Kimon Resort',
@@ -64,7 +63,7 @@ App.langData = {
                         'private bathroom will meet your needs, while the balconies will give you the opportunity to enjoy your coffee. ' +
                         'The rooms of IRIDA RESORT offer comfort, luxury and easy access to the center of Sivota and ' +
                         'the beach at very affordable prices.',
-                    facilities_title:'Facilities',
+                    facilities_title: 'Facilities',
                     facilities: App.facilities_lang.en,
                     gallery: 'Gallery',
                     title: 'Irida Resort',
@@ -177,17 +176,15 @@ App.langData = {
                         'Όλα τα διαμερίσματα μας είναι ευρύχωρα και πλήρως ανακαινισμένα το 2015, διαθέτουν καλαίσθητη επίπλωση και ιδιωτικό μπαλκόνι. ' +
                         'Μην διστάσετε να επικοινωνήσετε μαζί μας για να συζητήσουμε ποιό είναι το ιδανικό για εσάς για να σας εξασφαλίσουμε ' +
                         'τις πιο όμορφες και εύκολες διακοπές στα Σύβοτα.',
-                    kimonTitle: 'To KIMON RESORT, πλήρως ανακαινισμένο το 2015, είναι το παλαιότερο από τα καταλύματα μας.',
-                    iridaTitle: 'Το IRIDA RESORT, το νεότερο κατάλυμα μας, πλήρως ανακαινισμένο το 2013 και αυτό, ' +
-                        'βρίσκεται στο κέντρο, 30 μέτρα απο το λιμάνι.',
-                    kimonSubTitle: 'Δίχωρα οικογενεικά διαμερίσματα με τεράστιο ενιαίο χώρο που μπορεί να φιλοξενήσει από 2–5 άτομα. ' +
-                        'Πολύχρωμα, με καλαίσθητη επίπλωση, μεγάλες βεράντες και εντελώς σπιτική ατμόσφαιρα, τα διαμερίσματα μας περιβάλλονται ' +
-                        'από καταπράσινους κήπους. Πλήρως εξοπλισμένα με: TV και στους δυο χώρους, A/C, ψυγείο, καφετιέρα, κουζίνα, WC, ' +
-                        'δωρεάν ασύρματο internet.',
-                    iridaSubTitle: 'Δίχωρα οικογενεικά διαμερίσματα με τεράστιο ενιαίο χώρο που μπορεί να φιλοξενήσει από 2–5 άτομα. ' +
-                        'Πολύχρωμα, με καλαίσθητη επίπλωση, μεγάλες βεράντες και εντελώς σπιτική ατμόσφαιρα, τα διαμερίσματα μας περιβάλλονται ' +
-                        'από καταπράσινους κήπους. Πλήρως εξοπλισμένα με: TV και στους δυο χώρους, A/C, ψυγείο, καφετιέρα, κουζίνα, WC, ' +
-                        'δωρεάν ασύρματο internet.',
+                    kimonTitle: 'To KIMON RESORT, πλήρως ανακαινισμένο το 2015, βρίσκεται σε μια ειδυλλιακή τοποθεσία, ανάμεσα σε ' +
+                        'ελαιώνες και προσφέρει ησυχία και ομορφιά στους παραθεριστές.',
+                    iridaTitle: 'Το IRIDA RESORT, πλήρως ανακαινισμένο το 2015, βρίσκεται σε ιδανική τοποθεσία, στο κέντρο του χωριού. Στα 30 μέτρα από το λιμάνι, ' +
+                        'είναι ιδανικό για παραθεριστές που θέλουν να απολαύσουν την ζωή των Συβότων.',
+                    kimonSubTitle: 'Απέχοντας μόνο 200 μέτρα μόνο από το λιμάνι και 200 μέτρα από την παραλία Γαλλικός Μώλος, το KIMON RESORT ' +
+                        'είναι ιδανικό για όποιον θέλει να μένει σε ένα ήσυχο κατάλυμα αλλά ταυτόχρονα να μη του στερείται η δυνατότητα να αφήσει το ' +
+                        'αυτοκίνητο και να κάνει τα πάντα πεζός.',
+                    iridaSubTitle: 'Tα studios, όλα στον πρώτο όροφο του οικήματος, προσφέρουν στιγμές χαλάρωσης και απόλυτης ηρεμίας. Ευρύχωρα, φωτεινά, ' +
+                        'δροσερά, με φινετσάτη διακόσμηση και ιδιωτικά μπαλκόνια, διαθέτουν όλο το πακέτο και καλύπτουν όλες τις ανάγκες του παραθεριστή. ',
                     readMore: 'Περισσότερα',
                     footerMenu: 'Μενού',
                     footerAddress: 'Σύβοτα, Θεσπρωτία'
