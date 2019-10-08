@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "animate.css": "^3.7.2",
+    "jquery-validation": "^1.19.1"
+  }
+}
