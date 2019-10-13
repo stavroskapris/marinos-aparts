@@ -15,5 +15,3 @@ and [Route 53](https://aws.amazon.com/route53/).
 * [OpenLayers](http://www.openlayers.org/api/OpenLayers.js)
 
 * [Open Street Maps](https://www.openstreetmap.org)
-
-![Alt text](img/pisina-bg.jpg?raw=true "Title")
