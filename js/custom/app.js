@@ -1,4 +1,3 @@
-//TODO MINIFY JS AND CSS BEFORE FINAL COMMIT
 const App = window.App || {};
 
 /**
@@ -41,7 +40,7 @@ $(function ($) {
         // contact form field validation
         App.validateContactForm();
     }
-    //comment out for now
+    // comment out for now
     // App.handleAnimations();
 });
 
@@ -266,7 +265,6 @@ $(function ($) {
         }, 1500);
     };
 
-
     /**
      * Resets contact form
      *
@@ -290,94 +288,6 @@ $(function ($) {
     App.showLoader = () => {
         $('#generic-loader').show();
     };
-
-
-    /**
-     * Validates reCaptcha check
-     *
-     * @param e
-     * @returns {boolean}
-     */
-    App.checkRecaptcha = e => {
-        // get captcha response
-        let captchaResponse = grecaptcha.getResponse();
-        let result = false;
-        // validate response
-        if (captchaResponse.length === 0) {
-            e.preventDefault();
-            App.flushMessage('recaptcha_message');
-            return false;
-        }
-        // wait for apis response to proceed
-        return $.when(App.verifyCaptcha(captchaResponse));
-    };
-
-    /**
-     * Ajax call to api gateway captcha verify endpoint
-     *
-     * @param captchaResponse
-     * @return boolean
-     */
-    App.verifyCaptcha = captchaResponse => {
-        // verify captcha endpoint
-        let apiRecaptchaEndPoint = App.apiEndPoints.recaptcha;
-
-        let verifyData = {
-            captchaResponse: captchaResponse,
-        };
-        // verify captcha
-        $.post(apiRecaptchaEndPoint, JSON.stringify(verifyData)).done(function (data) {
-            console.log(data.statusCode);
-            console.log(data.body);
-            //TODO HANDLE BOT;
-            return true;
-        }).fail(function (data) {
-
-            return false;
-        });
-    };
-
-    /**
-     * Ajax call to api gateway contact endpoint
-     *
-     * @param e
-     */
-    App.submitToAPI = e => {
-        if ($("form#contact-form").valid()) {
-            e.preventDefault();
-            if (!App.checkRecaptcha(e)) {
-
-                return;
-            }
-            App.showLoader();
-            // get api contact endpoint
-            let apiContactEndPoint = App.apiEndPoints.contact;
-            let contact_name = $("#contact_name").val();
-            let contact_email = $("#contact_email").val();
-            let contact_subject = $("#contact_subject").val();
-            let contact_message = $("#contact_message").val();
-            let emailData = {
-                name: contact_name,
-                email: contact_email,
-                subject: contact_subject,
-                message: contact_message
-            };
-            // send the email
-            $.post(apiContactEndPoint, JSON.stringify(emailData)).done(function (data) {
-
-                App.hideLoader();
-                // clear form and show a success message
-                App.resetContactForm();
-                App.flushMessage('success_message');
-                // reset captcha
-                grecaptcha.reset()
-            }).fail(function (data) {
-                App.hideLoader();
-                App.flushMessage('error_message')
-            });
-        }
-    };
-
 
     /**
      * Contact form field validation
@@ -460,3 +370,86 @@ $("a.scroll-top").on('click', e => {
     $('html,body').animate({scrollTop: 0}, 350);
     return false;
 });
+
+/**
+ * Ajax call to api gateway contact endpoint
+ * responsible for actual email send
+ *
+ * @param e
+ * @returns {Promise<void>}
+ */
+async function sendEmail(e) {
+    if ($("form#contact-form").valid()) {
+        e.preventDefault();
+        // captcha verification
+        let captchaResult = await checkRecaptcha(e);
+        // check google api response
+        if (!captchaResult) {
+            App.flushMessage('error_message');
+            return;
+        }
+        App.showLoader();
+        // get api contact endpoint
+        let apiContactEndPoint = App.apiEndPoints.contact;
+        let contact_name = $("#contact_name").val();
+        let contact_email = $("#contact_email").val();
+        let contact_subject = $("#contact_subject").val();
+        let contact_message = $("#contact_message").val();
+        let emailData = {
+            name: contact_name,
+            email: contact_email,
+            subject: contact_subject,
+            message: contact_message
+        };
+        // send the email
+        $.post(apiContactEndPoint, JSON.stringify(emailData)).done(function () {
+            App.hideLoader();
+            // clear form and show a success message
+            App.resetContactForm();
+            App.flushMessage('success_message');
+            // reset captcha
+            grecaptcha.reset()
+        }).fail(function () {
+            App.hideLoader();
+            App.flushMessage('error_message')
+        });
+    }
+}
+
+/**
+ * Validates reCaptcha check
+ * Ajax call to api gateway verify endpoint
+ *
+ * @returns {Promise<boolean>}
+ */
+async function checkRecaptcha(e) {
+    // get captcha response
+    let captchaResponse = grecaptcha.getResponse();
+    let result = true;
+    // validate response
+    if (captchaResponse.length === 0) {
+        e.preventDefault();
+        App.flushMessage('recaptcha_message');
+        return false;
+    } else { // user checked recaptcha
+        // verify captcha endpoint
+        let apiRecaptchaEndPoint = App.apiEndPoints.recaptcha;
+        let verifyData = {
+            captchaResponse: captchaResponse,
+        };
+        // async ajax call to api gateway captcha verify endpoint
+        $.ajax({
+            type: "POST",
+            url: apiRecaptchaEndPoint,
+            dataType: "json",
+            data: JSON.stringify(verifyData),
+            async: false
+        }).done(function (data) {
+            if (data.body !== "\"Success\"") {
+                // bot calling
+                result = false;
+            }
+        });
+    }
+    return result;
+}
