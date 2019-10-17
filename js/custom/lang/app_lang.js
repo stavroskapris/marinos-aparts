@@ -156,6 +156,9 @@ App.langData = {
                             minlength3: 'Please enter at least 3 characters',
                         },
                     },
+                    contactErrorMessage: 'Unable to send',
+                    contactSuccessMessage: 'Thanks for contacting us',
+                    captchaErrorMessage: 'Captcha field is required',
                     submit: 'Submit',
                     footerMenu: 'Menu',
                     footerAddress: 'Sivota, Thesprotia'
@@ -323,6 +326,9 @@ App.langData = {
                             'minlength3': 'Παρακαλώ εισαγάγετε τουλάχιστον 3 χαρακτήρες',
                         },
                     },
+                    contactErrorMessage: 'Αδυναμία αποστολής',
+                    contactSuccessMessage: 'Ευχαριστούμε για την επικοινωνία',
+                    captchaErrorMessage: 'Το πεδίο captcha είναι υποχρεωτικό',
                     submit: 'Αποστολή',
                     footerMenu: 'Μενού',
                     footerAddress: 'Σύβοτα, Θεσπρωτία'

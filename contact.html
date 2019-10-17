@@ -137,13 +137,11 @@
                             <div id="generic-loader" class="text-center" style="display:none">
                                 Sending email... <i class="fa fa-spinner fa-spin"></i>
                             </div>
-                            <div id="error_message" class="ajax_response" style="display:none">Paketo</div>
-                            <div id="success_message" class="ajax_response" style="display:none">estali</div>
-                            <div id="recaptcha_message" class="ajax_response" style="color:red;display:none">Check
-                                recaptcha
-                            </div>
+                            <div id="error_message" class="lang" data-key="contactErrorMessage" style="display:none"></div>
+                            <div id="success_message" class="lang" data-key="contactSuccessMessage"  style="display:none"></div>
+                            <div id="recaptcha_message" class="lang" data-key="captchaErrorMessage"style="color:red;display:none"></div>
                         </div>
-                        <button type="submit" id="contact-form-submit" onClick="App.submitToAPI(event)"
+                        <button type="submit" id="contact-form-submit" onClick="sendEmail(event)"
                                 class="tm-btn btn-block lang"
                                 data-key="submit"></button>
                         <div class="g-recaptcha" data-sitekey="6LcglLUUAAAAAF_UyVCnbs1Jv4aLFlrDigWo0Y28"></div>
@@ -233,7 +231,7 @@
 <!-- UI JS file -->
 <script src="js/photoswipe/photoswipe-ui-default.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
-<script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+<script src="https://www.openlayers.org/api/OpenLayers.js"></script>
 <link href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" rel="stylesheet"/>
 </body>
 </html>
