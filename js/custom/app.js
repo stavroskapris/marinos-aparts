@@ -42,6 +42,10 @@ $(function ($) {
     }
     // comment out for now
     // App.handleAnimations();
+
+    // wait for map to exist in the dom and make the call https
+    lang === 'en' ? waitForMap('228566d27061cf3918f08479a88a7daa') : waitForMap('f21dc8791fa9a5d228373b93621a21e1');
+
 });
 
 (function scopeWrapper($) {
@@ -80,7 +84,7 @@ $(function ($) {
         'style="color: #999999; text-decoration: none; font: bold 13px/1.2 Arial;">Sivota Weather</a></h2>\n' +
         '<div id="w_228566d27061cf3918f08479a88a7daa" class="completo" style="height:100%"></div>\n' +
         '</div>\n' +
-        '<script type="text/javascript" src="http://www.okairos.gr/widget/loader/228566d27061cf3918f08479a88a7daa"></script>';
+        '<script type="text/javascript" src="https://www.okairos.gr/widget/loader/228566d27061cf3918f08479a88a7daa"></script>';
 
     /**
      * Gr weather widget
@@ -93,7 +97,7 @@ $(function ($) {
         'style="color: #999999; text-decoration: none; font: bold 13px/1.2 Arial;">Σύβοτα Καιρός</a></h2>\n' +
         '<div id="w_f21dc8791fa9a5d228373b93621a21e1" class="completo" style="height:100%"></div>\n' +
         '</div>\n' +
-        '<script type="text/javascript" src="http://www.okairos.gr/widget/loader/f21dc8791fa9a5d228373b93621a21e1"></script>';
+        '<script type="text/javascript" src="https://www.okairos.gr/widget/loader/f21dc8791fa9a5d228373b93621a21e1"></script>';
 
     /**
      * Handles page translation
@@ -127,8 +131,8 @@ $(function ($) {
         let map = L.map(document.getElementById('osm-map'));
 
         // Add OSM tile leayer to the Leaflet map.
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
         // Target's GPS coordinates.
@@ -453,3 +457,23 @@ async function checkRecaptcha(e) {
     }
     return result;
 }
+
+/**
+ * Wait for map widget to exist in the dom and change iframe's
+ * src attribute to https
+ * @param widgetId
+ * @param maxtries
+ * @param interval
+ */
+let waitForMap = function (widgetId, maxtries = false, interval = 100) {
+    const poller = setInterval(() => {
+        const el = $('#fr_' + widgetId);
+        const retry = maxtries === false || maxtries-- > 0;
+        if (retry && el.length < 1) {
+            return
+        } else {
+             el.attr('src','https://www.okairos.gr/widget/get/'+widgetId+'?v=11001');
+        }// will try again
+        clearInterval(poller);
+    }, interval)
+};

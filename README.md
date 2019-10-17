@@ -12,6 +12,6 @@ and [Route 53](https://aws.amazon.com/route53/).
 
 * [Leaflet](https://leafletjs.com)
 
-* [OpenLayers](http://www.openlayers.org/api/OpenLayers.js)
+* [OpenLayers](https://www.openlayers.org/api/OpenLayers.js)
 
 * [Open Street Maps](https://www.openstreetmap.org)
