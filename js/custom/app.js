@@ -389,7 +389,7 @@ async function sendEmail(e) {
         let captchaResult = await checkRecaptcha(e);
         // check google api response
         if (!captchaResult) {
-            App.flushMessage('error_message');
+            App.flushMessage('recaptcha_message');
             return;
         }
         App.showLoader();
@@ -433,7 +433,6 @@ async function checkRecaptcha(e) {
     // validate response
     if (captchaResponse.length === 0) {
         e.preventDefault();
-        App.flushMessage('recaptcha_message');
         return false;
     } else { // user checked recaptcha
         // verify captcha endpoint
