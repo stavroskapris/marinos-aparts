@@ -1,6 +1,6 @@
 # [marinos-aparts.gr](https://d2zjloyrcu8y9q.cloudfront.net)
 
-A bilingual website using AWS [CloudFront](https://aws.amazon.com/cloudfront/), [S3](https://aws.amazon.com/s3/), 
+A serverless bilingual website using AWS [CloudFront](https://aws.amazon.com/cloudfront/), [S3](https://aws.amazon.com/s3/), 
 [API Gateway](https://aws.amazon.com//api-gateway/), [Lambda](https://aws.amazon.com/lambda/) 
 and [Route 53](https://aws.amazon.com/route53/).
 
