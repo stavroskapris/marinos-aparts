@@ -89,23 +89,23 @@ figure.kimon {
 }
 
 .tm-home-img-container {
-    background-image: url('../img/sivota-high.jpg');
+    background-image: url('../img/home-sivota.jpg');
 }
 
 .tm-kimon-img-container {
-    background-image: url('../img/sivotaFINAL.jpg');
+    background-image: url('../img/kimon-sivota.jpg');
 }
 
 .tm-irida-img-container {
-	background-image: url('../img/sivota-high.jpg');
+	background-image: url('../img/irida-sivota.jpg');
 }
 
 .tm-location-img-container {
-	background-image: url('../img/sivotaFINAL.jpg');
+	background-image: url('../img/location-sivota.jpg');
 }
 
 .tm-contact-img-container {
-    background-image: url('../img/sivota-high.jpg');
+    background-image: url('../img/contact-sivota.jpg');
 }
 
 .tm-home-img-container,
