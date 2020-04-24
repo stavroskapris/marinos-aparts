@@ -1,4 +1,4 @@
-# [marinos-aparts.gr](https://d2zjloyrcu8y9q.cloudfront.net)
+# [marinos-aparts.gr](https://www.marinos-aparts.gr)
 
 A serverless bilingual website using AWS [CloudFront](https://aws.amazon.com/cloudfront/), [S3](https://aws.amazon.com/s3/), 
 [API Gateway](https://aws.amazon.com//api-gateway/), [Lambda](https://aws.amazon.com/lambda/) 
