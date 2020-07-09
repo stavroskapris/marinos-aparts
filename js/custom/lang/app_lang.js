@@ -12,17 +12,17 @@ App.langData = {
                     reservations: App.header_bottom_lang.en.reservations,
                     findus: App.header_bottom_lang.en.findus,
                     welcome: 'Welcome to Marinos-aparts Rooms in Sivota, where your ultimate satisfaction is our only goal. ' +
-                        'Marinos-aparts, with 30 years of hospitality, consist of 2 separate accommodation, KIMON RESORT and IRIDA RESORT.' +
+                        'Marinos-aparts, with 30 years of hospitality, consist of 2 separate accommodation, Kimon Resort and Irida Resort.' +
                         ' We make sure that all our customers find exactly what suits them for their vacation. So we have single ' +
                         'and double room apartments, ideal for couples and families, in the center of the port but also a little further, ' +
-                        'on the floor or on the ground floor.All of our apartments are spacious and fully refurbished in 2015, with stylish ' +
+                        'on the floor or on the ground floor.All of our apartments are spacious and fully refurbished, with stylish ' +
                         'furnishings and a private balcony. Feel free to contact us to discuss what is ideal for you to ensure you the most beautiful ' +
                         'and easy vacation in Sivota.',
-                    kimonTitle: 'Completely refurbished in 2015, KIMON RESORT is set in an idyllic setting amidst olive groves, ' +
+                    kimonTitle: 'Completely refurbished, Kimon Resort is set in an idyllic setting amidst olive groves, ' +
                         'offering tranquility and beauty to holidaymakers.',
-                    iridaTitle: 'Completely refurbished in 2015 and located only 30 meters from the port, Irida Resort is ideal for vacationers who want to enjoy ' +
+                    iridaTitle: 'Completely refurbished and located only 30 meters from the port, Irida Resort is ideal for vacationers who want to enjoy ' +
                         'the life of Sivota.',
-                    kimonSubTitle: 'Only 200 meters from the port and 200 meters from the beach of French Molos, KIMON RESORT is ideal ' +
+                    kimonSubTitle: 'Only 200 meters from the port and 200 meters from the beach of French Molos, Kimon Resort is ideal ' +
                         'for anyone wishing to stay in a quiet accommodation but at the same time not be deprived of the opportunity to leave the car ' +
                         'and do everything on foot.',
                     iridaSubTitle: 'The studios, all on the first floor of the property, offer moments of relaxation and total peace of mind. ' +
@@ -35,14 +35,14 @@ App.langData = {
                     navbar: App.navbar_lang.en,
                     reservations: App.header_bottom_lang.en.reservations,
                     findus: App.header_bottom_lang.en.findus,
-                    main: 'Completely renovated in 2015, KIMON RESORT is set in an idyllic location, surrounded by olive groves, ' +
+                    main: 'Completely renovated, Kimon Resort is set in an idyllic location, surrounded by olive groves, ' +
                         'offering tranquility and beauty to holidaymakers. Only 200 meters from the port and 200 meters from the ' +
-                        'beach of French Molos, KIMON RESORT is ideal for anyone wants to stay in a quiet accommodation but at the ' +
+                        'beach of French Molos, Kimon Resort is ideal for anyone wants to stay in a quiet accommodation but at the ' +
                         'same time is not deprived of the ability to leave the car and do everything on foot. It is an elegant two-storey ' +
                         'building with ten studios and a beautiful stone-built communal courtyard, ideal for children and an afternoon coffee. ' +
                         'The studios are spacious, renovated and all have air conditioning, a fully equipped kitchen, a bathroom and a private balcony. ' +
                         'Furthermore, our private covered parking lot right opposite the property helps you to walk on foot without any worry about your car. ' +
-                        'At KIMON RESORT, even the most demanding vacationer will feel good and enjoy his vacation.',
+                        'At Kimon Resort, even the most demanding vacationer will feel good and enjoy his vacation.',
                     facilities_title: 'Facilities',
                     facilities: App.facilities_lang.en,
                     gallery: 'Gallery',
@@ -54,14 +54,14 @@ App.langData = {
                     navbar: App.navbar_lang.en,
                     reservations: App.header_bottom_lang.en.reservations,
                     findus: App.header_bottom_lang.en.findus,
-                    main: 'IRIDA RESORT, completely renovated in 2015, is ideally located in the center of the village. ' +
+                    main: 'Irida Resort is completely renovated and ideally located in the center of the village. ' +
                         'Located 30 meters from the port, it is ideal for vacationers who want to enjoy the life of Sivota. ' +
                         ' At the same time it is only 200 meters from the beach of French Molos, giving you the opportunity to ' +
                         'enjoy your swim without your car. The studios, all on the first floor of the property, offer moments ' +
                         'of relaxation and total peace of mind. Spacious, bright, cool, with elegant décor and private balconies, ' +
                         'they feature the entire package and cater to all holiday needs. A fully equipped kitchen and a renovated ' +
                         'private bathroom will meet your needs, while the balconies will give you the opportunity to enjoy your coffee. ' +
-                        'The rooms of IRIDA RESORT offer comfort, luxury and easy access to the center of Sivota and ' +
+                        'The rooms of Irida Resort offer comfort, luxury and easy access to the center of Sivota and ' +
                         'the beach at very affordable prices.',
                     facilities_title: 'Facilities',
                     facilities: App.facilities_lang.en,
@@ -173,17 +173,17 @@ App.langData = {
                     findus: App.header_bottom_lang.gr.findus,
                     welcome: 'Καλωσορίσατε στα ενοικιαζόμενα δωμάτια Marinos-aparts, στα Σύβοτα, όπου η απόλυτη ικανοποίηση ' +
                         'σας είναι ο μόνος στόχος μας. Τα Marinos-aparts, με 30 χρόνια παρουσίας στον χώρο της φιλοξενίας, αποτελούνται ' +
-                        'από 2 ξεχωριστά καταλύματα, το KIMON RESORT και το IRIDA RESORT. Έχουμε φροντίσει ώστε όλοι οι πελάτες μας να βρουν ' +
+                        'από 2 ξεχωριστά καταλύματα, το Kimon Resort και το Irida Resort. Έχουμε φροντίσει ώστε όλοι οι πελάτες μας να βρουν ' +
                         'ακριβώς αυτό που τους ταιριάζει για τις διακοπές τους. Διαθέτουμε λοιπόν μονόχωρα αλλά και δίχωρα διαμερίσματα, ' +
                         'ιδανικά για ζευγάρια αλλά και οικογένειες, στο κέντρο του λιμανιού αλλά και λίγο πιο δίπλα, σε όροφο ή σε ισόγειο. ' +
-                        'Όλα τα διαμερίσματα μας είναι ευρύχωρα και πλήρως ανακαινισμένα το 2015, διαθέτουν καλαίσθητη επίπλωση και ιδιωτικό μπαλκόνι. ' +
+                        'Όλα τα διαμερίσματα μας είναι ευρύχωρα και πλήρως ανακαινισμένα, διαθέτουν καλαίσθητη επίπλωση και ιδιωτικό μπαλκόνι. ' +
                         'Μην διστάσετε να επικοινωνήσετε μαζί μας για να συζητήσουμε ποιό είναι το ιδανικό για εσάς για να σας εξασφαλίσουμε ' +
                         'τις πιο όμορφες και εύκολες διακοπές στα Σύβοτα.',
-                    kimonTitle: 'To KIMON RESORT, πλήρως ανακαινισμένο το 2015, βρίσκεται σε μια ειδυλλιακή τοποθεσία, ανάμεσα σε ' +
+                    kimonTitle: 'To πλήρως ανακαινισμένο Kimon Resort, βρίσκεται σε μια ειδυλλιακή τοποθεσία, ανάμεσα σε ' +
                         'ελαιώνες και προσφέρει ησυχία και ομορφιά στους παραθεριστές.',
-                    iridaTitle: 'Το IRIDA RESORT, πλήρως ανακαινισμένο το 2015, βρίσκεται σε ιδανική τοποθεσία, στο κέντρο του χωριού. Στα 30 μέτρα από το λιμάνι, ' +
+                    iridaTitle: 'Το πλήρως ανακαινισμένο Irida Resort, βρίσκεται σε ιδανική τοποθεσία, στο κέντρο του χωριού. Στα 30 μέτρα από το λιμάνι, ' +
                         'είναι ιδανικό για παραθεριστές που θέλουν να απολαύσουν την ζωή των Συβότων.',
-                    kimonSubTitle: 'Απέχοντας μόνο 200 μέτρα μόνο από το λιμάνι και 200 μέτρα από την παραλία Γαλλικός Μώλος, το KIMON RESORT ' +
+                    kimonSubTitle: 'Απέχοντας μόνο 200 μέτρα μόνο από το λιμάνι και 200 μέτρα από την παραλία Γαλλικός Μώλος, το Kimon Resort ' +
                         'είναι ιδανικό για όποιον θέλει να μένει σε ένα ήσυχο κατάλυμα αλλά ταυτόχρονα να μη του στερείται η δυνατότητα να αφήσει το ' +
                         'αυτοκίνητο και να κάνει τα πάντα πεζός.',
                     iridaSubTitle: 'Tα studios, όλα στον πρώτο όροφο του οικήματος, προσφέρουν στιγμές χαλάρωσης και απόλυτης ηρεμίας. Ευρύχωρα, φωτεινά, ' +
@@ -196,16 +196,16 @@ App.langData = {
                     navbar: App.navbar_lang.gr,
                     reservations: App.header_bottom_lang.gr.reservations,
                     findus: App.header_bottom_lang.gr.findus,
-                    main: 'To KIMON RESORT, πλήρως ανακαινισμένο το 2015, βρίσκεται σε μια ειδυλλιακή τοποθεσία, ανάμεσα ' +
+                    main: 'To πλήρως ανακαινισμένο Kimon Resort, βρίσκεται σε μια ειδυλλιακή τοποθεσία, ανάμεσα ' +
                         'σε ελαιώνες και προσφέρει ησυχία και ομορφιά στους παραθεριστές.' +
                         ' Απέχοντας μόνο 200 μέτρα μόνο από το λιμάνι και 200 μέτρα από την παραλία Γαλλικός Μώλος, ' +
-                        'το KIMON RESORT είναι ιδανικό για όποιον θέλει να μένει σε ένα ήσυχο κατάλυμα αλλά  ταυτόχρονα να ' +
+                        'το Kimon Resort είναι ιδανικό για όποιον θέλει να μένει σε ένα ήσυχο κατάλυμα αλλά  ταυτόχρονα να ' +
                         'μη του στερείται η δυνατότητα να αφήσει το αυτοκίνητο και να κάνει τα πάντα πεζός. Πρόκειται για ένα ' +
                         'καλαίσθητο διώροφο κτίριο, που διαθέτει δέκα studios και μια πανέμορφη πετρόκτιση κοινόχρηστη αυλή, ' +
                         'ιδανική για παιδιά αλλά και έναν απογευματινό καφέ. Τα studios είναι ευρύχωρα, ανακαινισμένα και ' +
                         'διαθέτουν όλα τους κλιματισμό, πλήρως εξοπλισμένη κουζίνα, μπάνιο και ιδιωτικό μπαλκόνι. ' +
                         'Ακόμη, το ιδιωτικό μας parking με σκέπαστρο, ακριβώς απέναντι από το κατάλυμα, σας βοηθάει στο να ' +
-                        'κινείστε πεζοί δίχως καμμία έγνοια για το αυτοκίνητό σας. Στο KIMON RESORT, ακόμα και ο πιο απαιτητικός ' +
+                        'κινείστε πεζοί δίχως καμμία έγνοια για το αυτοκίνητό σας. Στο Kimon Resort, ακόμα και ο πιο απαιτητικός ' +
                         'παραθεριστής θα νιώσει όμορφα και θα απολαύσει τις διακοπές του.',
                     facilities_title: 'Παροχές',
                     facilities: App.facilities_lang.gr,
@@ -218,14 +218,14 @@ App.langData = {
                     navbar: App.navbar_lang.gr,
                     reservations: App.header_bottom_lang.gr.reservations,
                     findus: App.header_bottom_lang.gr.findus,
-                    main: 'Το IRIDA RESORT, πλήρως ανακαινισμένο το 2015, βρίσκεται σε ιδανική τοποθεσία, στο κέντρο του χωριού. ' +
+                    main: 'Το πλήρως ανακαινισμένο Irida Resort, βρίσκεται σε ιδανική τοποθεσία, στο κέντρο του χωριού. ' +
                         'Στα 30 μέτρα από το λιμάνι, είναι ιδανικό για παραθεριστές που θέλουν να απολαύσουν την ζωή των Συβότων. ' +
                         'Ταυτόχρονα απέχει μόνο 200 μέτρα από την παραλία Γαλλικός Μώλος, προσφέροντάς σας τη δυνατότητα να απολαύσετε ' +
                         'το μπάνιο σας χωρίς το αυτοκίνητό σας. Tα studios, όλα στον πρώτο όροφο του οικήματος, προσφέρουν στιγμές ' +
                         'χαλάρωσης και απόλυτης ηρεμίας. Ευρύχωρα, φωτεινά, δροσερά, με φινετσάτη διακόσμηση και ιδιωτικά μπαλκόνια, ' +
                         'διαθέτουν όλο το πακέτο και καλύπτουν όλες τις ανάγκες του παραθεριστή. Μία πλήρως εξοπλισμένη κουζίνα και ' +
                         'ένα ανακαινισμένο ατομικό μπάνιο θα ικανοποιήσουν τις ανάγκες σας, ενώ τα μπαλκόνια θα σας προσφέρουν ' +
-                        'την ευκαιρία να απολαύσετε τον καφέ σας. Τα δωμάτια του IRIDA RESORT προσφέρουν άνεση, πολυτέλεια και ' +
+                        'την ευκαιρία να απολαύσετε τον καφέ σας. Τα δωμάτια του Irida Resort προσφέρουν άνεση, πολυτέλεια και ' +
                         'εύκολη πρόσβαση στο κέντρο των Συβότων και στην παραλία σε πολύ προσιτές τιμές.',
                     facilities_title: 'Παροχές',
                     facilities: App.facilities_lang.gr,
