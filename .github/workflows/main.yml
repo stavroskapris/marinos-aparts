@@ -23,4 +23,4 @@ jobs:
         run: npm install
 
       - name: Deploy static site to S3 bucket
-        run: aws s3 sync ./ s3://marinos-test-bucket --exclude "./js/custom/config/config.js"
+        run: aws s3 sync ./ s3://marinos-test-bucket --exclude "./js/custom/config/*"
