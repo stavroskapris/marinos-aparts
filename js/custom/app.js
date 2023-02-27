@@ -341,7 +341,7 @@ $(function ($) {
     };
 
     /**
-     * Shows loader
+     * Current year for copyright
      *
      */
     App.copyrightYear = () => {
