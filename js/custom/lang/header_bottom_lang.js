@@ -6,11 +6,11 @@
 App.header_bottom_lang = {
     en:
         {
-            reservations: '<strong>Reservations : </strong>+30 6936 772 821',
+            reservations: '<strong>Reservations : </strong>+30 6909 025 820',
             findus: '<strong>Find us</strong>',
         },
     gr: {
-        reservations: '<strong>Κρατήσεις : </strong>+30 6936 772 821',
+        reservations: '<strong>Κρατήσεις : </strong>+30 6909 025 820',
         findus: '<strong>Βρείτε μας</strong>',
     },
 };
