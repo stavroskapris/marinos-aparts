@@ -33,6 +33,8 @@ $(function ($) {
     App.initializeMap();
     // initialize photo galley
     App.galleryInit();
+    // copyright year
+    App.copyrightYear();
     // reset and validate contact form
     if (page === 'contact') {
         // reset contact form
@@ -337,6 +339,14 @@ $(function ($) {
             }
         });
     };
+
+    /**
+     * Current year for copyright
+     *
+     */
+    App.copyrightYear = () => {
+        $('#current-year').text(new Date().getFullYear());
+    };
 }(jQuery));
 
 /**
@@ -471,7 +481,7 @@ let waitForMap = function (widgetId, maxtries = false, interval = 100) {
         if (retry && el.length < 1) {
             return
         } else {
-             el.attr('src','https://www.okairos.gr/widget/get/'+widgetId+'?v=11001');
+            el.attr('src', 'https://www.okairos.gr/widget/get/' + widgetId + '?v=11001');
         }// will try again
         clearInterval(poller);
     }, interval)
