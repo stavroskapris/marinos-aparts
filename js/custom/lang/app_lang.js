@@ -29,7 +29,8 @@ App.langData = {
                         'Spacious, bright, cool, with elegant décor and private balconies, they feature the entire package and cater to all holiday needs.',
                     readMore: 'Read More',
                     footerMenu: 'Menu',
-                    footerAddress: 'Sivota, Thesprotia'
+                    footerAddress: 'Sivota, Thesprotia',
+                    footerRegistryNo: 'KIMON General Registry Number 019630328004 | IRIDA General Registry Number 019630328000'
                 },
                 kimon: {
                     navbar: App.navbar_lang.en,
@@ -48,7 +49,8 @@ App.langData = {
                     gallery: 'Gallery',
                     title: 'Kimon Resort',
                     footerMenu: 'Menu',
-                    footerAddress: 'Sivota, Thesprotia'
+                    footerAddress: 'Sivota, Thesprotia',
+                    footerRegistryNo: 'KIMON General Registry Number 019630328004 | IRIDA General Registry Number 019630328000'
                 },
                 irida: {
                     navbar: App.navbar_lang.en,
@@ -68,7 +70,8 @@ App.langData = {
                     gallery: 'Gallery',
                     title: 'Irida Resort',
                     footerMenu: 'Menu',
-                    footerAddress: 'Sivota, Thesprotia'
+                    footerAddress: 'Sivota, Thesprotia',
+                    footerRegistryNo: 'KIMON General Registry Number 019630328004 | IRIDA General Registry Number 019630328000'
                 },
                 location: {
                     navbar: App.navbar_lang.en,
@@ -139,7 +142,8 @@ App.langData = {
                             'very accessible and has parking space. Finally you can rent a boat to visit the nearby beaches.',
                     },
                     footerMenu: 'Menu',
-                    footerAddress: 'Sivota, Thesprotia'
+                    footerAddress: 'Sivota, Thesprotia',
+                    footerRegistryNo: 'KIMON General Registry Number 019630328004 | IRIDA General Registry Number 019630328000'
                 },
                 'contact': {
                     navbar: App.navbar_lang.en,
@@ -161,7 +165,8 @@ App.langData = {
                     captchaErrorMessage: 'Captcha field is required',
                     submit: 'Submit',
                     footerMenu: 'Menu',
-                    footerAddress: 'Sivota, Thesprotia'
+                    footerAddress: 'Sivota, Thesprotia',
+                    footerRegistryNo: 'KIMON General Registry Number 019630328004 | IRIDA General Registry Number 019630328000'
                 },
             },
         }
@@ -190,7 +195,8 @@ App.langData = {
                         'δροσερά, με φινετσάτη διακόσμηση και ιδιωτικά μπαλκόνια, διαθέτουν όλο το πακέτο και καλύπτουν όλες τις ανάγκες του παραθεριστή. ',
                     readMore: 'Περισσότερα',
                     footerMenu: 'Μενού',
-                    footerAddress: 'Σύβοτα, Θεσπρωτία'
+                    footerAddress: 'Σύβοτα, Θεσπρωτία',
+                    footerRegistryNo: 'KIMON Αριθμός ΓΕΜΗ 019630328004 | IRIDA Αριθμός ΓΕΜΗ 019630328000'
                 },
                 kimon: {
                     navbar: App.navbar_lang.gr,
@@ -212,7 +218,8 @@ App.langData = {
                     gallery: 'Φωτογραφίες',
                     title: 'Kimon Resort',
                     footerMenu: 'Μενού',
-                    footerAddress: 'Σύβοτα, Θεσπρωτία'
+                    footerAddress: 'Σύβοτα, Θεσπρωτία',
+                    footerRegistryNo: 'KIMON Αριθμός ΓΕΜΗ 019630328004 | IRIDA Αριθμός ΓΕΜΗ 019630328000'
                 },
                 irida: {
                     navbar: App.navbar_lang.gr,
@@ -232,7 +239,8 @@ App.langData = {
                     gallery: 'Φωτογραφίες',
                     title: 'Irida Resort',
                     footerMenu: 'Μενού',
-                    footerAddress: 'Σύβοτα, Θεσπρωτία'
+                    footerAddress: 'Σύβοτα, Θεσπρωτία',
+                    footerRegistryNo: 'KIMON Αριθμός ΓΕΜΗ 019630328004 | IRIDA Αριθμός ΓΕΜΗ 019630328000'
                 },
                 location: {
                     navbar: App.navbar_lang.gr,
@@ -309,7 +317,8 @@ App.langData = {
                             '                       για να επισκεφθείτε τις διπλανές παραλίες.',
                     },
                     footerMenu: 'Μενού',
-                    footerAddress: 'Σύβοτα, Θεσπρωτία'
+                    footerAddress: 'Σύβοτα, Θεσπρωτία',
+                    footerRegistryNo: 'KIMON Αριθμός ΓΕΜΗ 019630328004 | IRIDA Αριθμός ΓΕΜΗ 019630328000'
                 },
                 contact: {
                     navbar: App.navbar_lang.gr,
@@ -331,7 +340,8 @@ App.langData = {
                     captchaErrorMessage: 'Το πεδίο captcha είναι υποχρεωτικό',
                     submit: 'Αποστολή',
                     footerMenu: 'Μενού',
-                    footerAddress: 'Σύβοτα, Θεσπρωτία'
+                    footerAddress: 'Σύβοτα, Θεσπρωτία',
+                    footerRegistryNo: 'KIMON Αριθμός ΓΕΜΗ 019630328004 | IRIDA Αριθμός ΓΕΜΗ 019630328000'
                 },
             }
         }
