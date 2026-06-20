@@ -146,7 +146,21 @@ Three environments: ephemeral **preview** (per PR), long-lived **staging**, and 
 Notes:
 - Prod is intentionally **manual** so staging can be eyeballed before release.
 - Tests gate every path — a failing build or test blocks the deploy.
-- Staging is a separate S3 bucket/CloudFront distribution (or preview-platform project); details finalized with hosting verification.
+
+### Buckets & cutover (decided)
+Production today is `marinos-test-bucket` (misleading name). S3 buckets cannot be renamed, so we create two new, clearly-named buckets and retire the legacy one:
+
+- `marinos-aparts-prod` — new production bucket. The **existing** prod CloudFront distribution has its origin **repointed** to this bucket, preserving the domain, ACM certificate, and Route 53 config.
+- `marinos-aparts-staging` — new staging bucket with its **own** CloudFront distribution/URL, fully independent of prod.
+- `marinos-test-bucket` — **decommissioned** after prod cutover is verified.
+
+Cutover sequence (detailed in the implementation plan):
+1. Create both new buckets.
+2. Build + deploy to `marinos-aparts-prod`; repoint the prod distribution origin; verify on the live domain.
+3. Stand up the staging bucket + distribution; wire merge-to-master auto-deploy to it.
+4. Once prod is confirmed serving from the new bucket, decommission `marinos-test-bucket`.
+
+PR previews still use the mechanism chosen in Section 7 item 2 (separate from these two long-lived buckets).
 
 ---
 
@@ -154,7 +168,7 @@ Notes:
 
 These are explicit unknowns to resolve in the implementation plan, not silently assumed:
 
-1. **CloudFront fronting prod** — confirm the prod bucket is actually behind CloudFront, and obtain the real distribution ID + prod bucket name. The current workflow syncs to `marinos-test-bucket`; we must confirm what is genuinely production before wiring prod deploy + invalidation.
+1. **CloudFront distribution details** — production is confirmed to be `marinos-test-bucket` (being replaced — see Section 6 "Buckets & cutover"). Still need to obtain the prod CloudFront distribution ID and confirm it fronts the bucket, so we can repoint its origin and wire cache invalidation into the manual prod deploy.
 2. **Preview & staging hosting mechanism** — choose between:
    - All-AWS: preview/staging as separate S3 prefixes/buckets behind CloudFront.
    - Hybrid: ephemeral PR previews on Cloudflare Pages/Netlify (native preview support) while staging + prod stay on AWS S3/CloudFront.
