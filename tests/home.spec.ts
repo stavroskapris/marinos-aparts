@@ -36,3 +36,20 @@ test('scroll-to-top button exists', async ({ page }) => {
   await page.goto('/en/');
   await expect(page.locator('a.scroll-top')).toHaveCount(1);
 });
+
+test('footer shows current year and registry number', async ({ page }) => {
+  await page.goto('/en/');
+  const year = new Date().getFullYear().toString();
+  await expect(page.locator('#current-year')).toHaveText(year);
+  await expect(page.locator('.tm-copyright-text')).toContainText('General Registry Number');
+});
+
+test('leaflet map initializes in the footer', async ({ page }) => {
+  await page.goto('/en/');
+  await expect(page.locator('#osm-map .leaflet-container')).toBeVisible();
+});
+
+test('weather widget container renders for the locale', async ({ page }) => {
+  await page.goto('/en/');
+  await expect(page.locator('#weather-widget')).toBeVisible();
+});

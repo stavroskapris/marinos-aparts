@@ -1,0 +1,54 @@
+---
+import type { Locale } from '../i18n/locales';
+import { t } from '../i18n/t';
+import Map from './Map.astro';
+import WeatherWidget from './WeatherWidget.astro';
+import ScrollToTop from './ScrollToTop.astro';
+
+interface Props { lang: Locale; mapFocus?: 'kimon' | 'irida'; }
+const { lang, mapFocus } = Astro.props;
+const s = t(lang);
+const base = `/${lang}`;
+const year = new Date().getFullYear();
+---
+
+<footer class="tm-footer">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
+        <div class="tm-footer-content-box tm-footer-links-container">
+          <h3 class="tm-title tm-footer-content-box-title">{s.nav.contact}</h3>
+          <nav><ul class="nav">
+            <li class="tm-footer-link"><i class="fas fa-map-marker"></i> <span>{s.footer.address}</span></li>
+            <li class="tm-footer-link"><i class="fa fa-mobile"></i> +30 6909 025 820</li>
+            <li class="tm-footer-link"><i class="fa fa-envelope"></i> marinosaparts@gmail.com</li>
+          </ul></nav>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-2">
+        <div class="tm-footer-content-box tm-footer-links-container">
+          <h3 class="tm-title tm-footer-content-box-title">{s.footer.menu}</h3>
+          <nav><ul class="nav">
+            <li><a href={`${base}/`} class="tm-footer-link">{s.nav.home}</a></li>
+            <li><a href={`${base}/kimon`} class="tm-footer-link">{s.nav.kimon}</a></li>
+            <li><a href={`${base}/irida`} class="tm-footer-link">{s.nav.irida}</a></li>
+            <li><a href={`${base}/location`} class="tm-footer-link">{s.nav.location}</a></li>
+            <li><a href={`${base}/contact`} class="tm-footer-link">{s.nav.contact}</a></li>
+          </ul></nav>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-5 col-xl-4">
+        <div class="tm-footer-content-box tm-footer-links-container"><Map focus={mapFocus} /></div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
+        <div class="tm-footer-content-box tm-footer-links-container"><WeatherWidget lang={lang} /></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="tm-copyright-col"><p class="tm-copyright-text">{s.footer.registryNo}</p></div>
+      <div class="tm-copyright-col"><p class="tm-created-text">Copyright <span id="current-year">{year}</span> Marinos-Aparts</p></div>
+      <p class="tm-created-text"><small>developed by <a href="https://github.com/stavroskapris" target="_blank">stavroskapris</a></small></p>
+    </div>
+    <ScrollToTop />
+  </div>
+</footer>
