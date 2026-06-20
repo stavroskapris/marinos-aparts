@@ -68,4 +68,5 @@ test('greek home renders translated welcome copy', async ({ page }) => {
   await page.goto('/gr/');
   await expect(page.locator('html')).toHaveAttribute('lang', 'gr');
   await expect(page.getByText('Read More')).toHaveCount(0); // EN-only string absent
+  await expect(page.getByText('Περισσότερα')).toHaveCount(2); // GR read-more buttons present (Kimon + Irida)
 });
