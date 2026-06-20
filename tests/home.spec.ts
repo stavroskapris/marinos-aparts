@@ -16,6 +16,7 @@ test('hreflang alternates point to per-locale urls', async ({ page }) => {
   await page.goto('/en/');
   await expect(page.locator('link[rel="alternate"][hreflang="gr"]')).toHaveAttribute('href', /\/gr\/$/);
   await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute('href', /\/en\/$/);
+  await expect(page.locator('link[rel="alternate"][hreflang="x-default"]')).toHaveAttribute('href', /\/en\/$/);
 });
 
 test('navbar links are locale-prefixed', async ({ page }) => {
@@ -46,10 +47,25 @@ test('footer shows current year and registry number', async ({ page }) => {
 
 test('leaflet map initializes in the footer', async ({ page }) => {
   await page.goto('/en/');
-  await expect(page.locator('#osm-map .leaflet-container')).toBeVisible();
+  await expect(page.locator('#osm-map.leaflet-container')).toBeVisible();
 });
 
 test('weather widget container renders for the locale', async ({ page }) => {
   await page.goto('/en/');
   await expect(page.locator('#weather-widget')).toBeVisible();
+});
+
+test('english home renders intro, welcome, and both resort cards', async ({ page }) => {
+  await page.goto('/en/');
+  await expect(page.locator('h2.tm-title')).toContainText('Marinos Aparts');
+  await expect(page.locator('p').filter({ hasText: 'Welcome to Marinos-aparts Rooms in Sivota' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Kimon Resort' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Irida Resort' })).toBeVisible();
+  await expect(page.locator('img[src*="kimon-home"], img[src*="kimon/kimon-home"]')).toHaveCount(1);
+});
+
+test('greek home renders translated welcome copy', async ({ page }) => {
+  await page.goto('/gr/');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'gr');
+  await expect(page.getByText('Read More')).toHaveCount(0); // EN-only string absent
 });

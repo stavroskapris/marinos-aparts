@@ -1,0 +1,61 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navbar from '../../components/Navbar.astro';
+import HeaderBottom from '../../components/HeaderBottom.astro';
+import Footer from '../../components/Footer.astro';
+import { getStaticLocalePaths, isLocale, DEFAULT_LOCALE } from '../../i18n/locales';
+import { t } from '../../i18n/t';
+import kimonHome from '../../assets/kimon-home.jpg';
+import iridaHome from '../../assets/irida-home.jpg';
+
+export function getStaticPaths() {
+  return getStaticLocalePaths();
+}
+
+const langParam = Astro.params.lang;
+const lang = isLocale(langParam) ? langParam : DEFAULT_LOCALE;
+const s = t(lang);
+
+const title = 'Apartments | Studios to rent at Sivota - Marinos-Aparts - rooms to let Sivota | Ενοικιαζόμενα δωμάτια Σύβοτα';
+const description = 'Welcome to Marinos-aparts Rooms in Sivota, where your ultimate satisfaction is our only goal';
+---
+
+<BaseLayout lang={lang} title={title} description={description} canonicalPath="">
+  <Navbar lang={lang} canonicalPath="" />
+  <div class="tm-home-img-container"></div>
+  <HeaderBottom lang={lang} />
+
+  <section class="tm-section">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-xs-center">
+          <h2 class="tm-gold-text tm-title">{s.home.intro}</h2>
+          <p>{s.home.welcome}</p>
+        </div>
+      </div>
+      <div class="row tm">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+          <div class="tm-2-col-left">
+            <h3 class="tm-gold-text tm-title">{s.nav.kimon}</h3>
+            <p class="tm-margin-b-60">{s.home.kimonTitle}</p>
+            <Image src={kimonHome} alt="Kimon Resort" class="tm-margin-b-40 img-fluid img-rounded" />
+            <p class="text-md-left">{s.home.kimonSubTitle}</p>
+            <a href={`/${lang}/kimon`} class="tm-btn">{s.home.readMore}</a>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+          <div class="tm-2-col-right">
+            <h3 class="tm-gold-text tm-title">{s.nav.irida}</h3>
+            <p class="tm-margin-b-40">{s.home.iridaTitle}</p>
+            <Image src={iridaHome} alt="Irida Resort" class="tm-margin-b-40 img-fluid img-rounded" />
+            <p class="text-md-left">{s.home.iridaSubTitle}</p>
+            <a href={`/${lang}/irida`} class="tm-btn">{s.home.readMore}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer lang={lang} />
+</BaseLayout>
