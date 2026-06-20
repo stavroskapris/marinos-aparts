@@ -1,0 +1,45 @@
+---
+import type { Locale } from '../i18n/locales';
+import { t } from '../i18n/t';
+import LangSwitcher from './LangSwitcher.astro';
+
+interface Props { lang: Locale; canonicalPath: string; }
+const { lang, canonicalPath } = Astro.props;
+const s = t(lang);
+const base = `/${lang}`;
+---
+
+<div class="tm-header">
+  <div class="container-fluid">
+    <div class="tm-header-inner">
+      <a href={`${base}/`} class="navbar-left tm-site-logo"><img src="/img/nav/logo_marinos.png" alt="Marinos-Aparts" /></a>
+      <nav class="navbar tm-main-nav">
+        <button class="navbar-toggler hidden-md-up" type="button" aria-controls="tmNavbar" aria-expanded="false" aria-label="Toggle navigation">&#9776;</button>
+        <div class="collapse navbar-toggleable-sm" id="tmNavbar">
+          <ul class="nav navbar-nav">
+            <li class="nav-item active"><a href={`${base}/`} class="nav-link">{s.nav.home}</a></li>
+            <li class="nav-item"><a href={`${base}/kimon`} class="nav-link">{s.nav.kimon}</a></li>
+            <li class="nav-item"><a href={`${base}/irida`} class="nav-link">{s.nav.irida}</a></li>
+            <li class="nav-item"><a href="https://reservations.bookoncloud.com/welcome/kimon" target="_blank" rel="noopener noreferrer" class="nav-link">{s.nav.book}</a></li>
+            <li class="nav-item"><a href={`${base}/location`} class="nav-link">{s.nav.location}</a></li>
+            <li class="nav-item"><a href={`${base}/contact`} class="nav-link">{s.nav.contact}</a></li>
+          </ul>
+        </div>
+        <ul class="languagepicker roundborders">
+          <LangSwitcher lang={lang} canonicalPath={canonicalPath} />
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<script>
+  const toggler = document.querySelector('.tm-main-nav .navbar-toggler');
+  const menu = document.getElementById('tmNavbar');
+  if (toggler && menu) {
+    toggler.addEventListener('click', () => {
+      const open = menu.classList.toggle('in');
+      toggler.setAttribute('aria-expanded', String(open));
+    });
+  }
+</script>

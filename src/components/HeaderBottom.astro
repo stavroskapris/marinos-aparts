@@ -1,0 +1,23 @@
+---
+import type { Locale } from '../i18n/locales';
+import { t } from '../i18n/t';
+
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const s = t(lang);
+---
+
+<div class="header-bottom">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="contact-top">
+        <span set:html={s.header.reservations} />
+      </div>
+      <div class="fb-top">
+        <span set:html={s.header.findus} />
+        <a href="https://www.facebook.com/marinosaparts.sivota/" target="_blank" rel="noopener noreferrer" aria-label="Marinos Apartments on Facebook" class="facebook"><i class="fab fa-facebook"></i></a>
+        <a href="https://www.instagram.com/marinosaparts/" target="_blank" rel="noopener noreferrer" aria-label="Marinos Apartments on Instagram" class="instagram"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </div>
+</div>

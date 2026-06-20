@@ -1,0 +1,35 @@
+---
+interface Props { focus?: 'kimon' | 'irida'; }
+const { focus } = Astro.props;
+---
+
+<div id="osm-map" data-focus={focus ?? 'all'}></div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+<script>
+  import L from 'leaflet';
+
+  const el = document.getElementById('osm-map');
+  if (el) {
+    const focus = el.dataset.focus;
+    const map = L.map(el);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+
+    const kimon = L.latLng(39.410685, 20.239593);
+    const irida = L.latLng(39.408755, 20.240425);
+
+    if (focus === 'kimon') {
+      map.setView(kimon, 15); L.marker(kimon).addTo(map);
+    } else if (focus === 'irida') {
+      map.setView(irida, 15); L.marker(irida).addTo(map);
+    } else {
+      map.setView(irida, 15);
+      L.marker(kimon).addTo(map);
+      L.marker(irida).addTo(map);
+    }
+  }
+</script>

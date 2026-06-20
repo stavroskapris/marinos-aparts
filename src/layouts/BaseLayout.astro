@@ -1,0 +1,71 @@
+---
+import type { Locale } from '../i18n/locales';
+import { LOCALES } from '../i18n/locales';
+import '../styles/bootstrap.min.css';
+import '../styles/photoswipe.css';
+import '../styles/default-skin.css';
+import '../styles/templatemo-style.css';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  description: string;
+  canonicalPath: string; // e.g. "/kimon" or "" for home
+}
+
+const { lang, title, description, canonicalPath } = Astro.props;
+const site = 'https://www.marinos-aparts.gr';
+const altHref = (l: Locale) => `${site}/${l}${canonicalPath}/`;
+---
+
+<!DOCTYPE html>
+<html lang={lang}>
+  <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7PRPXQ745M"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-7PRPXQ745M');
+    </script>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="application-name" content="Marinos-Aparts" />
+
+    <title>{title}</title>
+    <meta property="og:url" content={`${site}/${lang}${canonicalPath}/`} />
+    <meta property="og:image" content={`${site}/img/nav/logo_marinos.png`} />
+    <meta property="og:site_name" content="Marinos-Aparts" />
+    <meta property="og:title" content={title} />
+    <meta property="og:type" content="website" />
+    <meta name="description" content={description} />
+    <meta property="og:description" content={description} />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    {LOCALES.map((l) => (
+      <link rel="alternate" href={altHref(l)} hreflang={l} />
+    ))}
+    <link rel="alternate" href={altHref('en')} hreflang="x-default" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" />
+    <script src="https://kit.fontawesome.com/3fad1b2de2.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <slot />
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'Marinos-Aparts',
+      url: 'https://www.marinos-aparts.gr',
+      sameAs: ['https://www.facebook.com/marinosaparts'],
+      logo: 'https://www.marinos-aparts.gr/img/nav/logo_marinos.png',
+      contactPoint: [
+        { '@type': 'ContactPoint', telephone: '+30-6936-772-821', contactType: 'customer service' },
+        { '@type': 'ContactPoint', telephone: '+30-6936-772-821', contactType: 'reservations' },
+      ],
+    })} />
+  </body>
+</html>

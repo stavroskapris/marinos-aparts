@@ -1,6 +1,26 @@
 {
+  "name": "marinos-aparts",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "playwright test",
+    "test:unit": "vitest run",
+    "check:links": "linkinator ./dist --recurse --silent --skip \"^https?://(www\\.)?(marinos-aparts\\.gr|okairos|kit\\.fontawesome|fonts\\.googleapis|unpkg|facebook|instagram|reservations\\.bookoncloud|googletagmanager)\""
+  },
   "dependencies": {
-    "animate.css": "^3.7.2",
-    "jquery-validation": "^1.19.5"
+    "astro": "^4.15.0",
+    "leaflet": "^1.9.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@playwright/test": "^1.47.0",
+    "@types/leaflet": "^1.9.12",
+    "@types/node": "^18.19.0",
+    "linkinator": "^6.1.0",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.0"
   }
 }
