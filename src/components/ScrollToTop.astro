@@ -1,0 +1,16 @@
+<a href="#" class="scroll-top" aria-label="Scroll to top"><i class="fa fa-angle-up"></i></a>
+
+<script>
+  const btn = document.querySelector('a.scroll-top');
+  if (btn) {
+    const toggle = () => {
+      (btn as HTMLElement).style.display = window.scrollY > 500 ? 'block' : 'none';
+    };
+    toggle();
+    window.addEventListener('scroll', toggle);
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+</script>
