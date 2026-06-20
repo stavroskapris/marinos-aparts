@@ -158,14 +158,33 @@ A dedicated step that **proves** nothing was lost in the migration, rather than 
 
 This step is a hard gate: prod cutover does not proceed until text diff is clean (or every difference is explicitly approved), image coverage is one-to-one, and the functionality + visual checklists pass.
 
+### Branching & deployment strategy
+A long-lived integration branch, **`astro-migration`**, is the trunk for the entire Phase 1 epic. `master` stays frozen during the migration so the existing live site keeps serving safely.
+
+- All feature PRs target **`astro-migration`**, never `master`.
+- `master` is untouched throughout the migration → the legacy `main.yml` workflow never fires → production keeps serving the current site until deliberate cutover.
+- At **cutover**, `astro-migration` is merged into `master` in one release, the deploy wiring flips to the end-state model, and the `astro-migration` branch is retired.
+
 ### CI/CD pipeline
-Three environments: ephemeral **preview** (per PR), long-lived **staging**, and **prod**.
+Three environments: ephemeral **preview** (per PR), long-lived **staging**, and **prod**. The staging trigger changes at cutover; everything else is stable.
+
+**During the migration (`astro-migration` is the trunk):**
 
 | Trigger | Steps |
 |---------|-------|
-| PR opened/updated | install → build → test → deploy ephemeral **preview** → comment preview URL |
-| Merge to `master` | install → build → test → **auto-deploy to staging** |
-| Manual `workflow_dispatch` | install → build → test → **deploy prod** → **invalidate CloudFront** |
+| PR opened/updated (base = `astro-migration`) | install → build → test → deploy ephemeral **preview** → comment preview URL |
+| Push/merge to **`astro-migration`** | install → build → test → **auto-deploy to staging** |
+| `master` | unchanged — legacy workflow remains; not exercised because nothing merges to `master` yet |
+
+**End state (after cutover to `master`):**
+
+| Trigger | Steps |
+|---------|-------|
+| PR opened/updated (base = `master`) | install → build → test → deploy ephemeral **preview** → comment preview URL |
+| Push/merge to **`master`** | install → build → test → **auto-deploy to staging** |
+| Manual **`workflow_dispatch`** | install → build → test → **deploy prod** → **invalidate CloudFront** |
+
+The staging workflow's trigger branch is the single line that changes at cutover (`astro-migration` → `master`). The new prod (`workflow_dispatch`) workflow fully replaces the legacy `main.yml`, which is deleted at cutover.
 
 Notes:
 - Prod is intentionally **manual** so staging can be eyeballed before release.
