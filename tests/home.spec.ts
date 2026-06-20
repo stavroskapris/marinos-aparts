@@ -70,3 +70,13 @@ test('greek home renders translated welcome copy', async ({ page }) => {
   await expect(page.getByText('Read More')).toHaveCount(0); // EN-only string absent
   await expect(page.getByText('Περισσότερα')).toHaveCount(2); // GR read-more buttons present (Kimon + Irida)
 });
+
+test('mobile hamburger toggles the nav menu', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 800 });
+  await page.goto('/en/');
+  const menu = page.locator('#tmNavbar');
+  await expect(menu).not.toHaveClass(/\bin\b/);
+  await page.locator('.tm-main-nav .navbar-toggler').click();
+  await expect(menu).toHaveClass(/\bin\b/);
+  await expect(page.locator('.tm-main-nav .navbar-toggler')).toHaveAttribute('aria-expanded', 'true');
+});
