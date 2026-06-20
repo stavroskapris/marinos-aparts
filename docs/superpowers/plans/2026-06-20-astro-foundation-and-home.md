@@ -104,6 +104,7 @@ Expected: FAIL — no Astro project / no `/en/` route yet (connection refused or
     "build": "astro build",
     "preview": "astro preview",
     "test": "playwright test",
+    "test:unit": "vitest run",
     "check:links": "linkinator ./dist --recurse --silent"
   },
   "dependencies": {
@@ -112,6 +113,7 @@ Expected: FAIL — no Astro project / no `/en/` route yet (connection refused or
   },
   "devDependencies": {
     "@playwright/test": "^1.47.0",
+    "vitest": "^2.1.0",
     "linkinator": "^6.1.0",
     "@types/leaflet": "^1.9.12"
   }
@@ -253,32 +255,31 @@ git commit -m "chore: port images, favicon, and stylesheets into Astro structure
 
 - [ ] **Step 1: Write the failing test**
 
-Create `src/i18n/t.test.ts`:
+Create `src/i18n/t.test.ts` (Vitest — runs TypeScript and JSON imports natively on Node 18):
 
 ```ts
-import assert from 'node:assert/strict';
-import { test } from 'node:test';
+import { test, expect } from 'vitest';
 import { t } from './t.ts';
 import { LOCALES, DEFAULT_LOCALE, isLocale } from './locales.ts';
 
 test('locales are en and gr, default en', () => {
-  assert.deepEqual([...LOCALES], ['en', 'gr']);
-  assert.equal(DEFAULT_LOCALE, 'en');
-  assert.ok(isLocale('gr'));
-  assert.ok(!isLocale('fr'));
+  expect([...LOCALES]).toEqual(['en', 'gr']);
+  expect(DEFAULT_LOCALE).toBe('en');
+  expect(isLocale('gr')).toBe(true);
+  expect(isLocale('fr')).toBe(false);
 });
 
 test('t returns locale-specific shared and home strings', () => {
-  assert.equal(t('en').nav.home, 'Home');
-  assert.equal(t('gr').nav.home, 'Αρχική');
-  assert.equal(t('en').home.readMore, 'Read More');
-  assert.ok(t('en').home.welcome.startsWith('Welcome to Marinos-aparts'));
+  expect(t('en').nav.home).toBe('Home');
+  expect(t('gr').nav.home).toBe('Αρχική');
+  expect(t('en').home.readMore).toBe('Read More');
+  expect(t('en').home.welcome.startsWith('Welcome to Marinos-aparts')).toBe(true);
 });
 ```
 
 - [ ] **Step 2: Run it to verify it fails**
 
-Run: `node --test --experimental-strip-types src/i18n/t.test.ts`
+Run: `npm run test:unit -- src/i18n/t.test.ts`
 Expected: FAIL — modules not found.
 
 - [ ] **Step 3: Create `src/i18n/locales.ts`**
@@ -357,7 +358,7 @@ export function t(locale: Locale): Strings {
 
 - [ ] **Step 7: Run the test to verify it passes**
 
-Run: `node --test --experimental-strip-types src/i18n/t.test.ts`
+Run: `npm run test:unit -- src/i18n/t.test.ts`
 Expected: PASS (both tests).
 
 - [ ] **Step 8: Commit**
@@ -702,15 +703,17 @@ interface Props { focus?: 'kimon' | 'irida'; }
 const { focus } = Astro.props;
 ---
 
-<div id="osm-map"></div>
+<div id="osm-map" data-focus={focus ?? 'all'}></div>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
-<script define:vars={{ focus }}>
-  import('leaflet').then(({ default: L }) => {
-    const el = document.getElementById('osm-map');
-    if (!el) return;
+<script>
+  import L from 'leaflet';
+
+  const el = document.getElementById('osm-map');
+  if (el) {
+    const focus = el.dataset.focus;
     const map = L.map(el);
     L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -728,11 +731,11 @@ const { focus } = Astro.props;
       L.marker(kimon).addTo(map);
       L.marker(irida).addTo(map);
     }
-  });
+  }
 </script>
 ```
 
-Note: importing `leaflet` inside the module script lets Astro bundle it (no CDN `leaflet.js`, no jQuery). The CSS is loaded from CDN to match the current setup; it can be localized later.
+Note: a plain (non-`define:vars`) `<script>` is bundled by Astro, so `import L from 'leaflet'` resolves to the npm package (no CDN `leaflet.js`, no jQuery). `focus` is passed through the `data-focus` attribute rather than `define:vars` (which would force the script inline and break the bundled import). The CSS is loaded from CDN to match the current setup; it can be localized later.
 
 - [ ] **Step 4: Create `src/components/WeatherWidget.astro`**
 
