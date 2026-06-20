@@ -134,6 +134,30 @@ A Lighthouse comparison (before vs after) is captured as evidence but performanc
   - Contact form validates (rejects bad input) and submits the expected payload (network mocked).
 - **Build checks:** link checker (no broken internal links) + HTML validation, run in CI.
 
+### Content & functionality parity verification (lift-and-shift gate)
+A dedicated step that **proves** nothing was lost in the migration, rather than trusting it. Run after the build is feature-complete and before prod cutover; results recorded as evidence.
+
+**Text parity (automated):**
+- Extract every user-visible string from the current site (the five HTML files + the `*_lang.js` dictionaries) per language.
+- Extract every rendered string from the new Astro build per locale.
+- Diff the two sets for each language (en, gr). The expected diff is **empty** — any missing, added, or altered string must be explained (e.g. an intentional typo fix) and signed off, not silently accepted.
+
+**Image parity (automated):**
+- Enumerate every image referenced by the current site (`img/**`, including the per-resort, beaches, nav, shutter subfolders) and map each to its counterpart in the new build.
+- Verify one-to-one coverage: no image dropped, none orphaned. Because images are intentionally re-encoded (WebP/AVIF, resized), the check is **presence + visual equivalence**, not byte-identity — confirmed via the page-by-page visual pass below, not a checksum.
+
+**Functionality parity (checklist, partly covered by smoke tests):**
+- Language switch (en↔gr) on every page.
+- Gallery opens and shows the correct images + captions on kimon/irida/location.
+- Contact form: same fields, same validation rules, same reCAPTCHA, successful submit to the Lambda endpoint.
+- Map renders with correct markers per page.
+- Weather widget loads per locale; scroll-to-top works; GA4 fires.
+
+**Visual parity:**
+- Page-by-page side-by-side comparison (current site vs new build) at desktop and mobile widths for all 5 pages × 2 locales, confirming layout and appearance match.
+
+This step is a hard gate: prod cutover does not proceed until text diff is clean (or every difference is explicitly approved), image coverage is one-to-one, and the functionality + visual checklists pass.
+
 ### CI/CD pipeline
 Three environments: ephemeral **preview** (per PR), long-lived **staging**, and **prod**.
 
@@ -182,6 +206,7 @@ These are explicit unknowns to resolve in the implementation plan, not silently 
 
 - Site builds with Astro to static output and deploys through the new pipeline.
 - Visual parity: pages look the same as the current site (lift-and-shift).
+- **Content & functionality parity gate passes** (Section 6): text diff per language is clean (or every difference explicitly approved), images map one-to-one, and the functionality + visual checklists pass — verified before prod cutover.
 - `/en/...` and `/gr/...` pages render correctly in both languages with correct `hreflang`; old flat URLs 301-redirect to new ones.
 - No jQuery in the shipped bundle.
 - Playwright smoke tests + build checks pass in CI.
