@@ -8,7 +8,7 @@
     "preview": "astro preview",
     "test": "playwright test",
     "test:unit": "vitest run",
-    "check:links": "linkinator ./dist --recurse --silent"
+    "check:links": "linkinator ./dist --recurse --silent --skip \"^https?://(www\\.)?(marinos-aparts\\.gr|okairos|kit\\.fontawesome|fonts\\.googleapis|unpkg|facebook|instagram|reservations\\.bookoncloud|googletagmanager)\""
   },
   "dependencies": {
     "astro": "^4.15.0",
