@@ -3,6 +3,5 @@
 node_modules/
 dist/
 .astro/
-node_modules/
 test-results/
 playwright-report/
