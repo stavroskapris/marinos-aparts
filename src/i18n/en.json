@@ -1,0 +1,28 @@
+{
+  "nav": {
+    "home": "Home",
+    "kimon": "Kimon Resort",
+    "irida": "Irida Resort",
+    "location": "Location",
+    "contact": "Contact",
+    "book": "Book now"
+  },
+  "header": {
+    "reservations": "<strong>Reservations : </strong>+30 6909 025 820",
+    "findus": "<strong>Find us</strong>"
+  },
+  "footer": {
+    "menu": "Menu",
+    "address": "Sivota, Thesprotia",
+    "registryNo": "KIMON General Registry Number 019630328004 | IRIDA General Registry Number 019630328000"
+  },
+  "home": {
+    "intro": "Marinos Aparts",
+    "welcome": "Welcome to Marinos-aparts Rooms in Sivota, where your ultimate satisfaction is our only goal. Marinos-aparts, with 30 years of hospitality, consist of 2 separate accommodation, Kimon Resort and Irida Resort. We make sure that all our customers find exactly what suits them for their vacation. So we have single and double room apartments, ideal for couples and families, in the center of the port but also a little further, on the floor or on the ground floor.All of our apartments are spacious and fully refurbished, with stylish furnishings and a private balcony. Feel free to contact us to discuss what is ideal for you to ensure you the most beautiful and easy vacation in Sivota.",
+    "kimonTitle": "Completely refurbished, Kimon Resort is set in an idyllic setting amidst olive groves, offering tranquility and beauty to holidaymakers.",
+    "iridaTitle": "Completely refurbished and located only 30 meters from the port, Irida Resort is ideal for vacationers who want to enjoy the life of Sivota.",
+    "kimonSubTitle": "Only 200 meters from the port and 200 meters from the beach of French Molos, Kimon Resort is ideal for anyone wishing to stay in a quiet accommodation but at the same time not be deprived of the opportunity to leave the car and do everything on foot.",
+    "iridaSubTitle": "The studios, all on the first floor of the property, offer moments of relaxation and total peace of mind. Spacious, bright, cool, with elegant décor and private balconies, they feature the entire package and cater to all holiday needs.",
+    "readMore": "Read More"
+  }
+}
