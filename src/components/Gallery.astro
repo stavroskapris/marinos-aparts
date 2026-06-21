@@ -1,0 +1,74 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export interface GalleryItem {
+  thumb: ImageMetadata;
+  full: ImageMetadata;
+  alt: string;
+  heading?: string;
+  caption?: string;
+}
+interface Props { items: GalleryItem[]; figureClass: string; }
+const { items, figureClass } = Astro.props;
+---
+
+<div id="gallery" class="gallery">
+  {items.map((item) => (
+    <figure class={figureClass} itemprop="associatedMedia">
+      {item.heading && <h4 class="tm-margin-b-20 tm-gold-text" set:html={item.heading} />}
+      <a
+        href={item.full.src}
+        data-pswp-width={item.full.width}
+        data-pswp-height={item.full.height}
+        data-pswp-caption={item.caption ?? ''}
+        itemprop="contentUrl"
+      >
+        <Image src={item.thumb} alt={item.alt} width={250} height={165} itemprop="thumbnail" />
+      </a>
+    </figure>
+  ))}
+</div>
+
+<link rel="stylesheet" href="https://unpkg.com/photoswipe@5.4.4/dist/photoswipe.css" />
+
+<script>
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+
+  const el = document.querySelector('#gallery');
+  if (el) {
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: '#gallery',
+      children: 'a',
+      pswpModule: () => import('photoswipe'),
+      bgOpacity: 0.85,
+    });
+
+    // Render the per-slide HTML caption from data-pswp-caption.
+    lightbox.on('uiRegister', () => {
+      if (!lightbox.pswp?.ui) return;
+      lightbox.pswp.ui.registerElement({
+        name: 'custom-caption',
+        order: 9,
+        isButton: false,
+        appendTo: 'root',
+        html: '',
+        onInit: (elm, pswp) => {
+          pswp.on('change', () => {
+            const a = pswp.currSlide?.data?.element as HTMLElement | undefined;
+            const caption = a?.getAttribute('data-pswp-caption') ?? '';
+            elm.innerHTML = caption;
+            elm.style.display = caption ? 'block' : 'none';
+          });
+        },
+      });
+    });
+
+    lightbox.init();
+  }
+</script>
+
+<style is:global>
+  .pswp__custom-caption,
+  .pswp .custom-caption { /* caption styling handled by photoswipe defaults; container positioned bottom */ }
+</style>
