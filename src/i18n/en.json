@@ -24,5 +24,83 @@
     "kimonSubTitle": "Only 200 meters from the port and 200 meters from the beach of French Molos, Kimon Resort is ideal for anyone wishing to stay in a quiet accommodation but at the same time not be deprived of the opportunity to leave the car and do everything on foot.",
     "iridaSubTitle": "The studios, all on the first floor of the property, offer moments of relaxation and total peace of mind. Spacious, bright, cool, with elegant décor and private balconies, they feature the entire package and cater to all holiday needs.",
     "readMore": "Read More"
+  },
+  "facilities": {
+    "spaciousRooms": "Spacious rooms",
+    "kitchen": "Fully equipped kitchen",
+    "fridge": "Refrigerator and kitchenette",
+    "airCondition": "Αir-Condition",
+    "largeClosets": "Large closets",
+    "parking": "Private parking with cover",
+    "tableChairs": "Outdoor table and chairs",
+    "hotWater": "24h hot water (solar water heater & boiler)",
+    "wifi": "Free wi-fi Internet",
+    "hairDryer": "Hair dryer",
+    "balcony": "Private balcony",
+    "screens": "Screens in the windows",
+    "iron": "Iron and ironing board",
+    "yard": "Big yard",
+    "tv": "Plasma TV",
+    "safe": "Safe"
+  },
+  "kimon": {
+    "title": "Kimon Resort",
+    "main": "Completely renovated, Kimon Resort is set in an idyllic location, surrounded by olive groves, offering tranquility and beauty to holidaymakers. Only 200 meters from the port and 200 meters from the beach of French Molos, Kimon Resort is ideal for anyone wants to stay in a quiet accommodation but at the same time is not deprived of the ability to leave the car and do everything on foot. It is an elegant two-storey building with ten studios and a beautiful stone-built communal courtyard, ideal for children and an afternoon coffee. The studios are spacious, renovated and all have air conditioning, a fully equipped kitchen, a bathroom and a private balcony. Furthermore, our private covered parking lot right opposite the property helps you to walk on foot without any worry about your car. At Kimon Resort, even the most demanding vacationer will feel good and enjoy his vacation.",
+    "facilitiesTitle": "Facilities",
+    "gallery": "Gallery"
+  },
+  "irida": {
+    "title": "Irida Resort",
+    "main": "Irida Resort is completely renovated and ideally located in the center of the village. Located 30 meters from the port, it is ideal for vacationers who want to enjoy the life of Sivota.  At the same time it is only 200 meters from the beach of French Molos, giving you the opportunity to enjoy your swim without your car. The studios, all on the first floor of the property, offer moments of relaxation and total peace of mind. Spacious, bright, cool, with elegant décor and private balconies, they feature the entire package and cater to all holiday needs. A fully equipped kitchen and a renovated private bathroom will meet your needs, while the balconies will give you the opportunity to enjoy your coffee. The rooms of Irida Resort offer comfort, luxury and easy access to the center of Sivota and the beach at very affordable prices.",
+    "facilitiesTitle": "Facilities",
+    "gallery": "Gallery"
+  },
+  "location": {
+    "title": "Sivota",
+    "main": "Sivota is a special destination, as one of the most picturesque villages of Epirus. It is an ideal combination of blue and green as the hills are joined with the crystal waters of the Ionian Sea. The village of Sivota has a unique cluster of islands with the names \"Mavro Oros\", \"Ag. Nikolaos\" and \"Mourtemeno\", which consist of beaches and small bays that stand out for their diversity. The location of Sivota is also ideal for excursions to surrounding areas. In a very close distance (just 25km) is the town of Igoumenitsa, which is the capital of the prefecture and the largest tourist resort in the area. There exists also the namesake port, from where you can organize trips to the islands of Corfu, Ithaca and Paxos. Within 60 km there is the international airport of Aktion with flights to and from European countries. Also just in a short distance you will find the Egnatia Highway, connecting the area with Northern Greece. Sivota is a region with countless activities for every taste and demand of the people who choose to spend their vacation in Sivota. The beautiful and clean beaches (Mikri and Megali Ammos, Pisina, Gallikos, Molos, Zavia, Mega Trafos, Zeri, DEI, Agia Raraskevi), are beaches that meet all your needs and requirements. The well-organised harbor and the excellent tourist infrastructures attract Greek and foreign tourists, offering them numerous of leisure options such as diving, sailing and trips.",
+    "beachTitle": "Beaches",
+    "beaches": {
+      "agiaParaskevi": "Agia Paraskevi",
+      "zeri": "Zeri",
+      "zavia": "Zavia",
+      "dei": "Dei",
+      "megaNtrafi": "Mega Ntrafi",
+      "mpelaVraka": "Mpela Vraka",
+      "gallikosMolos": "Gallikos Molos",
+      "megaAmmos": "Mega Ammos",
+      "mikriAmmos": "Mikri Ammos",
+      "pisina": "Pisina",
+      "karavostasi": "Karavostasi",
+      "arrilas": "Arrilas"
+    },
+    "galleryDescriptions": {
+      "agiaParaskevi": "<h5>Agia Paraskevi</h5>It is next to Mega Trafos beach and I must point out that it belongs to the village of Perdika. The sea is warm and has something exotic. There is a small island just a short walk from the beach.",
+      "zeri": "<h5>Zeri</h5>The beach is just after the French sand, the waters are warm and you can sit down for lunch or coffee. There are also water slides for the little ones at the party.",
+      "zavia": "<h5>Zavia</h5>Zavia is outside the village headed for the village of Perdika. The sea there is quite cool. It's organized. You will find food - bar.",
+      "dei": "<h5>Dei</h5>We leave the center of the village. The beach has pebbles and is quite calm. The sea is also warm and you can enjoy the view of Ag. Nicholas. At the moment (17/08/2009) the store that offered coolness and something to eat remained closed. As it was not accessible by car to the beach.",
+      "megaNtrafi": "<h5>Mega Ntrafi</h5>Departing from Mikri Ammos to Perdika you will find Mega Drafi beach. You should leave the car high on the road. The beach has sand and pebbles. There is a canteen that offers you the basics. It is well organized and the cost of a sunbed umbrella reaches 5 euros (price 17/08/2009).",
+      "mpelaVraka": "<h5>Mpela Vraka</h5>Incredible beach !!! You should definitely visit it. The beach is located on the island of Mourtenom. You pass the island crossing the sea on foot where the water reaches your knees. You will not find anything to eat but no soft drinks so before you get the supplies you need.",
+      "gallikosMolos": "<h5>Gallikos Molos</h5>It is very close to the center of the village. The beach is sandy and has a shop where you can sit and enjoy coffee and snack. The sea is generally warm.",
+      "megaAmmos": "<h5>Mega Ammos</h5>It is outside the village heading to Perdika. It is the in beach of Sivota with many cafe - bar restaurants. As for the beach it is well organized. It should also be known that the water is cool and pebbly.",
+      "mikriAmmos": "<h5>Mikri Ammos</h5>Immediately after Mega Ammos is Mikri Ammos where you willfind food and a bar. It's organized.",
+      "pisina": "<h5>Pisina</h5>The name says it all! It is located on the island of Agios Nikolaos. Access is by boat only. The sea is quite cool but these waters will remain unforgettable!",
+      "karavostasi": "<h5>Karavostasi</h5>Karavostasi beach is a very large organized beach with white sand and blue waters. It has an amazing landscape where you can relax while enjoying your coffee or eating. You can also rent canoes, water bicycles, etc. for your enjoyment on the water etc. Finally, your access to the beach is easy and definitely has plenty of space to park.",
+      "arrilas": "<h5>Arrilas</h5>Secure organized beach with fine sand and crystal clear waters. It is ideal and preferable for families with children as it is particularly shallow. Clearly easy to reach the beach is very accessible and has parking space. Finally you can rent a boat to visit the nearby beaches."
+    }
+  },
+  "contact": {
+    "title": "Contact Form",
+    "main": "Check for availability. We will contact you as soon as possible.",
+    "submit": "Submit",
+    "contactErrorMessage": "Unable to send",
+    "contactSuccessMessage": "Thanks for contacting us",
+    "captchaErrorMessage": "Captcha field is required",
+    "form": {
+      "required": "This field is required",
+      "validEmail": "Please enter a valid email address",
+      "minlength3": "Please enter at least 3 characters",
+      "minlength5": "Please enter at least 5 characters",
+      "minlength10": "Please enter at least 10 characters"
+    }
   }
 }
