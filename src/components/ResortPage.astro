@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from './Navbar.astro';
+import HeaderBottom from './HeaderBottom.astro';
+import Footer from './Footer.astro';
+import Gallery, { type GalleryItem } from './Gallery.astro';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  description: string;
+  canonicalPath: string;
+  current: 'kimon' | 'irida';
+  mapFocus: 'kimon' | 'irida';
+  heroClass: string;
+  resort: { title: string; main: string; facilitiesTitle: string; gallery: string };
+  facilities: Record<string, string>;
+  items: GalleryItem[];
+  figureClass: string;
+}
+
+const {
+  lang,
+  title,
+  description,
+  canonicalPath,
+  current,
+  mapFocus,
+  heroClass,
+  resort,
+  facilities,
+  items,
+  figureClass,
+} = Astro.props;
+
+const facilityKeys = Object.keys(facilities) as (keyof typeof facilities)[];
+const col1 = facilityKeys.slice(0, 8);
+const col2 = facilityKeys.slice(8);
+---
+
+<BaseLayout lang={lang} title={title} description={description} canonicalPath={canonicalPath}>
+  <Navbar lang={lang} canonicalPath={canonicalPath} current={current} />
+  <div class={heroClass}></div>
+  <HeaderBottom lang={lang} />
+
+  <section class="tm-section">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+          <div class="tm-2-col-left text-xs-center">
+            <h2 class="tm-gold-text tm-title">{resort.title}</h2>
+            <p>{resort.main}</p>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+          <h2 class="tm-gold-text tm-title text-xs-center">{resort.facilitiesTitle}</h2>
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-7">
+            <div class="facilities"><ul>{col1.map((k) => <li>{facilities[k]}</li>)}</ul></div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-5">
+            <div class="facilities"><ul>{col2.map((k) => <li>{facilities[k]}</li>)}</ul></div>
+          </div>
+        </div>
+      </div>
+      <div class="row tm-margin-t-mid">
+        <h2 class="tm-gold-text tm-title text-xs-center">{resort.gallery}</h2>
+        <Gallery items={items} figureClass={figureClass} />
+      </div>
+    </div>
+  </section>
+
+  <Footer lang={lang} mapFocus={mapFocus} />
+</BaseLayout>

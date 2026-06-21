@@ -1,0 +1,43 @@
+---
+import ResortPage from '../../components/ResortPage.astro';
+import { type GalleryItem } from '../../components/Gallery.astro';
+import { getStaticLocalePaths, isLocale, DEFAULT_LOCALE } from '../../i18n/locales';
+import { t } from '../../i18n/t';
+import type { ImageMetadata } from 'astro';
+
+export function getStaticPaths() {
+  return getStaticLocalePaths();
+}
+
+const langParam = Astro.params.lang;
+const lang = isLocale(langParam) ? langParam : DEFAULT_LOCALE;
+const s = t(lang);
+
+// Import all kimon gallery images, sorted by numeric suffix (kimon1..kimon20).
+const modules = import.meta.glob<{ default: ImageMetadata }>('../../assets/kimon/*.jpg', { eager: true });
+const images = Object.entries(modules)
+  .sort((a, b) => {
+    const n = (p: string) => parseInt(p.match(/kimon(\d+)\.jpg$/)![1], 10);
+    return n(a[0]) - n(b[0]);
+  })
+  .map(([, m]) => m.default);
+
+const items: GalleryItem[] = images.map((img) => ({ thumb: img, full: img, alt: 'Kimon Resort' }));
+
+const title = 'Kimon Resort | Studios to rent at Sivota - Marinos-Aparts - rooms to let Sivota | Ενοικιαζόμενα δωμάτια Σύβοτα';
+const description = 'Completely renovated in 2015, KIMON RESORT is set in an idyllic location, surrounded by olive groves, offering tranquility and beauty to holidaymakers';
+---
+
+<ResortPage
+  lang={lang}
+  title={title}
+  description={description}
+  canonicalPath="/kimon"
+  current="kimon"
+  mapFocus="kimon"
+  heroClass="tm-kimon-img-container"
+  resort={s.kimon}
+  facilities={s.facilities}
+  items={items}
+  figureClass="kimon"
+/>
