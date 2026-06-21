@@ -76,6 +76,22 @@ const resolvedItems = await Promise.all(
       });
     });
 
+    lightbox.on('uiRegister', () => {
+      lightbox.pswp!.ui!.registerElement({
+        name: 'fs',
+        title: 'Toggle fullscreen',
+        order: 8,
+        isButton: true,
+        html: '<span style="font-size:18px;line-height:1">⛶</span>',
+        onClick: () => {
+          const el = lightbox.pswp!.element as HTMLElement | undefined;
+          if (!el) return;
+          if (document.fullscreenElement) document.exitFullscreen();
+          else el.requestFullscreen?.();
+        },
+      });
+    });
+
     lightbox.init();
   }
 </script>
