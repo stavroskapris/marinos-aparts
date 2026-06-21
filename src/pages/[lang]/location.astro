@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navbar from '../../components/Navbar.astro';
+import HeaderBottom from '../../components/HeaderBottom.astro';
+import Footer from '../../components/Footer.astro';
+import Gallery, { type GalleryItem } from '../../components/Gallery.astro';
+import { getStaticLocalePaths, isLocale, DEFAULT_LOCALE } from '../../i18n/locales';
+import { t } from '../../i18n/t';
+import type { ImageMetadata } from 'astro';
+
+export function getStaticPaths() { return getStaticLocalePaths(); }
+
+const langParam = Astro.params.lang;
+const lang = isLocale(langParam) ? langParam : DEFAULT_LOCALE;
+const s = t(lang);
+
+// filename stem -> i18n beach key, in display order
+const BEACHES: { file: string; key: keyof typeof s.location.beaches }[] = [
+  { file: 'agia_paraskevi', key: 'agiaParaskevi' },
+  { file: 'zeri', key: 'zeri' },
+  { file: 'zavia', key: 'zavia' },
+  { file: 'dei', key: 'dei' },
+  { file: 'mega_ntrafo', key: 'megaNtrafi' },
+  { file: 'mpela_vraka', key: 'mpelaVraka' },
+  { file: 'gallikos', key: 'gallikosMolos' },
+  { file: 'mega_ammos', key: 'megaAmmos' },
+  { file: 'mikri_ammos', key: 'mikriAmmos' },
+  { file: 'pisina', key: 'pisina' },
+  { file: 'karavostasi', key: 'karavostasi' },
+  { file: 'arillas', key: 'arrilas' },
+];
+
+const modules = import.meta.glob<{ default: ImageMetadata }>('../../assets/beaches/*.jpg', { eager: true });
+const byFile = (file: string) =>
+  Object.entries(modules).find(([p]) => p.endsWith(`/${file}.jpg`))![1].default;
+
+const items: GalleryItem[] = BEACHES.map(({ file, key }) => {
+  const img = byFile(file);
+  return {
+    thumb: img,
+    full: img,
+    alt: s.location.beaches[key],
+    heading: s.location.beaches[key],
+    caption: s.location.galleryDescriptions[key],
+  };
+});
+
+const title = 'Location | Studios to rent at Sivota - Marinos-Aparts - rooms to let Sivota | Ενοικιαζόμενα δωμάτια Σύβοτα';
+const description = 'Sivota is a special destination, as one of the most picturesque villages of Epirus';
+---
+
+<BaseLayout lang={lang} title={title} description={description} canonicalPath="/location">
+  <Navbar lang={lang} canonicalPath="/location" current="location" />
+  <div class="tm-location-img-container"></div>
+  <HeaderBottom lang={lang} />
+
+  <section class="tm-section">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-xs-center">
+          <h2 class="tm-gold-text tm-title">{s.location.title}</h2>
+          <p>{s.location.main}</p>
+        </div>
+      </div>
+      <div class="row tm-margin-t-mid">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-xs-center">
+          <h2 class="tm-gold-text tm-title">{s.location.beachTitle}</h2>
+        </div>
+        <Gallery items={items} figureClass="location" />
+      </div>
+    </div>
+  </section>
+
+  <Footer lang={lang} />
+</BaseLayout>
