@@ -3,10 +3,12 @@ import type { Locale } from '../i18n/locales';
 import { t } from '../i18n/t';
 import LangSwitcher from './LangSwitcher.astro';
 
-interface Props { lang: Locale; canonicalPath: string; }
-const { lang, canonicalPath } = Astro.props;
+type NavKey = 'home' | 'kimon' | 'irida' | 'location' | 'contact';
+interface Props { lang: Locale; canonicalPath: string; current?: NavKey; }
+const { lang, canonicalPath, current } = Astro.props;
 const s = t(lang);
 const base = `/${lang}`;
+const active = (key: NavKey) => (current === key ? 'nav-item active' : 'nav-item');
 ---
 
 <div class="tm-header">
@@ -17,12 +19,12 @@ const base = `/${lang}`;
         <button class="navbar-toggler hidden-md-up" type="button" aria-controls="tmNavbar" aria-expanded="false" aria-label="Toggle navigation">&#9776;</button>
         <div class="collapse navbar-toggleable-sm" id="tmNavbar">
           <ul class="nav navbar-nav">
-            <li class="nav-item active"><a href={`${base}/`} class="nav-link">{s.nav.home}</a></li>
-            <li class="nav-item"><a href={`${base}/kimon`} class="nav-link">{s.nav.kimon}</a></li>
-            <li class="nav-item"><a href={`${base}/irida`} class="nav-link">{s.nav.irida}</a></li>
+            <li class={active('home')}><a href={`${base}/`} class="nav-link">{s.nav.home}</a></li>
+            <li class={active('kimon')}><a href={`${base}/kimon`} class="nav-link">{s.nav.kimon}</a></li>
+            <li class={active('irida')}><a href={`${base}/irida`} class="nav-link">{s.nav.irida}</a></li>
             <li class="nav-item"><a href="https://reservations.bookoncloud.com/welcome/kimon" target="_blank" rel="noopener noreferrer" class="nav-link">{s.nav.book}</a></li>
-            <li class="nav-item"><a href={`${base}/location`} class="nav-link">{s.nav.location}</a></li>
-            <li class="nav-item"><a href={`${base}/contact`} class="nav-link">{s.nav.contact}</a></li>
+            <li class={active('location')}><a href={`${base}/location`} class="nav-link">{s.nav.location}</a></li>
+            <li class={active('contact')}><a href={`${base}/contact`} class="nav-link">{s.nav.contact}</a></li>
           </ul>
         </div>
         <ul class="languagepicker roundborders">

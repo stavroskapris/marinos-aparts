@@ -1,0 +1,104 @@
+---
+import { Image, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export interface GalleryItem {
+  thumb: ImageMetadata;
+  full: ImageMetadata;
+  alt: string;
+  heading?: string;
+  caption?: string;
+}
+interface Props { items: GalleryItem[]; figureClass: string; }
+const { items, figureClass } = Astro.props;
+
+// Resolve full-size images through Astro's image pipeline so the
+// generated URLs are always emitted to dist (avoids 404 on lightbox open).
+const resolvedItems = await Promise.all(
+  items.map(async (item) => {
+    const fullImg = await getImage({ src: item.full, format: 'webp' });
+    return { ...item, fullSrc: fullImg.src };
+  })
+);
+---
+
+<div id="gallery" class="gallery">
+  {resolvedItems.map((item) => (
+    <figure class={figureClass} itemprop="associatedMedia">
+      {item.heading && <h4 class="tm-margin-b-20 tm-gold-text">{item.heading}</h4>}
+      <a
+        href={item.fullSrc}
+        data-pswp-width={item.full.width}
+        data-pswp-height={item.full.height}
+        data-pswp-caption={item.caption ?? ''}
+        itemprop="contentUrl"
+      >
+        <Image src={item.thumb} alt={item.alt} width={250} height={165} itemprop="thumbnail" />
+      </a>
+    </figure>
+  ))}
+</div>
+
+<link rel="stylesheet" href="https://unpkg.com/photoswipe@5.4.4/dist/photoswipe.css" />
+
+<script>
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+
+  const el = document.querySelector('#gallery');
+  if (el) {
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: '#gallery',
+      children: 'a',
+      pswpModule: () => import('photoswipe'),
+      bgOpacity: 0.85,
+    });
+
+    // Render the per-slide HTML caption from data-pswp-caption.
+    // SECURITY: the caption HTML comes only from our build-time i18n data
+    // (src/i18n/*.json galleryDescriptions, which intentionally contain <h5>);
+    // it is never user- or request-influenced, so innerHTML is safe here. If
+    // captions ever become dynamic (CMS, query params), sanitize before injecting.
+    lightbox.on('uiRegister', () => {
+      lightbox.pswp!.ui!.registerElement({
+        name: 'custom-caption',
+        order: 9,
+        isButton: false,
+        appendTo: 'root',
+        html: '',
+        onInit: (elm, pswp) => {
+          pswp.on('change', () => {
+            const a = pswp.currSlide?.data?.element as HTMLElement | undefined;
+            const caption = a?.getAttribute('data-pswp-caption') ?? '';
+            elm.innerHTML = caption;
+            elm.style.display = caption ? 'block' : 'none';
+          });
+        },
+      });
+    });
+
+    lightbox.init();
+  }
+</script>
+
+<style is:global>
+  /* PhotoSwipe v5 renders the custom caption element (registered as
+     `custom-caption`) outside this component's scoped DOM, so these rules must
+     be global. Mirrors the legacy v4 `.pswp__caption`: a readable bottom bar. */
+  .pswp__custom-caption {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 12px 16px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #ccc;
+    font-size: 13px;
+    line-height: 20px;
+    text-align: center;
+  }
+  .pswp__custom-caption h5 {
+    margin: 0 0 4px;
+    color: #fff;
+    font-size: 15px;
+  }
+</style>

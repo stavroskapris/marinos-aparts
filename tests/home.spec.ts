@@ -80,3 +80,10 @@ test('mobile hamburger toggles the nav menu', async ({ page }) => {
   await expect(menu).toHaveClass(/\bin\b/);
   await expect(page.locator('.tm-main-nav .navbar-toggler')).toHaveAttribute('aria-expanded', 'true');
 });
+
+test('home nav item is active on the home page', async ({ page }) => {
+  await page.goto('/en/');
+  const items = page.locator('.tm-main-nav li.nav-item');
+  await expect(items.filter({ hasText: 'Home' })).toHaveClass(/active/);
+  await expect(items.filter({ hasText: 'Kimon Resort' })).not.toHaveClass(/active/);
+});

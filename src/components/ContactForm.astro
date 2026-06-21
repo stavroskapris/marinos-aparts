@@ -1,0 +1,127 @@
+---
+import type { Locale } from '../i18n/locales';
+import { t } from '../i18n/t';
+import { API_ENDPOINTS, RECAPTCHA_SITE_KEY } from '../config';
+
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+const s = t(lang);
+const f = s.contact.form;
+---
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 text-xs-center contact-form">
+  <section>
+    <h3 class="tm-gold-text tm-form-title">{s.contact.title}</h3>
+    <p class="tm-form-description">{s.contact.main}</p>
+
+    <form id="contact-form" method="post" class="tm-contact-form" novalidate>
+      <div class="form-group">
+        <input type="text" id="contact_name" name="contact_name" class="form-control" placeholder="Name" />
+        <div class="field-error" data-for="contact_name" style="color:red;display:none"></div>
+      </div>
+      <div class="form-group">
+        <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="Email" />
+        <div class="field-error" data-for="contact_email" style="color:red;display:none"></div>
+      </div>
+      <div class="form-group">
+        <input type="text" id="contact_subject" name="contact_subject" class="form-control" placeholder="Subject" />
+        <div class="field-error" data-for="contact_subject" style="color:red;display:none"></div>
+      </div>
+      <div class="form-group">
+        <textarea id="contact_message" name="contact_message" class="form-control" rows="6" placeholder="Message"></textarea>
+        <div class="field-error" data-for="contact_message" style="color:red;display:none"></div>
+      </div>
+
+      <div class="contact-form-messages">
+        <div id="generic-loader" class="text-center" style="display:none">Sending email... <i class="fa fa-spinner fa-spin"></i></div>
+        <div id="error_message" style="display:none">{s.contact.contactErrorMessage}</div>
+        <div id="success_message" style="display:none">{s.contact.contactSuccessMessage}</div>
+        <div id="recaptcha_message" style="color:red;display:none">{s.contact.captchaErrorMessage}</div>
+      </div>
+
+      <button type="submit" id="contact-form-submit" class="tm-btn btn-block">{s.contact.submit}</button>
+      <div class="g-recaptcha" data-sitekey={RECAPTCHA_SITE_KEY}></div>
+    </form>
+  </section>
+</div>
+
+<script
+  define:vars={{
+    endpoints: API_ENDPOINTS,
+    messages: { required: f.required, validEmail: f.validEmail, minlength3: f.minlength3, minlength5: f.minlength5, minlength10: f.minlength10 },
+  }}
+>
+  const form = document.getElementById('contact-form');
+  if (form) {
+    const $ = (id) => document.getElementById(id);
+    const show = (id, on) => { const el = $(id); if (el) el.style.display = on ? 'block' : 'none'; };
+    const flash = (id) => { show(id, true); setTimeout(() => show(id, false), 1500); };
+
+    const setError = (name, msg) => {
+      const box = document.querySelector(`.field-error[data-for="${name}"]`);
+      if (box) { box.textContent = msg || ''; box.style.display = msg ? 'block' : 'none'; }
+      return !msg;
+    };
+
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const validate = () => {
+      const v = (id) => ($(id).value || '').trim();
+      let ok = true;
+      ok = setError('contact_name', !v('contact_name') ? messages.required : v('contact_name').length < 3 ? messages.minlength3 : '') && ok;
+      ok = setError('contact_email', !v('contact_email') ? messages.required : !emailRe.test(v('contact_email')) ? messages.validEmail : '') && ok;
+      ok = setError('contact_subject', !v('contact_subject') ? messages.required : v('contact_subject').length < 5 ? messages.minlength5 : '') && ok;
+      ok = setError('contact_message', !v('contact_message') ? messages.required : v('contact_message').length < 10 ? messages.minlength10 : '') && ok;
+      return ok;
+    };
+
+    const verifyCaptcha = async () => {
+      const resp = (window.grecaptcha && window.grecaptcha.getResponse()) || '';
+      if (!resp) return false;
+      // Content-Type matches the legacy jQuery default (form-urlencoded) so the
+      // request stays CORS-simple (no preflight) and the API Gateway/Lambda sees
+      // the same request shape it always has. A failure returns false rather than
+      // throwing, so the caller can surface feedback instead of dying silently.
+      try {
+        const r = await fetch(endpoints.recaptcha, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+          body: JSON.stringify({ captchaResponse: resp }),
+        });
+        const data = await r.json();
+        return data.body === '"Success"';
+      } catch {
+        return false;
+      }
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validate()) return;
+      const captchaOk = await verifyCaptcha();
+      if (!captchaOk) { flash('recaptcha_message'); return; }
+
+      show('generic-loader', true);
+      try {
+        const payload = {
+          name: $('contact_name').value,
+          email: $('contact_email').value,
+          subject: $('contact_subject').value,
+          message: $('contact_message').value,
+        };
+        const res = await fetch(endpoints.contact, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+          body: JSON.stringify(payload),
+        });
+        show('generic-loader', false);
+        if (!res.ok) throw new Error('send failed');
+        form.reset();
+        flash('success_message');
+        if (window.grecaptcha) window.grecaptcha.reset();
+      } catch {
+        show('generic-loader', false);
+        flash('error_message');
+      }
+    });
+  }
+</script>
