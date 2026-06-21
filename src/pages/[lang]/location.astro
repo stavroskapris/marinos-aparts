@@ -31,8 +31,11 @@ const BEACHES: { file: string; key: keyof typeof s.location.beaches }[] = [
 ];
 
 const modules = import.meta.glob<{ default: ImageMetadata }>('../../assets/beaches/*.jpg', { eager: true });
-const byFile = (file: string) =>
-  Object.entries(modules).find(([p]) => p.endsWith(`/${file}.jpg`))![1].default;
+const byFile = (file: string) => {
+  const entry = Object.entries(modules).find(([p]) => p.endsWith(`/${file}.jpg`));
+  if (!entry) throw new Error(`Beach image not found in src/assets/beaches: ${file}.jpg`);
+  return entry[1].default;
+};
 
 const items: GalleryItem[] = BEACHES.map(({ file, key }) => {
   const img = byFile(file);

@@ -25,7 +25,7 @@ const resolvedItems = await Promise.all(
 <div id="gallery" class="gallery">
   {resolvedItems.map((item) => (
     <figure class={figureClass} itemprop="associatedMedia">
-      {item.heading && <h4 class="tm-margin-b-20 tm-gold-text" set:html={item.heading} />}
+      {item.heading && <h4 class="tm-margin-b-20 tm-gold-text">{item.heading}</h4>}
       <a
         href={item.fullSrc}
         data-pswp-width={item.full.width}
@@ -54,6 +54,10 @@ const resolvedItems = await Promise.all(
     });
 
     // Render the per-slide HTML caption from data-pswp-caption.
+    // SECURITY: the caption HTML comes only from our build-time i18n data
+    // (src/i18n/*.json galleryDescriptions, which intentionally contain <h5>);
+    // it is never user- or request-influenced, so innerHTML is safe here. If
+    // captions ever become dynamic (CMS, query params), sanitize before injecting.
     lightbox.on('uiRegister', () => {
       lightbox.pswp!.ui!.registerElement({
         name: 'custom-caption',

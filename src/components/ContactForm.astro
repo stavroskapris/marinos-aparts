@@ -77,9 +77,21 @@ const f = s.contact.form;
     const verifyCaptcha = async () => {
       const resp = (window.grecaptcha && window.grecaptcha.getResponse()) || '';
       if (!resp) return false;
-      const r = await fetch(endpoints.recaptcha, { method: 'POST', body: JSON.stringify({ captchaResponse: resp }) });
-      const data = await r.json();
-      return data.body === '"Success"';
+      // Content-Type matches the legacy jQuery default (form-urlencoded) so the
+      // request stays CORS-simple (no preflight) and the API Gateway/Lambda sees
+      // the same request shape it always has. A failure returns false rather than
+      // throwing, so the caller can surface feedback instead of dying silently.
+      try {
+        const r = await fetch(endpoints.recaptcha, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+          body: JSON.stringify({ captchaResponse: resp }),
+        });
+        const data = await r.json();
+        return data.body === '"Success"';
+      } catch {
+        return false;
+      }
     };
 
     form.addEventListener('submit', async (e) => {
@@ -96,7 +108,11 @@ const f = s.contact.form;
           subject: $('contact_subject').value,
           message: $('contact_message').value,
         };
-        const res = await fetch(endpoints.contact, { method: 'POST', body: JSON.stringify(payload) });
+        const res = await fetch(endpoints.contact, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+          body: JSON.stringify(payload),
+        });
         show('generic-loader', false);
         if (!res.ok) throw new Error('send failed');
         form.reset();
