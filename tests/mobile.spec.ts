@@ -34,3 +34,22 @@ test('LangSwitcher emits valid li-inside-a-free markup', async ({ page }) => {
   // the picker anchors wrap an <li>; assert the corrected nesting <li><a>
   await expect(page.locator('.languagepicker li a img')).toHaveCount(2);
 });
+
+test('mobile: nav toggle, language switch, gallery open all work at 390px', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+
+  // nav toggle
+  await page.goto('/en/kimon');
+  const menu = page.locator('#tmNavbar');
+  await page.locator('.navbar-toggler').click();
+  await expect(menu).toBeVisible();
+
+  // language switch via the in-menu mobile switcher
+  await page.locator('#toggle-js-langmenu a[data-lang-switch="gr"]').click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'gr');
+
+  // gallery opens on mobile
+  await page.goto('/en/location');
+  await page.locator('#gallery a').first().click();
+  await expect(page.locator('.pswp')).toBeVisible();
+});
