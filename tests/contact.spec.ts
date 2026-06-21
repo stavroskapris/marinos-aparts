@@ -16,7 +16,7 @@ test('contact form submits with valid input (network + recaptcha stubbed)', asyn
   // Mock the two API Gateway calls (scoped to the API host so the /en/contact page navigation is not intercepted).
   await page.route('**/validaterecaptcha', (route) =>
     route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ body: '"Success"' }) }));
-  await page.route('**/amazonaws.com/**/contact', (route) =>
+  await page.route(/amazonaws\.com.*\/contact$/, (route) =>
     route.fulfill({ status: 200, contentType: 'application/json', body: '{}' }));
 
   await page.goto('/en/contact');
@@ -47,8 +47,8 @@ test('shows per-field validation messages for too-short input', async ({ page })
 });
 
 test('treats a non-success response body as an error, not success', async ({ page }) => {
-  await page.addInitScript(() => { (window as any).grecaptcha = { getResponse: () => 'tok', reset: () => {} }; });
   await page.route('**/recaptcha/api.js*', (r) => r.abort());
+  await page.addInitScript(() => { (window as any).grecaptcha = { getResponse: () => 'tok', reset: () => {} }; });
   await page.route('**/validaterecaptcha', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ body: '"Success"' }) }));
   // Regex used instead of glob because Playwright's glob engine does not match
   // amazonaws.com when it appears in the hostname rather than the URL path.
