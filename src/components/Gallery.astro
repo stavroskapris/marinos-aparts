@@ -17,7 +17,7 @@ const { items, figureClass } = Astro.props;
 const resolvedItems = await Promise.all(
   items.map(async (item) => {
     const fullImg = await getImage({ src: item.full, format: 'webp' });
-    return { ...item, fullSrc: fullImg.src, fullWidth: fullImg.options.width ?? item.full.width, fullHeight: fullImg.options.height ?? item.full.height };
+    return { ...item, fullSrc: fullImg.src };
   })
 );
 ---
