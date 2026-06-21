@@ -10,7 +10,8 @@
     "test:unit": "vitest run",
     "check:links": "linkinator http://localhost:4321/en/ http://localhost:4321/gr/ --recurse --silent --skip \"^https?://(www\\.)?(marinos-aparts\\.gr|okairos|kit\\.fontawesome|fonts\\.googleapis|unpkg|photoswipe|facebook|instagram|reservations\\.bookoncloud|googletagmanager|google\\.com|gstatic)\"",
     "check:links:ci": "astro build && (astro preview & SERVER_PID=$!; trap 'kill $SERVER_PID 2>/dev/null' EXIT; sleep 3 && npm run check:links)",
-    "parity:text": "node scripts/parity-text.mjs"
+    "parity:text": "node scripts/parity-text.mjs",
+    "parity:images": "node scripts/parity-images.mjs"
   },
   "dependencies": {
     "astro": "^4.15.0",
