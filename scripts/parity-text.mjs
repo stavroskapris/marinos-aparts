@@ -83,7 +83,11 @@ const astro = { en: flatten(en), gr: flatten(gr) };
 
 const legacy = buildLegacyValueSets();
 
-const lines = ['# Text parity report', ''];
+const lines = [
+  '# Text parity report',
+  '> Scope: values-only and directional — verifies every legacy string value is present somewhere in the Astro build per locale. It does NOT check key/page placement or flag extra/altered Astro strings (key parity was verified in Plans 1–2).',
+  '',
+];
 let unexplained = 0;
 const approvedLines = [];
 
