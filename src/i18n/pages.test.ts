@@ -2,7 +2,7 @@ import { test, expect } from 'vitest';
 import { t } from './t';
 import { LOCALES } from './locales';
 
-const FACILITY_KEYS = ['spaciousRooms','kitchen','fridge','parking','airCondition','safe','yard','hotWater','largeClosets','tv','iron','balcony','tableChairs','hairDryer','screens','wifi'];
+const FACILITY_KEYS = ['spaciousRooms','kitchen','fridge','parking','airCondition','safe','yard','hotWater','largeClosets','builtInClosets','tv','iron','balcony','tableChairs','hairDryer','screens','wifi'];
 const BEACH_KEYS = ['agiaParaskevi','zeri','zavia','dei','megaNtrafi','mpelaVraka','gallikosMolos','megaAmmos','mikriAmmos','pisina','karavostasi','arrilas'];
 
 test('every locale has all page blocks with matching key sets', () => {

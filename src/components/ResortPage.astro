@@ -15,7 +15,8 @@ interface Props {
   mapFocus: 'kimon' | 'irida';
   heroClass: string;
   resort: { title: string; main: string; facilitiesTitle: string; gallery: string };
-  facilities: Record<string, string>;
+  facilityCol1: string[];
+  facilityCol2: string[];
   items: GalleryItem[];
   figureClass: string;
 }
@@ -29,14 +30,11 @@ const {
   mapFocus,
   heroClass,
   resort,
-  facilities,
+  facilityCol1,
+  facilityCol2,
   items,
   figureClass,
 } = Astro.props;
-
-const facilityKeys = Object.keys(facilities) as (keyof typeof facilities)[];
-const col1 = facilityKeys.slice(0, 8);
-const col2 = facilityKeys.slice(8);
 ---
 
 <BaseLayout lang={lang} title={title} description={description} canonicalPath={canonicalPath}>
@@ -56,10 +54,10 @@ const col2 = facilityKeys.slice(8);
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
           <h2 class="tm-gold-text tm-title text-xs-center">{resort.facilitiesTitle}</h2>
           <div class="col-sm-6 col-md-6 col-lg-6 col-xl-7">
-            <div class="facilities"><ul>{col1.map((k) => <li>{facilities[k]}</li>)}</ul></div>
+            <div class="facilities"><ul>{facilityCol1.map((label) => <li>{label}</li>)}</ul></div>
           </div>
           <div class="col-sm-6 col-md-6 col-lg-6 col-xl-5">
-            <div class="facilities"><ul>{col2.map((k) => <li>{facilities[k]}</li>)}</ul></div>
+            <div class="facilities"><ul>{facilityCol2.map((label) => <li>{label}</li>)}</ul></div>
           </div>
         </div>
       </div>
