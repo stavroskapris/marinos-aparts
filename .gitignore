@@ -5,3 +5,6 @@ dist/
 .astro/
 test-results/
 playwright-report/
+docs/superpowers/parity/shots/
+docs/superpowers/parity/text-report.md
+docs/superpowers/parity/image-report.md
