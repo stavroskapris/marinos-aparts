@@ -1,0 +1,43 @@
+---
+import ResortPage from '../../components/ResortPage.astro';
+import { type GalleryItem } from '../../components/Gallery.astro';
+import { getStaticLocalePaths, isLocale, DEFAULT_LOCALE } from '../../i18n/locales';
+import { t } from '../../i18n/t';
+import type { ImageMetadata } from 'astro';
+
+export function getStaticPaths() {
+  return getStaticLocalePaths();
+}
+
+const langParam = Astro.params.lang;
+const lang = isLocale(langParam) ? langParam : DEFAULT_LOCALE;
+const s = t(lang);
+
+// Import all irida gallery images, sorted by numeric suffix (irida1..irida15).
+const modules = import.meta.glob<{ default: ImageMetadata }>('../../assets/irida/*.jpg', { eager: true });
+const images = Object.entries(modules)
+  .sort((a, b) => {
+    const n = (p: string) => parseInt(p.match(/irida(\d+)\.jpg$/)![1], 10);
+    return n(a[0]) - n(b[0]);
+  })
+  .map(([, m]) => m.default);
+
+const items: GalleryItem[] = images.map((img) => ({ thumb: img, full: img, alt: 'Irida Resort' }));
+
+const title = 'Irida Resort | Studios to rent at Sivota - Marinos-Aparts - rooms to let Sivota | Ενοικιαζόμενα δωμάτια Σύβοτα';
+const description = 'Irida Resort is completely renovated and ideally located in the center of the village.';
+---
+
+<ResortPage
+  lang={lang}
+  title={title}
+  description={description}
+  canonicalPath="/irida"
+  current="irida"
+  mapFocus="irida"
+  heroClass="tm-irida-img-container"
+  resort={s.irida}
+  facilities={s.facilities}
+  items={items}
+  figureClass="irida"
+/>
