@@ -39,9 +39,8 @@ const resolvedItems = await Promise.all(
   ))}
 </div>
 
-<link rel="stylesheet" href="https://unpkg.com/photoswipe@5.4.4/dist/photoswipe.css" />
-
 <script>
+  import 'photoswipe/style.css';
   import PhotoSwipeLightbox from 'photoswipe/lightbox';
 
   const el = document.querySelector('#gallery');
