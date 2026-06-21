@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 export interface GalleryItem {
@@ -11,14 +11,23 @@ export interface GalleryItem {
 }
 interface Props { items: GalleryItem[]; figureClass: string; }
 const { items, figureClass } = Astro.props;
+
+// Resolve full-size images through Astro's image pipeline so the
+// generated URLs are always emitted to dist (avoids 404 on lightbox open).
+const resolvedItems = await Promise.all(
+  items.map(async (item) => {
+    const fullImg = await getImage({ src: item.full, format: 'webp' });
+    return { ...item, fullSrc: fullImg.src, fullWidth: fullImg.options.width ?? item.full.width, fullHeight: fullImg.options.height ?? item.full.height };
+  })
+);
 ---
 
 <div id="gallery" class="gallery">
-  {items.map((item) => (
+  {resolvedItems.map((item) => (
     <figure class={figureClass} itemprop="associatedMedia">
       {item.heading && <h4 class="tm-margin-b-20 tm-gold-text" set:html={item.heading} />}
       <a
-        href={item.full.src}
+        href={item.fullSrc}
         data-pswp-width={item.full.width}
         data-pswp-height={item.full.height}
         data-pswp-caption={item.caption ?? ''}

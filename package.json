@@ -8,7 +8,8 @@
     "preview": "astro preview",
     "test": "playwright test",
     "test:unit": "vitest run",
-    "check:links": "linkinator ./dist --recurse --silent --skip \"^https?://(www\\.)?(marinos-aparts\\.gr|okairos|kit\\.fontawesome|fonts\\.googleapis|unpkg|facebook|instagram|reservations\\.bookoncloud|googletagmanager)\""
+    "check:links": "linkinator http://localhost:4321/en/ http://localhost:4321/gr/ --recurse --silent --skip \"^https?://(www\\.)?(marinos-aparts\\.gr|okairos|kit\\.fontawesome|fonts\\.googleapis|unpkg|photoswipe|facebook|instagram|reservations\\.bookoncloud|googletagmanager|google\\.com|gstatic)\"",
+    "check:links:ci": "npm run build && (npm run preview & sleep 3 && npm run check:links; kill %1)"
   },
   "dependencies": {
     "astro": "^4.15.0",
