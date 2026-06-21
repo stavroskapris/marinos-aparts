@@ -12,7 +12,7 @@
 import { chromium } from '@playwright/test';
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, mkdirSync } from 'node:fs';
-import { extname, join } from 'node:path';
+import { join, extname, resolve, sep } from 'node:path';
 
 const LEGACY_PORT = 4399;
 const ASTRO_PORT = 4321;
@@ -38,7 +38,9 @@ const MIME = {
 const legacyServer = createServer((req, res) => {
   let p = decodeURIComponent(req.url.split('?')[0]);
   if (p === '/') p = '/home.html';
-  const file = join(process.cwd(), p);
+  const root = resolve(process.cwd());
+  const file = resolve(join(root, p));
+  if (file !== root && !file.startsWith(root + sep)) { res.statusCode = 403; return res.end('forbidden'); }
   if (!existsSync(file)) {
     res.statusCode = 404;
     return res.end('not found');

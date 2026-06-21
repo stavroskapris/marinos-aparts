@@ -18,20 +18,20 @@ test('language switcher: desktop picker hidden on mobile, in-menu switcher shown
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('/en/');
   await expect(page.locator('.languagepicker')).toBeVisible();
-  await expect(page.locator('#toggle-js-langmenu')).toBeHidden();
+  await expect(page.locator('.hide-lang-nav-items').first()).toBeHidden();
 
   // mobile: flag picker hidden, in-menu switcher present with both locale links
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/en/');
   await expect(page.locator('.languagepicker')).toBeHidden();
-  const menuLinks = page.locator('#toggle-js-langmenu a');
+  const menuLinks = page.locator('.hide-lang-nav-items a');
   await expect(menuLinks).toHaveCount(2);
   await expect(menuLinks.first()).toHaveAttribute('href', /\/(en|gr)\//);
 });
 
 test('LangSwitcher emits valid li-inside-a-free markup', async ({ page }) => {
   await page.goto('/en/');
-  // the picker anchors wrap an <li>; assert the corrected nesting <li><a>
+  // each picker item is a valid <li><a><img></a></li>; assert that nesting
   await expect(page.locator('.languagepicker li a img')).toHaveCount(2);
 });
 
@@ -45,7 +45,7 @@ test('mobile: nav toggle, language switch, gallery open all work at 390px', asyn
   await expect(menu).toBeVisible();
 
   // language switch via the in-menu mobile switcher
-  await page.locator('#toggle-js-langmenu a[data-lang-switch="gr"]').click();
+  await page.locator('.hide-lang-nav-items a[data-lang-switch="gr"]').click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'gr');
 
   // gallery opens on mobile

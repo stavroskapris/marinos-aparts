@@ -25,10 +25,8 @@ const active = (key: NavKey) => (current === key ? 'nav-item active' : 'nav-item
             <li class="nav-item"><a href="https://reservations.bookoncloud.com/welcome/kimon" target="_blank" rel="noopener noreferrer" class="nav-link">{s.nav.book}</a></li>
             <li class={active('location')}><a href={`${base}/location`} class="nav-link">{s.nav.location}</a></li>
             <li class={active('contact')}><a href={`${base}/contact`} class="nav-link">{s.nav.contact}</a></li>
-            <div class="hide-lang-nav-items" id="toggle-js-langmenu">
-              <li class="nav-item"><a href={`/en${canonicalPath}/`} data-lang-switch="en" class="nav-link js-langanchor"><img src="/img/nav/en.png" height="13" width="18" alt="en" /></a></li>
-              <li class="nav-item"><a href={`/gr${canonicalPath}/`} data-lang-switch="gr" class="nav-link js-langanchor"><img src="/img/nav/gr.jpg" height="13" width="18" alt="gr" /></a></li>
-            </div>
+            <li class="nav-item hide-lang-nav-items"><a href={`/en${canonicalPath}/`} data-lang-switch="en" class="nav-link js-langanchor"><img src="/img/nav/en.png" height="13" width="18" alt="en" /></a></li>
+            <li class="nav-item hide-lang-nav-items"><a href={`/gr${canonicalPath}/`} data-lang-switch="gr" class="nav-link js-langanchor"><img src="/img/nav/gr.jpg" height="13" width="18" alt="gr" /></a></li>
           </ul>
         </div>
         <ul class="languagepicker roundborders hide-lang-menu">
