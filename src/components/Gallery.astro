@@ -75,3 +75,26 @@ const resolvedItems = await Promise.all(
     lightbox.init();
   }
 </script>
+
+<style is:global>
+  /* PhotoSwipe v5 renders the custom caption element (registered as
+     `custom-caption`) outside this component's scoped DOM, so these rules must
+     be global. Mirrors the legacy v4 `.pswp__caption`: a readable bottom bar. */
+  .pswp__custom-caption {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 12px 16px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #ccc;
+    font-size: 13px;
+    line-height: 20px;
+    text-align: center;
+  }
+  .pswp__custom-caption h5 {
+    margin: 0 0 4px;
+    color: #fff;
+    font-size: 15px;
+  }
+</style>
