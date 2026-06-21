@@ -39,9 +39,8 @@ const resolvedItems = await Promise.all(
   ))}
 </div>
 
-<link rel="stylesheet" href="https://unpkg.com/photoswipe@5.4.4/dist/photoswipe.css" />
-
 <script>
+  import 'photoswipe/style.css';
   import PhotoSwipeLightbox from 'photoswipe/lightbox';
 
   const el = document.querySelector('#gallery');
@@ -72,6 +71,22 @@ const resolvedItems = await Promise.all(
             elm.innerHTML = caption;
             elm.style.display = caption ? 'block' : 'none';
           });
+        },
+      });
+    });
+
+    lightbox.on('uiRegister', () => {
+      lightbox.pswp!.ui!.registerElement({
+        name: 'fs',
+        title: 'Toggle fullscreen',
+        order: 8,
+        isButton: true,
+        html: '<span style="font-size:18px;line-height:1">⛶</span>',
+        onClick: () => {
+          const el = lightbox.pswp!.element as HTMLElement | undefined;
+          if (!el) return;
+          if (document.fullscreenElement) document.exitFullscreen();
+          else el.requestFullscreen?.();
         },
       });
     });

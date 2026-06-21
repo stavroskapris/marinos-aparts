@@ -27,8 +27,8 @@ test('navbar links are locale-prefixed', async ({ page }) => {
 
 test('language switcher links to the same page in the other locale', async ({ page }) => {
   await page.goto('/en/');
-  await expect(page.locator('a[data-lang-switch="gr"]')).toHaveAttribute('href', '/gr/');
-  await page.locator('a[data-lang-switch="gr"]').click();
+  await expect(page.locator('.languagepicker a[data-lang-switch="gr"]')).toHaveAttribute('href', '/gr/');
+  await page.locator('.languagepicker a[data-lang-switch="gr"]').click();
   await expect(page).toHaveURL(/\/gr\/$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'gr');
 });

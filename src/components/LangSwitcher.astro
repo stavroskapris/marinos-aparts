@@ -10,7 +10,5 @@ const ordered: Locale[] = [lang, ...LOCALES.filter((l) => l !== lang)];
 ---
 
 {ordered.map((l) => (
-  <a href={`/${l}${canonicalPath}/`} data-lang-switch={l} class="js-langanchor">
-    <li><img src={flag[l]} height="13" width="18" alt={l} /></li>
-  </a>
+  <li><a href={`/${l}${canonicalPath}/`} data-lang-switch={l} class="js-langanchor"><img src={flag[l]} height="13" width="18" alt={l} /></a></li>
 ))}

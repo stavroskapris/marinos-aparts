@@ -115,6 +115,9 @@ const f = s.contact.form;
         });
         show('generic-loader', false);
         if (!res.ok) throw new Error('send failed');
+        const data = await res.json().catch(() => ({}));
+        // Lambda echoes a body; treat an explicit error body as failure.
+        if (typeof data.body === 'string' && data.body.toLowerCase().includes('error')) throw new Error('send rejected');
         form.reset();
         flash('success_message');
         if (window.grecaptcha) window.grecaptcha.reset();
