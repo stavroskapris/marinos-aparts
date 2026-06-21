@@ -46,8 +46,7 @@ const { items, figureClass } = Astro.props;
 
     // Render the per-slide HTML caption from data-pswp-caption.
     lightbox.on('uiRegister', () => {
-      if (!lightbox.pswp?.ui) return;
-      lightbox.pswp.ui.registerElement({
+      lightbox.pswp!.ui!.registerElement({
         name: 'custom-caption',
         order: 9,
         isButton: false,
@@ -67,8 +66,3 @@ const { items, figureClass } = Astro.props;
     lightbox.init();
   }
 </script>
-
-<style is:global>
-  .pswp__custom-caption,
-  .pswp .custom-caption { /* caption styling handled by photoswipe defaults; container positioned bottom */ }
-</style>
