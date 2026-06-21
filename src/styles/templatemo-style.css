@@ -1,6 +1,4 @@
-/**
-TODO MINIFY BEFORE FINAL COMMIT
- */
+/**/
 
 body {
     background-color: #F8F8F8;
@@ -259,14 +257,12 @@ p { line-height: 1.9; }
 #osm-map {
     height: 280px;
     width: 100%;
-    size: 100px;
     float: right;
 }
 
 #weather-widget {
     height: 280px;
     width: 100%;
-    size: 100px;
     float: right;
 }
 
