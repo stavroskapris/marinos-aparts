@@ -10,6 +10,8 @@ test('build emits no prod-hardcoded redirect stub at the root', () => {
     const html = readFileSync('dist/index.html', 'utf8');
     expect(html).not.toMatch(/http-equiv="refresh"[^>]*marinos-aparts\.gr/i);
   }
-  // The legacy .html redirect stubs must be gone too.
-  expect(existsSync('dist/kimon.html')).toBe(false);
+  // All legacy .html redirect stubs (one per removed `redirects` entry) must be gone.
+  for (const stub of ['home.html', 'kimon.html', 'irida.html', 'location.html', 'contact.html']) {
+    expect(existsSync(`dist/${stub}`)).toBe(false);
+  }
 }, 120_000);
