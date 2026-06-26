@@ -6,6 +6,6 @@ import { defineConfig } from 'vitest/config';
 // (which throw "test() not expected here" under the Vitest runner).
 export default defineConfig({
   test: {
-    include: ['src/**/*.test.ts'],
+    include: ['src/**/*.test.ts', 'infra/**/*.test.ts'],
   },
 });
