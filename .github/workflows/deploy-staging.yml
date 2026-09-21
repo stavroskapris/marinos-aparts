@@ -1,7 +1,7 @@
 name: Deploy Staging
 on:
   push:
-    branches: [astro-migration]   # Task 8 flips this to: master
+    branches: [master]
 jobs:
   deploy:
     runs-on: ubuntu-latest

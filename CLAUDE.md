@@ -101,14 +101,21 @@ test) once production has settled.
 
 | Workflow | Trigger | Target |
 |---|---|---|
-| `ci.yml` | pull request | gates only, no deploy |
-| `deploy-staging.yml` | push to the integration branch | staging bucket |
+| `ci.yml` | pull request into `astro-migration` or `master` | gates only, no deploy |
+| `deploy-staging.yml` | push to `master` | staging bucket |
 | `deploy-prod.yml` | manual (`workflow_dispatch`) | production bucket |
-| `main.yml` | push to `master` | **legacy**, retired at finalize |
 
-`master` is still frozen at the pre-migration site; the Astro trunk is the `astro-migration`
-branch until the cutover is finalized. The step-by-step cutover, with gates and rollback, is in
-`docs/superpowers/runbook-cutover.md`.
+The legacy `main.yml` (push to `master` → `aws s3 sync ./` of the whole repo root into the old
+bucket) has been deleted. It had to go **before** `astro-migration` merges to `master`, or that
+merge would have fired it and pushed the repo source — and the checkout's `.git` directory — into
+the rollback bucket.
+
+Until that merge lands, `master` is still the pre-migration site and `astro-migration` is the
+trunk. Afterwards `master` is the trunk and pushes to it deploy staging; production stays manual.
+Note `deploy-prod.yml` is **not dispatchable** until it exists on the default branch — that is
+why the cutover deployed production by direct `aws s3 sync`.
+
+The step-by-step cutover, with gates and rollback, is in `docs/superpowers/runbook-cutover.md`.
 
 **Origin and function must change together.** Because the site depends on the redirect function,
 repointing a distribution's origin to the Astro bucket without attaching the function (or the
@@ -128,8 +135,8 @@ policies; the runbook uses placeholders for exactly this reason.
   purpose** as the reference corpus for the parity gates. They are not served, not built, and not
   edited. They go away once the cutover has soaked.
 - **`src/config.ts` is baked into the build.** The endpoints and reCAPTCHA key are public values,
-  so there is no per-environment secret and no runtime config. (Historic note: the legacy
-  `main.yml` excluded `js/custom/config/*` from its sync, but the bucket copy was identical to the
+  so there is no per-environment secret and no runtime config. (Historic note: the legacy deploy
+  workflow excluded `js/custom/config/*` from its sync, but the bucket copy was identical to the
   committed one — nothing was ever overridden.)
 - The contact API has exactly one API Gateway stage, named `dev`. Despite the name, **it is
   production** — there is no other stage. CORS is `*`, so reCAPTCHA is the only spam control.
