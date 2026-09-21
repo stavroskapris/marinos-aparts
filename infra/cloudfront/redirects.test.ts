@@ -45,6 +45,13 @@ test('the generated sitemap files are served as-is', () => {
   expect(handler(req('/robots.txt')).uri).toBe('/robots.txt');
 });
 
+test('the deploy provenance file is served as-is', () => {
+  // scripts/build-info.mjs writes dist/.build-info.json. The last segment
+  // starts with a dot, so guard against it being mistaken for a clean URL and
+  // rewritten to /.build-info.json/index.html.
+  expect(handler(req('/.build-info.json')).uri).toBe('/.build-info.json');
+});
+
 test('paths with a file extension pass through unchanged', () => {
   expect(handler(req('/_astro/app.abc123.css')).uri).toBe('/_astro/app.abc123.css');
   expect(handler(req('/img/nav/logo_marinos.png')).uri).toBe('/img/nav/logo_marinos.png');

@@ -2,6 +2,7 @@
   "name": "marinos-aparts",
   "type": "module",
   "version": "1.0.0",
+  "private": true,
   "engines": {
     "node": ">=22.0.0"
   },
@@ -15,7 +16,8 @@
     "check:links:ci": "astro build && (astro preview & SERVER_PID=$!; trap 'kill $SERVER_PID 2>/dev/null' EXIT; sleep 3 && npm run check:links)",
     "parity:text": "node scripts/parity-text.mjs",
     "parity:images": "node scripts/parity-images.mjs",
-    "visual:capture": "node scripts/visual-capture.mjs"
+    "visual:capture": "node scripts/visual-capture.mjs",
+    "build:info": "node scripts/build-info.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.2.1",
