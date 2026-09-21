@@ -1,11 +1,27 @@
 name: Deploy Production
 on:
   workflow_dispatch:
+    inputs:
+      ref:
+        description: "Tag, branch or commit SHA to deploy"
+        required: false
+        default: master
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # Gives a deployment history in the repo's Environments view, so what is in
+    # production is a recorded fact rather than something inferred from run logs.
+    environment:
+      name: production
+      url: https://www.marinos-aparts.gr
     steps:
+      # The workflow file always comes from the branch the run was started on;
+      # only the content being built varies. Passing a ref here - rather than
+      # dispatching the whole workflow at a tag - means an old tag cannot bring
+      # along an old, broken deploy pipeline.
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref }}
       - uses: actions/setup-node@v7
         with:
           node-version: 22
@@ -17,6 +33,7 @@ jobs:
       - run: npm test
       - run: npm run parity:text
       - run: npm run parity:images
+      - run: npm run build:info
       - uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -24,3 +41,10 @@ jobs:
           aws-region: eu-west-1
       - run: aws s3 sync ./dist s3://marinos-aparts-prod --delete
       - run: aws cloudfront create-invalidation --distribution-id ${{ secrets.PROD_DISTRIBUTION_ID }} --paths "/*"
+      - name: Record what was deployed
+        run: |
+          echo "### Deployed to production" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat dist/.build-info.json >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "Verify live: <https://www.marinos-aparts.gr/.build-info.json>" >> "$GITHUB_STEP_SUMMARY"
