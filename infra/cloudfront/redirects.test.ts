@@ -31,6 +31,20 @@ test('clean URLs are rewritten to index.html objects', () => {
   expect(handler(req('/gr/contact')).uri).toBe('/gr/contact/index.html');
 });
 
+test('the legacy /sitemap.xml path is rewritten to the generated sitemap index', () => {
+  // Astro's sitemap integration emits sitemap-index.xml; the legacy site
+  // published /sitemap.xml and that URL is registered in Search Console.
+  const res = handler(req('/sitemap.xml'));
+  expect(res.uri).toBe('/sitemap-index.xml');
+  expect(res.statusCode).toBeUndefined(); // a rewrite, not a redirect
+});
+
+test('the generated sitemap files are served as-is', () => {
+  expect(handler(req('/sitemap-index.xml')).uri).toBe('/sitemap-index.xml');
+  expect(handler(req('/sitemap-0.xml')).uri).toBe('/sitemap-0.xml');
+  expect(handler(req('/robots.txt')).uri).toBe('/robots.txt');
+});
+
 test('paths with a file extension pass through unchanged', () => {
   expect(handler(req('/_astro/app.abc123.css')).uri).toBe('/_astro/app.abc123.css');
   expect(handler(req('/img/nav/logo_marinos.png')).uri).toBe('/img/nav/logo_marinos.png');

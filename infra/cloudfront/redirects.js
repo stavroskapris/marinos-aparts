@@ -23,6 +23,14 @@ function handler(event) {
         };
     }
 
+    // Astro's sitemap integration emits sitemap-index.xml; the legacy site
+    // published /sitemap.xml and that URL is what search engines already know.
+    // Rewrite (not redirect) so the old address keeps serving a valid sitemap.
+    if (uri === '/sitemap.xml') {
+        request.uri = '/sitemap-index.xml';
+        return request;
+    }
+
     // Map clean/directory URLs to their S3 index.html object.
     if (uri.charAt(uri.length - 1) === '/') {
         request.uri = uri + 'index.html';

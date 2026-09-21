@@ -15,3 +15,17 @@ test('build emits no prod-hardcoded redirect stub at the root', () => {
     expect(existsSync(`dist/${stub}`)).toBe(false);
   }
 }, 120_000);
+
+// Runs after the build above (vitest executes a file's tests in order), so it
+// reuses dist/ rather than paying for a second build.
+test('build emits the SEO assets the legacy site published', () => {
+  expect(existsSync('dist/sitemap-index.xml')).toBe(true);
+  expect(existsSync('dist/sitemap-0.xml')).toBe(true);
+  expect(existsSync('dist/robots.txt')).toBe(true);
+
+  const sitemap = readFileSync('dist/sitemap-0.xml', 'utf8');
+  // Every route, both locales, cross-linked with a parseable language tag.
+  expect(sitemap.match(/<url>/g)).toHaveLength(10);
+  expect(sitemap).toContain('hreflang="el"');
+  expect(sitemap).not.toContain('hreflang="gr"');
+});

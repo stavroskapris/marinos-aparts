@@ -15,6 +15,7 @@
     "visual:capture": "node scripts/visual-capture.mjs"
   },
   "dependencies": {
+    "@astrojs/sitemap": "3.2.1",
     "astro": "^4.15.0",
     "leaflet": "^1.9.4",
     "photoswipe": "^5.4.4"
