@@ -5,10 +5,14 @@ served from AWS [CloudFront](https://aws.amazon.com/cloudfront/) + [S3](https://
 with the contact form backed by [API Gateway](https://aws.amazon.com//api-gateway/) +
 [Lambda](https://aws.amazon.com/lambda/), and DNS on [Route 53](https://aws.amazon.com/route53/).
 
-> **Migration in progress.** The site is being rewritten from plain HTML + jQuery to
-> [Astro](https://astro.build). The new app lives under `src/`; the original `*.html` files
-> remain at the repo root until the migration completes. **For local development, use the Astro
-> workflow below** — the root `.html` files are legacy and are not the source of truth for new work.
+> **The Astro rewrite is complete; production cutover is underway.** The app lives under `src/`
+> and is the source of truth for all new work — **use the Astro workflow below.**
+>
+> The original `*.html` files, `js/custom/`, `css/` and `img/` are still at the repo root on
+> purpose: they are the **reference corpus for the parity gates** (`npm run parity:text` /
+> `parity:images`), which diff the Astro build against the legacy site. They are not served and
+> are not edited. They are removed once the cutover has soaked — see
+> `docs/superpowers/runbook-cutover.md`.
 
 ---
 
@@ -60,6 +64,9 @@ HTML). Use it when verifying the image pipeline or doing a final check.
 | `npm run test:unit` | Run the **unit** tests (Vitest) — i18n data + helpers |
 | `npm run check:links` | Crawl the running site (needs a server on :4321) for broken **internal** links |
 | `npm run check:links:ci` | Build, start a preview server, run the link check, then stop the server |
+| `npm run parity:text` | Diff the built pages' copy against the legacy `*.html` reference (gate) |
+| `npm run parity:images` | Check every image the legacy site referenced is present in the build (gate) |
+| `npm run visual:capture` | Screenshot every route for the visual sign-off record |
 
 There is no separate lint step; type-checking runs via **`npx astro check`** (used in CI and worth
 running before a PR).
@@ -103,6 +110,10 @@ src/
   styles/              # bootstrap + template CSS
 public/                # served as-is: img/nav, backgrounds, favicon, etc.
 tests/                 # Playwright e2e specs (*.spec.ts)
+infra/
+  cloudfront/          # edge redirect + clean-URL function (ES5) and its unit test
+scripts/               # parity gates and the visual-capture helper
+docs/superpowers/      # design spec, implementation plans, parity sign-offs, cutover runbook
 ```
 
 ### Where to edit common things
@@ -130,9 +141,39 @@ tests/                 # Playwright e2e specs (*.spec.ts)
 
 ## Deployment
 
-The production site is served via CloudFront + S3 (region `eu-west-1`), with the contact form hitting
-API Gateway + Lambda. CI/CD for the Astro build is part of the ongoing migration; the implementation
-plans live in `docs/superpowers/plans/`.
+The site is static: `npm run build` emits `dist/`, which is synced to an S3 bucket and served by
+CloudFront (region `eu-west-1`). The contact form posts to API Gateway + Lambda; DNS is Route 53.
+
+### Pipelines
+
+| Workflow | Trigger | What it does |
+|---|---|---|
+| `ci.yml` | pull request | Build + unit + e2e + both parity gates. No deploy. |
+| `deploy-staging.yml` | push to the integration branch | Same gates, then sync `dist/` to the staging bucket and invalidate. |
+| `deploy-prod.yml` | manual (`workflow_dispatch`) | Same gates, then sync `dist/` to the production bucket and invalidate. |
+
+Every deploy runs the full gate set first — a red test or a parity regression blocks the sync, not
+just the merge.
+
+### Clean URLs and redirects
+
+Pages are per-locale static routes (`/en/kimon`), so there is no `index.html` at the site root and
+no server to rewrite paths. A **CloudFront Function** (`infra/cloudfront/redirects.js`, attached as
+*viewer-request*) does both jobs at the edge:
+
+- redirects the legacy entry points — `/`, `/home.html`, `/kimon.html`, … → their `/en/…` equivalents
+- rewrites clean URLs to their S3 object key (`/en/kimon` → `/en/kimon/index.html`), passing through
+  anything with a file extension
+
+It is plain ES5 (CloudFront Functions' runtime) and unit-tested in `infra/cloudfront/redirects.test.ts`.
+Because the site depends on it, the function and the origin must be configured together — the
+cutover runbook does both in a single distribution update.
+
+### Cutover
+
+Migrating the live domain onto the Astro build is documented step by step, with gates and a rollback,
+in **`docs/superpowers/runbook-cutover.md`**. Design notes and the implementation plans live in
+`docs/superpowers/specs/` and `docs/superpowers/plans/`.
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Resources

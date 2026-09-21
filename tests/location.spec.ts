@@ -31,6 +31,6 @@ test('location lightbox caption renders anchored at the bottom and is readable',
 
 test('greek location uses translated beach names', async ({ page }) => {
   await page.goto('/gr/location');
-  await expect(page.locator('html')).toHaveAttribute('lang', 'gr');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'el');
   await expect(page.locator('#gallery h4').filter({ hasText: 'Αγία Παρασκευή' })).toBeVisible();
 });

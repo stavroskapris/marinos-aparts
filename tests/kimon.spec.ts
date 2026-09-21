@@ -11,7 +11,7 @@ test('english kimon renders title, facilities, and gallery', async ({ page }) =>
 
 test('greek kimon renders translated facilities', async ({ page }) => {
   await page.goto('/gr/kimon');
-  await expect(page.locator('html')).toHaveAttribute('lang', 'gr');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'el');
   await expect(page.getByText('Δωρεάν wi-fi Internet')).toBeVisible();
 });
 

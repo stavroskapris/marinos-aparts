@@ -14,7 +14,7 @@ test('html lang attribute and GA4 are present on english home', async ({ page })
 
 test('hreflang alternates point to per-locale urls', async ({ page }) => {
   await page.goto('/en/');
-  await expect(page.locator('link[rel="alternate"][hreflang="gr"]')).toHaveAttribute('href', /\/gr\/$/);
+  await expect(page.locator('link[rel="alternate"][hreflang="el"]')).toHaveAttribute('href', /\/gr\/$/);
   await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute('href', /\/en\/$/);
   await expect(page.locator('link[rel="alternate"][hreflang="x-default"]')).toHaveAttribute('href', /\/en\/$/);
 });
@@ -30,7 +30,7 @@ test('language switcher links to the same page in the other locale', async ({ pa
   await expect(page.locator('.languagepicker a[data-lang-switch="gr"]')).toHaveAttribute('href', '/gr/');
   await page.locator('.languagepicker a[data-lang-switch="gr"]').click();
   await expect(page).toHaveURL(/\/gr\/$/);
-  await expect(page.locator('html')).toHaveAttribute('lang', 'gr');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'el');
 });
 
 test('scroll-to-top button exists', async ({ page }) => {
@@ -66,7 +66,7 @@ test('english home renders intro, welcome, and both resort cards', async ({ page
 
 test('greek home renders translated welcome copy', async ({ page }) => {
   await page.goto('/gr/');
-  await expect(page.locator('html')).toHaveAttribute('lang', 'gr');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'el');
   await expect(page.getByText('Read More')).toHaveCount(0); // EN-only string absent
   await expect(page.getByText('Περισσότερα')).toHaveCount(2); // GR read-more buttons present (Kimon + Irida)
 });

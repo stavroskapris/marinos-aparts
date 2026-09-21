@@ -46,7 +46,7 @@ test('mobile: nav toggle, language switch, gallery open all work at 390px', asyn
 
   // language switch via the in-menu mobile switcher
   await page.locator('.hide-lang-nav-items a[data-lang-switch="gr"]').click();
-  await expect(page.locator('html')).toHaveAttribute('lang', 'gr');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'el');
 
   // gallery opens on mobile
   await page.goto('/en/location');

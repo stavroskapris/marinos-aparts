@@ -12,11 +12,23 @@ function handler(event) {
     };
 
     if (redirects.hasOwnProperty(uri)) {
+        // 302 (not 301) for the duration of the post-cutover soak: browsers cache a
+        // 301 indefinitely, which would strand visitors on /en/* even after a
+        // rollback to the legacy bucket. Flip to 301 once prod is settled
+        // (docs/superpowers/runbook-cutover.md, Phase E).
         return {
-            statusCode: 301,
-            statusDescription: 'Moved Permanently',
+            statusCode: 302,
+            statusDescription: 'Found',
             headers: { 'location': { value: redirects[uri] } }
         };
+    }
+
+    // Astro's sitemap integration emits sitemap-index.xml; the legacy site
+    // published /sitemap.xml and that URL is what search engines already know.
+    // Rewrite (not redirect) so the old address keeps serving a valid sitemap.
+    if (uri === '/sitemap.xml') {
+        request.uri = '/sitemap-index.xml';
+        return request;
     }
 
     // Map clean/directory URLs to their S3 index.html object.
