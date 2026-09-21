@@ -8,7 +8,7 @@ step ordering causes a live-site outage — see "Why the plan's ordering was wro
 
 Status at time of writing (2026-09-21):
 - Trunk `astro-migration` @ `70390ff`; Plans 1–4 code merged.
-- Staging **E1LWA9UH9QOEWW** / `d3rdv3w5lgyop6.cloudfront.net` — live and verified.
+- Staging **<STAGING_DIST_ID>** / `<STAGING_DOMAIN>` — live and verified.
 - `master` frozen at the 2023 legacy site; `main.yml` still deploys it to `marinos-test-bucket`.
 - `PROD_DISTRIBUTION_ID` secret **not set**; `marinos-aparts-prod` bucket existence **unverified**.
 
@@ -394,6 +394,6 @@ Fill in as you go.
 | 302-during-soak taken? | | |
 | Cutover date | | |
 
-**Known state carried in:** staging `E1LWA9UH9QOEWW` / `d3rdv3w5lgyop6.cloudfront.net`,
+**Known state carried in:** staging `<STAGING_DIST_ID>` / `<STAGING_DOMAIN>`,
 function `marinos-redirects` published (`cloudfront-js-2.0`), `STAGING_DISTRIBUTION_ID`
 secret set, staging CORS on the contact form still unaddressed.
