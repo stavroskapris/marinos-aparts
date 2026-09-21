@@ -6,11 +6,20 @@ Ledger section at the bottom as you go.
 Supersedes **Task 7 of `docs/superpowers/plans/2026-06-21-cicd-and-cutover.md`**, whose
 step ordering causes a live-site outage — see "Why the plan's ordering was wrong" below.
 
-Status at time of writing (2026-09-21):
+**STATUS: the cutover described here was EXECUTED AND VERIFIED on 2026-09-21.**
+`www.marinos-aparts.gr` serves the Astro build. This document is now both the record of what
+was done and the reference for the remaining steps (Phase E) and for a rollback. Phases A–D
+are complete; do not re-run them.
+
+State as the cutover began:
 - Trunk `astro-migration` @ `70390ff`; Plans 1–4 code merged.
 - Staging **<STAGING_DIST_ID>** / `<STAGING_DOMAIN>` — live and verified.
-- `master` frozen at the 2023 legacy site; `main.yml` still deploys it to `marinos-test-bucket`.
-- `PROD_DISTRIBUTION_ID` secret **not set**; `marinos-aparts-prod` bucket existence **unverified**.
+- `master` frozen at the 2023 legacy site; `main.yml` still deploying it to the legacy bucket.
+- `PROD_DISTRIBUTION_ID` secret not set; `marinos-aparts-prod` bucket did not exist.
+
+Two things the original plan did not anticipate, both handled in Phase C: the prod
+distribution used a legacy **OAI** rather than an OAC, and its `DefaultRootObject` was
+`home.html`, which does not exist in the Astro build.
 
 ---
 
@@ -18,10 +27,14 @@ Status at time of writing (2026-09-21):
 
 The plan's Task 7 attaches the `marinos-redirects` CloudFront Function to the prod
 distribution (Step 1) and only repoints the origin two steps later (Step 3). The function
-temporarily 302-redirects `/` → `/en/` and rewrites clean URLs to `/en/index.html` — **keys that do not exist in
-`marinos-test-bucket`**. Every request to the live site 404s from the moment the function
-association deploys until the origin swap finishes: two sequential CloudFront deployments,
-roughly 5–15 minutes of hard downtime.
+301-redirects `/` → `/en/` (as the plan specified; the switch to 302 described under
+*Rollback is not fully symmetric* came later and is a separate concern) and rewrites clean
+URLs to `/en/index.html` — **keys that do not exist in `marinos-test-bucket`**. Every request
+to the live site 404s from the moment the function association deploys until the origin swap
+finishes: two sequential CloudFront deployments, roughly 5–15 minutes of hard downtime.
+
+The status code is incidental to this failure either way: a 301 and a 302 both send the
+viewer to a path the legacy bucket cannot serve. What breaks the site is the *ordering*.
 
 Reversing the order does not help. `dist/` has no root `index.html` (only `en/`, `gr/`,
 `_astro/`, `img/`, `favicon.ico`), and CloudFront's default-root-object only rewrites `/`,
@@ -155,9 +168,9 @@ aws cloudfront describe-function --name marinos-redirects \
 
 Record as **FUNCTION_ARN**.
 
-If you took the 302-during-soak option (see "Rollback is not fully symmetric" below), the
-function must be republished from the edited `infra/cloudfront/redirects.js` *before* this
-check.
+The 302-during-soak option was taken (see "Rollback is not fully symmetric" below), so the
+function was republished from the edited `infra/cloudfront/redirects.js` before this check.
+The LIVE code should read `statusCode: 302`.
 
 ### A7. Set the prod distribution-ID secret
 
@@ -296,8 +309,10 @@ for u in "/en/" "/gr/" "/en/kimon" "/gr/kimon" "/en/irida" "/gr/irida" "/en/loca
 done
 ```
 
-Expected: the first group 301s (`/` and `/home.html` → `/en/`, the rest → their `/en/…`
-clean URL); the second group is all 200.
+Expected: the first group **302s** (`/` and `/home.html` → `/en/`, the rest → their `/en/…`
+clean URL); the second group is all 200. They are 302 and not 301 because the
+soak option below was taken — see *Rollback is not fully symmetric*. Once the soak ends and
+the function is flipped back, the same checks should show 301.
 
 Then in a browser, on the live domain:
 
@@ -331,7 +346,12 @@ delete it until after the soak (Task 8).**
 
 ### Rollback is not fully symmetric — read before Phase C
 
-The redirect function returns **301 Moved Permanently**. Browsers cache a 301 indefinitely
+> **DECIDED AND DONE (2026-09-21).** The 302 option below was taken before the swap: commit
+> `f0fe6a3` changed `redirects.js`, the function was republished, and staging was verified
+> serving 302 before production was touched. Production currently returns **302**. The
+> remaining action is the flip back to 301 after the soak — see Phase E.
+
+The redirect function returned **301 Moved Permanently** as originally written. Browsers cache a 301 indefinitely
 and stop asking CloudFront. Any visitor who loads `/kimon.html` after the cutover will keep
 being sent to `/en/kimon` **even after a rollback**, where the legacy bucket has no such
 key — they get a 404 that the rollback cannot reach.
@@ -355,16 +375,17 @@ commit, then republish the function (`aws cloudfront update-function` + `publish
 before A6. Flipping back to 301 after the soak is the same edit in reverse, plus a republish
 and an invalidation.
 
-Taking the 302 path is a judgement call about how much rollback confidence is worth one
-extra function republish — it is not required for a correct cutover.
+Taking the 302 path was a judgement call about how much rollback confidence is worth one
+extra function republish — it was not required for a correct cutover, but it was taken.
 
 ---
 
 ## Phase E — Finalize (Task 8; only after a clean soak)
 
 1. **(CODE, via PR into `astro-migration`)** Delete `.github/workflows/main.yml`; change the
-   `deploy-staging.yml` trigger branch from `astro-migration` to `master`. If the 302 option
-   was taken, flip `redirects.js` back to 301 in this PR and republish the function.
+   `deploy-staging.yml` trigger branch from `astro-migration` to `master`. The 302 option **was**
+   taken, so flip `redirects.js` back to 301 in this PR, update `redirects.test.ts` to match,
+   republish the function and invalidate `/*`.
 2. **(OPERATOR)** Merge `astro-migration` → `master`. Per the project's review rule: open the
    PR, wait for review, resolve comments, never auto-merge.
 3. **(OPERATOR)** After the soak, decommission `marinos-test-bucket`.
@@ -376,24 +397,29 @@ extra function republish — it is not required for a correct cutover.
 
 ## Ledger
 
-Fill in as you go.
+Outcome of the 2026-09-21 run. **Concrete AWS identifiers are deliberately omitted — this
+repository is public.** Retrieve them with the discovery commands in Phase A, or from the
+operator's own notes.
 
-| Item | Value | Confirmed |
-|---|---|---|
-| PROD_DIST_ID | | |
-| PROD_DIST_ARN | | |
-| Legacy origin shape (Variant 1 / 2) | | |
-| Origin `Id` (unchanged) | | |
-| OAC_ID | | |
-| FUNCTION_ARN | | |
-| `marinos-aparts-prod` bucket | pre-existing / created | |
-| `PROD_DISTRIBUTION_ID` secret set | | |
-| Phase B deploy run | | |
-| Phase C swap applied (ETag used) | | |
-| Phase D verification | | |
-| 302-during-soak taken? | | |
-| Cutover date | | |
+| Item | Outcome |
+|---|---|
+| Legacy origin shape | **Variant 1** (`S3OriginConfig`), but via a legacy **OAI**, not an OAC |
+| Origin `Id` | left unchanged, so `TargetOriginId` still resolved |
+| `DefaultRootObject` | `home.html` → `index.html` (the old value is absent from the build) |
+| OAC | reused staging's, rather than creating a second one |
+| `marinos-aparts-prod` bucket | **created** during Phase A (private, all four public-access blocks on) |
+| Bucket policy | CloudFront read, scoped by `AWS:SourceArn` to the prod distribution only |
+| `PROD_DISTRIBUTION_ID` secret | set |
+| Phase B deploy | **not** via `gh workflow run` — "Deploy Production" is not dispatchable, since `workflow_dispatch` needs the workflow file on the default branch. Done by direct `aws s3 sync ./dist` after running all four gates locally. |
+| Phase C swap | applied as a single `update-distribution` with `--if-match`; five fields changed, everything else verified byte-identical |
+| Phase D verification | 6 legacy paths → 302; 10 clean URLs → 200 on both `www` and apex; sitemap/robots 200; no `x-robots-tag` on prod; `x-cache: Miss` confirming the new origin |
+| 302-during-soak | **taken** (commit `f0fe6a3`) |
+| Cutover date | 2026-09-21 |
 
-**Known state carried in:** staging `<STAGING_DIST_ID>` / `<STAGING_DOMAIN>`,
-function `marinos-redirects` published (`cloudfront-js-2.0`), `STAGING_DISTRIBUTION_ID`
-secret set, staging CORS on the contact form still unaddressed.
+**Unplanned finding:** the legacy bucket was populated by `aws s3 sync ./` of the whole repo,
+including `.git/`, so the old production site served its own VCS directory. The new bucket
+holds only `dist/`; `/.git/config`, `/js/custom/app.js`, `/package.json` and `/CLAUDE.md` now
+all return 403.
+
+**Also resolved:** the "staging CORS may block the contact form" risk carried in from Plan 4
+was unfounded — both API endpoints return `access-control-allow-origin: *`.
