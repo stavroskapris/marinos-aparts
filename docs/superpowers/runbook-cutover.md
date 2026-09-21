@@ -18,7 +18,7 @@ Status at time of writing (2026-09-21):
 
 The plan's Task 7 attaches the `marinos-redirects` CloudFront Function to the prod
 distribution (Step 1) and only repoints the origin two steps later (Step 3). The function
-301s `/` → `/en/` and rewrites clean URLs to `/en/index.html` — **keys that do not exist in
+temporarily 302-redirects `/` → `/en/` and rewrites clean URLs to `/en/index.html` — **keys that do not exist in
 `marinos-test-bucket`**. Every request to the live site 404s from the moment the function
 association deploys until the origin swap finishes: two sequential CloudFront deployments,
 roughly 5–15 minutes of hard downtime.
