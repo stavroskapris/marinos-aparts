@@ -62,12 +62,25 @@ updates:
       # only move when Astro does.
       - dependency-name: "@astrojs/sitemap"
 
-      # vitest 5 pulls vite 8, which requires @types/node ^20.19 || >=22.12.
-      # The project is on @types/node ^18 and the workflows pin node-version 18,
-      # so it breaks `npm ci` — and that is step one of every deploy, not just
-      # the test job. Unblock by upgrading Node first.
+      # vitest 5 needs vite ^6/^7/^8; astro 4.16 pins vite ^5.4.11. (The
+      # @types/node half of this was cleared by the move to Node 22, but the
+      # vite peer remains.) Gated on the Astro major.
       - dependency-name: "vitest"
         update-types: [version-update:semver-major]
+
+      # TypeScript 7 is rejected by @astrojs/check@0.9.9, which peers
+      # typescript ^5 || ^6 and only moves with the Astro major.
+      - dependency-name: "typescript"
+        update-types: [version-update:semver-major]
+
+      # @astrojs/check majors track the Astro major; bumping it alone breaks
+      # the type-check against Astro 4.
+      - dependency-name: "@astrojs/check"
+        update-types: [version-update:semver-major]
+
+      # @types/node must match the Node major the workflows pin (currently 22).
+      # Letting it float to the next major would describe a runtime we do not
+      # run on. Bump it deliberately, together with node-version and engines.
       - dependency-name: "@types/node"
         update-types: [version-update:semver-major]
 
