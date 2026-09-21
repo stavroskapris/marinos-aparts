@@ -309,10 +309,12 @@ for u in "/en/" "/gr/" "/en/kimon" "/gr/kimon" "/en/irida" "/gr/irida" "/en/loca
 done
 ```
 
-Expected: the first group **302s** (`/` and `/home.html` → `/en/`, the rest → their `/en/…`
-clean URL); the second group is all 200. They are 302 and not 301 because the
-soak option below was taken — see *Rollback is not fully symmetric*. Once the soak ends and
-the function is flipped back, the same checks should show 301.
+Expected: the first group **301s** (`/` and `/home.html` → `/en/`, the rest → their `/en/…`
+clean URL); the second group is all 200.
+
+They were **302** between the cutover and the end of the soak — see *Rollback is not fully
+symmetric* — and returned to 301 once production had settled. A 302 here now means the soak
+flip has not been applied yet.
 
 Then in a browser, on the live domain:
 
