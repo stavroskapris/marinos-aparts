@@ -9,7 +9,7 @@ function loadHandler() {
 const handler = loadHandler();
 const req = (uri: string) => ({ request: { uri } });
 
-test('root and legacy .html paths temporarily 302-redirect to locale URLs', () => {
+test('root and legacy .html paths 301-redirect to locale URLs', () => {
   for (const [from, to] of [
     ['/', '/en/'],
     ['/home.html', '/en/'],
@@ -19,8 +19,7 @@ test('root and legacy .html paths temporarily 302-redirect to locale URLs', () =
     ['/contact.html', '/en/contact'],
   ]) {
     const res = handler(req(from));
-    // 302 during the cutover soak; see the comment in redirects.js.
-    expect(res.statusCode).toBe(302);
+    expect(res.statusCode).toBe(301);
     expect(res.headers.location.value).toBe(to);
   }
 });
