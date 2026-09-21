@@ -408,10 +408,26 @@ Split in two, because the pieces are gated on different things. **Step 1 is stag
    difference is Astro's internal `data-image-component` marker attribute on `<img>` tags, with
    no runtime effect — but production should be reproducible from the pipeline.
 
-4. **(CODE + OPERATOR) — GATED ON THE SOAK, deliberately NOT in step 1's PR.** Flip
-   `redirects.js` from 302 back to 301, update `redirects.test.ts` to match, republish the
-   function and invalidate `/*`. Doing this early ends the soak and gives up symmetric
-   rollback, so it waits until production is settled and the contact form has been verified.
+4. **(CODE + OPERATOR) — the soak flip, its own PR.** Flip `redirects.js` from 302 back to 301
+   and update `redirects.test.ts` to match, then republish the function and invalidate:
+
+   ```bash
+   ETAG=$(aws cloudfront describe-function --name marinos-redirects --query ETag --output text)
+   NEW=$(aws cloudfront update-function --name marinos-redirects --if-match "$ETAG" \
+     --function-config Comment="redirects + clean URLs",Runtime="cloudfront-js-2.0" \
+     --function-code fileb://infra/cloudfront/redirects.js --query ETag --output text)
+   aws cloudfront publish-function --name marinos-redirects --if-match "$NEW"
+   aws cloudfront create-invalidation --distribution-id <PROD_DIST_ID> --paths "/*"
+   ```
+
+   The function is shared with staging, so staging flips at the same moment — expected.
+   Verify: `curl -s -o /dev/null -w "%{http_code}\n" https://www.marinos-aparts.gr/kimon.html` → 301.
+
+   **This is the point of no return for a clean rollback.** From here every visitor who follows
+   a redirect caches it permanently, so repointing the origin back to the legacy bucket no
+   longer restores them. Do it only once production is settled — contact form verified, no
+   crawl errors, no reports of broken pages — and after step 3, so that the CI-built artifact
+   has been verified while the safety net still exists.
 
 5. **(OPERATOR)** After the soak, decommission `marinos-test-bucket`, and disable or delete the
    aliasless distribution that still points at it (enabled, last modified 2023, its
