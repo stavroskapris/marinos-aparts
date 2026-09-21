@@ -1,0 +1,22 @@
+---
+import type { Locale } from '../i18n/locales';
+
+interface Props { lang: Locale; }
+const { lang } = Astro.props;
+
+const widget = {
+  en: { id: '228566d27061cf3918f08479a88a7daa', title: 'Sivota Weather' },
+  gr: { id: 'f21dc8791fa9a5d228373b93621a21e1', title: 'Σύβοτα Καιρός' },
+}[lang];
+---
+
+<div id="weather-widget">
+  <div id={`c_${widget.id}`} class="completo">
+    <h2 style="color:#999;margin:0 0 3px;padding:2px;font:bold 13px/1.2 Arial;text-align:center;width:100%">
+      <a href="https://www.okairos.gr/%CF%83%CF%8D%CE%B2%CE%BF%CF%84%CE%B1.html"
+         style="color:#999;text-decoration:none;font:bold 13px/1.2 Arial;">{widget.title}</a>
+    </h2>
+    <div id={`w_${widget.id}`} class="completo" style="height:100%"></div>
+  </div>
+  <script type="text/javascript" src={`https://www.okairos.gr/widget/loader/${widget.id}`} is:inline></script>
+</div>

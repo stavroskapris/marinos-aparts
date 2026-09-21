@@ -1,3 +1,10 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea/
 node_modules/
+dist/
+.astro/
+test-results/
+playwright-report/
+docs/superpowers/parity/shots/
+docs/superpowers/parity/text-report.md
+docs/superpowers/parity/image-report.md

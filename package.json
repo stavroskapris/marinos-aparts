@@ -1,6 +1,32 @@
 {
+  "name": "marinos-aparts",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "playwright test",
+    "test:unit": "vitest run",
+    "check:links": "linkinator http://localhost:4321/en/ http://localhost:4321/gr/ --recurse --silent --skip \"^https?://(www\\.)?(marinos-aparts\\.gr|okairos|kit\\.fontawesome|fonts\\.googleapis|unpkg|photoswipe|facebook|instagram|reservations\\.bookoncloud|googletagmanager|google\\.com|gstatic)\"",
+    "check:links:ci": "astro build && (astro preview & SERVER_PID=$!; trap 'kill $SERVER_PID 2>/dev/null' EXIT; sleep 3 && npm run check:links)",
+    "parity:text": "node scripts/parity-text.mjs",
+    "parity:images": "node scripts/parity-images.mjs",
+    "visual:capture": "node scripts/visual-capture.mjs"
+  },
   "dependencies": {
-    "animate.css": "^3.7.2",
-    "jquery-validation": "^1.19.5"
+    "@astrojs/sitemap": "3.2.1",
+    "astro": "^4.15.0",
+    "leaflet": "^1.9.4",
+    "photoswipe": "^5.4.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@playwright/test": "^1.47.0",
+    "@types/leaflet": "^1.9.12",
+    "@types/node": "^18.19.0",
+    "linkinator": "^6.1.0",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.0"
   }
 }
