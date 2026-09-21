@@ -380,15 +380,40 @@ extra function republish — it was not required for a correct cutover, but it w
 
 ---
 
-## Phase E — Finalize (Task 8; only after a clean soak)
+## Phase E — Finalize (Task 8)
 
-1. **(CODE, via PR into `astro-migration`)** Delete `.github/workflows/main.yml`; change the
-   `deploy-staging.yml` trigger branch from `astro-migration` to `master`. The 302 option **was**
-   taken, so flip `redirects.js` back to 301 in this PR, update `redirects.test.ts` to match,
-   republish the function and invalidate `/*`.
+Split in two, because the pieces are gated on different things. **Step 1 is staged on branch
+`astro-finalize`.**
+
+1. **(CODE, via PR into `astro-migration`) — STAGED, not merged.** Delete
+   `.github/workflows/main.yml` and change the `deploy-staging.yml` trigger from
+   `astro-migration` to `master`.
+
+   **`main.yml` must go before the merge to `master`, not with it.** It triggers on push to
+   `master` and runs `aws s3 sync ./ s3://marinos-test-bucket` over the whole repo root — so
+   merging while it still exists would push `src/`, `infra/`, `docs/`, `package.json` and the
+   checkout's `.git` directory into the rollback bucket. It syncs without `--delete`, so the
+   legacy site would survive, but that is how `.git` came to be served in the first place.
+
 2. **(OPERATOR)** Merge `astro-migration` → `master`. Per the project's review rule: open the
-   PR, wait for review, resolve comments, never auto-merge.
-3. **(OPERATOR)** After the soak, decommission `marinos-test-bucket`.
+   PR, wait for review, resolve comments, never auto-merge. Two things follow automatically:
+   `deploy-staging` now runs from `master`, and `deploy-prod.yml` becomes dispatchable for the
+   first time (`workflow_dispatch` requires the file on the default branch).
+
+3. **(OPERATOR)** Re-run **Deploy Production** now that it is dispatchable. Production is
+   currently serving an artifact built on an operator's laptop during the cutover, because the
+   workflow could not be dispatched. It is functionally identical to the CI build — the only
+   difference is Astro's internal `data-image-component` marker attribute on `<img>` tags, with
+   no runtime effect — but production should be reproducible from the pipeline.
+
+4. **(CODE + OPERATOR) — GATED ON THE SOAK, deliberately NOT in step 1's PR.** Flip
+   `redirects.js` from 302 back to 301, update `redirects.test.ts` to match, republish the
+   function and invalidate `/*`. Doing this early ends the soak and gives up symmetric
+   rollback, so it waits until production is settled and the contact form has been verified.
+
+5. **(OPERATOR)** After the soak, decommission `marinos-test-bucket`, and disable or delete the
+   aliasless distribution that still points at it (enabled, last modified 2023, its
+   `*.cloudfront.net` domain does not resolve).
 4. Re-run the perf benchmark once the higher-res image backlog item lands — the current
    kimon/irida weight numbers in `docs/astro-migration-results.md` are inflated by
    low-res placeholders and are not a like-for-like win.
