@@ -74,9 +74,10 @@ const f = s.contact.form;
       return ok;
     };
 
-    const verifyCaptcha = async () => {
-      const resp = (window.grecaptcha && window.grecaptcha.getResponse()) || '';
-      if (!resp) return false;
+    // token is passed in (read once by the caller) rather than re-read here, so
+    // the same value is sent to both /validaterecaptcha and /contact.
+    const verifyCaptcha = async (token) => {
+      if (!token) return false;
       // Content-Type matches the legacy jQuery default (form-urlencoded) so the
       // request stays CORS-simple (no preflight) and the API Gateway/Lambda sees
       // the same request shape it always has. A failure returns false rather than
@@ -85,10 +86,11 @@ const f = s.contact.form;
         const r = await fetch(endpoints.recaptcha, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
-          body: JSON.stringify({ captchaResponse: resp }),
+          body: JSON.stringify({ captchaResponse: token }),
         });
         const data = await r.json();
-        return data.body === '"Success"';
+        const parsed = typeof data.body === 'string' ? JSON.parse(data.body) : data;
+        return parsed.success === true;
       } catch {
         return false;
       }
@@ -97,7 +99,8 @@ const f = s.contact.form;
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!validate()) return;
-      const captchaOk = await verifyCaptcha();
+      const token = (window.grecaptcha && window.grecaptcha.getResponse()) || '';
+      const captchaOk = await verifyCaptcha(token);
       if (!captchaOk) { flash('recaptcha_message'); return; }
 
       show('generic-loader', true);
@@ -107,6 +110,7 @@ const f = s.contact.form;
           email: $('contact_email').value,
           subject: $('contact_subject').value,
           message: $('contact_message').value,
+          captchaResponse: token,
         };
         const res = await fetch(endpoints.contact, {
           method: 'POST',
@@ -116,8 +120,8 @@ const f = s.contact.form;
         show('generic-loader', false);
         if (!res.ok) throw new Error('send failed');
         const data = await res.json().catch(() => ({}));
-        // Lambda echoes a body; treat an explicit error body as failure.
-        if (typeof data.body === 'string' && data.body.toLowerCase().includes('error')) throw new Error('send rejected');
+        const parsed = typeof data.body === 'string' ? JSON.parse(data.body) : data;
+        if (parsed.ok !== true) throw new Error('send rejected');
         form.reset();
         flash('success_message');
         if (window.grecaptcha) window.grecaptcha.reset();

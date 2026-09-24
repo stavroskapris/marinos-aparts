@@ -14,10 +14,11 @@ test('contact form submits with valid input (network + recaptcha stubbed)', asyn
     (window as any).grecaptcha = { getResponse: () => 'test-token', reset: () => {} };
   });
   // Mock the two API Gateway calls (scoped to the API host so the /en/contact page navigation is not intercepted).
+  // Bodies are wrapped as { body: "<json>" }, matching the real Lambdas' { statusCode, body } shape.
   await page.route('**/validaterecaptcha', (route) =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ body: '"Success"' }) }));
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ body: JSON.stringify({ success: true }) }) }));
   await page.route(/amazonaws\.com.*\/contact$/, (route) =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: '{}' }));
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ body: JSON.stringify({ ok: true }) }) }));
 
   await page.goto('/en/contact');
   await page.fill('#contact_name', 'Jane Doe');
@@ -49,10 +50,10 @@ test('shows per-field validation messages for too-short input', async ({ page })
 test('treats a non-success response body as an error, not success', async ({ page }) => {
   await page.route('**/recaptcha/api.js*', (r) => r.abort());
   await page.addInitScript(() => { (window as any).grecaptcha = { getResponse: () => 'tok', reset: () => {} }; });
-  await page.route('**/validaterecaptcha', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ body: '"Success"' }) }));
+  await page.route('**/validaterecaptcha', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ body: JSON.stringify({ success: true }) }) }));
   // Regex used instead of glob because Playwright's glob engine does not match
   // amazonaws.com when it appears in the hostname rather than the URL path.
-  await page.route(/amazonaws\.com.*\/contact$/, (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ body: '"Error"' }) }));
+  await page.route(/amazonaws\.com.*\/contact$/, (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ body: JSON.stringify({ error: 'rejected' }) }) }));
   await page.goto('/en/contact');
   await page.fill('#contact_name', 'Jane Doe');
   await page.fill('#contact_email', 'jane@example.com');
