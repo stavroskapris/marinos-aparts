@@ -7,6 +7,14 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: staging
+    # Job scope, not step scope. Later steps rebuild dist/ - `npm run test:unit`
+    # runs the no-stub test, which shells out to `npm run build`, and `npm test`
+    # rebuilds through Playwright's webServer command - and `astro build` empties
+    # outDir first. Scoped to the build step alone, the variable would be unset
+    # for those rebuilds and the artifact reaching S3 would fall back to the
+    # hardcoded default in src/config.ts.
+    env:
+      PUBLIC_CONTACT_API_BASE: ${{ vars.STAGING_CONTACT_API_BASE }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -16,13 +24,19 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm run build
-        env:
-          PUBLIC_CONTACT_API_BASE: ${{ vars.STAGING_CONTACT_API_BASE }}
       - run: npm run test:unit
       - run: npm test
       - run: npm run parity:text
       - run: npm run parity:images
       - run: npm run build:info
+      # Last thing before the sync, so it observes the artifact that is actually
+      # uploaded rather than an earlier build that a later step overwrote. The
+      # first assertion also catches a missing or misspelled repository
+      # variable: GitHub substitutes an empty string for an undefined vars.*.
+      - name: Verify the built bundle targets the intended contact API
+        run: |
+          test -n "$PUBLIC_CONTACT_API_BASE" || { echo "PUBLIC_CONTACT_API_BASE is unset"; exit 1; }
+          grep -q "${PUBLIC_CONTACT_API_BASE%/}/contact" dist/en/contact/index.html
       - uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}

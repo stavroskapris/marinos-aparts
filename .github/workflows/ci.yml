@@ -18,3 +18,7 @@ jobs:
       - run: npm test
       - run: npm run parity:text
       - run: npm run parity:images
+      # The project's type-check. It has no npm script, so CLAUDE.md names the
+      # bare command - which meant nothing ran it and type errors accumulated
+      # unnoticed across three task reviews.
+      - run: npx astro check
