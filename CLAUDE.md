@@ -81,7 +81,9 @@ without the first one:
 - **`infra/cloudfront/redirects.js`** — *viewer-request*, on both distributions. Redirects legacy
   entry points (`/`, `/home.html`, `/kimon.html`, ...) to their `/en/...` equivalents; rewrites
   clean URLs to their S3 key (`/en/kimon` -> `/en/kimon/index.html`); rewrites `/sitemap.xml` to
-  the generated `/sitemap-index.xml`; passes anything with a file extension through.
+  the generated `/sitemap-index.xml`; passes anything with a file extension through. That last
+  rule is what serves `/.build-info.json`, whose last segment *starts* with a dot — there is a
+  test pinning it, because it would break silently if the rewrite logic changed.
 - **`infra/cloudfront/staging-noindex.js`** — *viewer-response*, **staging only**. Adds
   `X-Robots-Tag: noindex, nofollow` so the mirror doesn't compete with the real domain. It is a
   function rather than a response-headers policy because the staging distribution is on
@@ -91,9 +93,10 @@ Both must be **ES5** (`function handler(event){}`, no arrow functions, template 
 `module.exports`) — that is the CloudFront Functions runtime. Both are unit-tested by loading the
 file and invoking `handler`, so they stay plain functions.
 
-Redirects currently return **302, not 301**, for the post-cutover soak: browsers cache a 301
-forever, which would strand visitors on `/en/*` even after a rollback. Flip to 301 (and update the
-test) once production has settled.
+Redirects return **301**. They were deliberately 302 during the post-cutover soak, because
+browsers cache a 301 forever and it would have stranded visitors on `/en/*` even after a rollback.
+The soak ended on 2026-09-24 and they were flipped back. Changing the status code means editing
+`redirects.js` **and** republishing the function — a merge alone changes nothing at the edge.
 
 ## Deployment
 
@@ -105,15 +108,35 @@ test) once production has settled.
 | `deploy-staging.yml` | push to `master` | staging bucket |
 | `deploy-prod.yml` | manual (`workflow_dispatch`) | production bucket |
 
+`master` is the trunk. Pushing to it deploys **staging**; production is always manual.
+
 The legacy `main.yml` (push to `master` → `aws s3 sync ./` of the whole repo root into the old
-bucket) has been deleted. It had to go **before** `astro-migration` merges to `master`, or that
+bucket) has been deleted. It had to go **before** `astro-migration` merged to `master`, or that
 merge would have fired it and pushed the repo source — and the checkout's `.git` directory — into
 the rollback bucket.
 
-Until that merge lands, `master` is still the pre-migration site and `astro-migration` is the
-trunk. Afterwards `master` is the trunk and pushes to it deploy staging; production stays manual.
-Note `deploy-prod.yml` is **not dispatchable** until it exists on the default branch — that is
-why the cutover deployed production by direct `aws s3 sync`.
+**Deploying production:**
+
+```bash
+gh workflow run "Deploy Production"                  # deploys master
+gh workflow run "Deploy Production" -f ref=<tag|sha> # deploys a specific commit
+```
+
+The `ref` input is passed to `checkout`. It is an input rather than `workflow_dispatch --ref`
+because `--ref` would also take the *workflow file* from that ref, so deploying an old commit
+could drag along an old, broken pipeline. (A `workflow_dispatch` workflow is only dispatchable
+once it exists on the default branch — which is why the cutover itself had to deploy production
+by direct `aws s3 sync`.)
+
+**What is running in production** is recorded, not inferred:
+
+```bash
+curl https://www.marinos-aparts.gr/.build-info.json
+```
+
+`scripts/build-info.mjs` writes that file after the gates and before the sync, so it is part of
+the synced artifact rather than something the next `--delete` would strip. Both deploys also
+declare a GitHub environment, so deployments appear in the repository's Environments view.
 
 The step-by-step cutover, with gates and rollback, is in `docs/superpowers/runbook-cutover.md`.
 

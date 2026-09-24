@@ -9,7 +9,7 @@ function loadHandler() {
 const handler = loadHandler();
 const req = (uri: string) => ({ request: { uri } });
 
-test('root and legacy .html paths temporarily 302-redirect to locale URLs', () => {
+test('root and legacy .html paths 301-redirect to locale URLs', () => {
   for (const [from, to] of [
     ['/', '/en/'],
     ['/home.html', '/en/'],
@@ -19,8 +19,7 @@ test('root and legacy .html paths temporarily 302-redirect to locale URLs', () =
     ['/contact.html', '/en/contact'],
   ]) {
     const res = handler(req(from));
-    // 302 during the cutover soak; see the comment in redirects.js.
-    expect(res.statusCode).toBe(302);
+    expect(res.statusCode).toBe(301);
     expect(res.headers.location.value).toBe(to);
   }
 });
@@ -43,6 +42,13 @@ test('the generated sitemap files are served as-is', () => {
   expect(handler(req('/sitemap-index.xml')).uri).toBe('/sitemap-index.xml');
   expect(handler(req('/sitemap-0.xml')).uri).toBe('/sitemap-0.xml');
   expect(handler(req('/robots.txt')).uri).toBe('/robots.txt');
+});
+
+test('the deploy provenance file is served as-is', () => {
+  // scripts/build-info.mjs writes dist/.build-info.json. The last segment
+  // starts with a dot, so guard against it being mistaken for a clean URL and
+  // rewritten to /.build-info.json/index.html.
+  expect(handler(req('/.build-info.json')).uri).toBe('/.build-info.json');
 });
 
 test('paths with a file extension pass through unchanged', () => {

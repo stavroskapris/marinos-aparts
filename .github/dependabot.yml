@@ -1,0 +1,98 @@
+# Eight PRs landed at once after the Astro cutover, most of them transitive
+# build-time bumps that nothing in the deployed site depends on. This groups
+# the noise and keeps the individually-interesting updates separate.
+#
+# Context that shapes the rules below: the site is static HTML on S3 behind
+# CloudFront. Nothing from npm runs in production — only `leaflet` and
+# `photoswipe` reach the browser at all, bundled at build time. Everything
+# else is build or test tooling, so its advisories are reachable only on a
+# developer machine or the CI runner.
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels: [dependencies]
+    commit-message:
+      prefix: "build(deps)"
+      prefix-development: "build(deps-dev)"
+
+    groups:
+      # Everything that ships to a browser, kept separate so a visible change
+      # is never buried in a batch of tooling updates.
+      runtime:
+        patterns: ["leaflet", "@types/leaflet", "photoswipe"]
+        update-types: [minor, patch]
+
+      # Test and type-check tooling. Noisy, zero production impact.
+      dev-tooling:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+          - "@playwright/*"
+          - "typescript"
+          - "@types/*"
+          - "linkinator"
+          - "@astrojs/check"
+        update-types: [minor, patch]
+
+      # Transitive build-chain packages: sharp, devalue, js-yaml, fast-uri,
+      # browserslist, esbuild, vite and friends. These generated most of the
+      # post-cutover flood and are only ever reachable at build time.
+      build-chain:
+        patterns: ["*"]
+        exclude-patterns: ["astro", "@astrojs/sitemap"]
+        update-types: [minor, patch]
+
+    ignore:
+      # Astro majors are a migration, not a dependency bump. A bot raised
+      # ^4 -> ^7 to patch a build-time image library; it left @astrojs/sitemap
+      # and @astrojs/check at their Astro-4 versions, so it would have broken
+      # the build outright. Upgrade deliberately, moving the plugins together.
+      - dependency-name: "astro"
+        update-types: [version-update:semver-major]
+
+      # Pinned exactly at 3.2.1. 3.7.x reads routes from the
+      # `astro:routes:resolved` hook, which only exists in Astro 5, and fails
+      # the build on Astro 4 with "Cannot read properties of undefined". It can
+      # only move when Astro does.
+      - dependency-name: "@astrojs/sitemap"
+
+      # vitest 5 needs vite ^6/^7/^8; astro 4.16 pins vite ^5.4.11. (The
+      # @types/node half of this was cleared by the move to Node 22, but the
+      # vite peer remains.) Gated on the Astro major.
+      - dependency-name: "vitest"
+        update-types: [version-update:semver-major]
+
+      # TypeScript 7 is rejected by @astrojs/check@0.9.9, which peers
+      # typescript ^5 || ^6 and only moves with the Astro major.
+      - dependency-name: "typescript"
+        update-types: [version-update:semver-major]
+
+      # @astrojs/check majors track the Astro major; bumping it alone breaks
+      # the type-check against Astro 4.
+      - dependency-name: "@astrojs/check"
+        update-types: [version-update:semver-major]
+
+      # @types/node must match the Node major the workflows pin (currently 22).
+      # Letting it float to the next major would describe a runtime we do not
+      # run on. Bump it deliberately, together with node-version and engines.
+      - dependency-name: "@types/node"
+        update-types: [version-update:semver-major]
+
+  # The workflows are already being warned that their actions target a
+  # deprecated Node. Keep them current, batched.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+    labels: [dependencies, ci]
+    commit-message:
+      prefix: "ci(deps)"
+    groups:
+      actions:
+        patterns: ["*"]
