@@ -12,13 +12,13 @@ function handler(event) {
     };
 
     if (redirects.hasOwnProperty(uri)) {
-        // 302 (not 301) for the duration of the post-cutover soak: browsers cache a
-        // 301 indefinitely, which would strand visitors on /en/* even after a
-        // rollback to the legacy bucket. Flip to 301 once prod is settled
-        // (docs/superpowers/runbook-cutover.md, Phase E).
+        // 301: the cutover has soaked and these targets are permanent, so let
+        // browsers and search engines cache the redirect. This was deliberately
+        // a 302 during the soak, because a cached 301 survives a rollback and
+        // would have stranded visitors on /en/* (see the cutover runbook).
         return {
-            statusCode: 302,
-            statusDescription: 'Found',
+            statusCode: 301,
+            statusDescription: 'Moved Permanently',
             headers: { 'location': { value: redirects[uri] } }
         };
     }
