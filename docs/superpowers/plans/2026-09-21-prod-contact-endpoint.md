@@ -939,6 +939,65 @@ curl -s -X POST "https://$API.execute-api.eu-west-1.amazonaws.com/prod/validater
 ```
 Expected: `lambdaAlias=prod`, and a body containing `"success": false`.
 
+- [ ] **Step 5b: Throttle both stages and cap Lambda concurrency**
+
+Both stages currently sit at the AWS account default — **10,000 req/sec, 5,000 burst** — which is
+unlimited for a site serving roughly 2,000 requests a day in total. Nothing rate-limits the contact
+endpoints.
+
+Server-side captcha verification (Task 1) is the primary gate, but it does not cover everything:
+`/validaterecaptcha` has no gate at all and makes an outbound call to Google per request, which is a
+free amplification vector; and even a rejected `/contact` costs an invocation plus a Google
+round-trip. The realistic harm is not spam reaching the inbox — the SES sandbox caps that at 200/day
+— it is that a modest flood **exhausts the daily quota and silently breaks legitimate enquiries**.
+
+```bash
+for stage in dev prod; do
+  $AWS apigateway update-stage --rest-api-id $API --stage-name $stage --patch-operations \
+    op=replace,path=/*/*/throttling/rateLimit,value=5 \
+    op=replace,path=/*/*/throttling/burstLimit,value=10
+done
+```
+
+Verification:
+```bash
+$AWS apigateway get-stage --rest-api-id $API --stage-name prod \
+  --query 'methodSettings."*/*".{rate:throttlingRateLimit,burst:throttlingBurstLimit}' --output json
+```
+Expected: `rate: 5.0`, `burst: 10`.
+
+> **This is a global cap, not per-IP.** During an attack it throttles legitimate visitors too. At
+> 5/sec it sits roughly two orders of magnitude above this site's normal contact traffic, so the
+> trade is worth taking — but it is not equivalent to a per-IP limit. See the follow-up below.
+
+Then cap the cost blast radius, so a flood cannot scale out concurrency:
+
+```bash
+for fn in marinos-contact-form marinos-recaptcha-verify; do
+  $AWS lambda put-function-concurrency --function-name $fn --reserved-concurrent-executions 5
+done
+```
+Verification: `$AWS lambda get-function-concurrency --function-name marinos-contact-form` → 5.
+
+- [ ] **Step 5c: Alarm when the contact endpoints are being hammered**
+
+Without this the failure mode is silent: the quota is exhausted, enquiries stop arriving, and nobody
+knows until a guest complains. An alarm is what makes it visible.
+
+```bash
+$AWS cloudwatch put-metric-alarm \
+  --alarm-name marinos-contact-invocations-high \
+  --namespace AWS/Lambda --metric-name Invocations \
+  --dimensions Name=FunctionName,Value=marinos-contact-form \
+  --statistic Sum --period 3600 --evaluation-periods 1 --threshold 50 \
+  --comparison-operator GreaterThanThreshold \
+  --alarm-description "Contact form invocations unusually high — possible abuse or a quota-exhaustion attack"
+```
+
+Set `--alarm-actions <SNS topic ARN>` if a topic exists, or add one; an alarm with no action still
+shows state in the console but will not notify. Threshold 50/hour is far above normal for this site
+— tune it after a week of real data rather than guessing twice.
+
 - [ ] **Step 6: Set the two repository variables**
 
 ```bash
