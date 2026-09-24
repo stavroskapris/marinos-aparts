@@ -33,10 +33,20 @@ test('rejects a request with no token without calling Google', async () => {
 
 test('does not leak verdicts between invocations', async () => {
   process.env.RECAPTCHA_SECRET = 'shhh';
-  const h1 = makeHandler({ fetchImpl: fetchReturning({ success: true }) });
-  const h2 = makeHandler({ fetchImpl: fetchReturning({ success: false }) });
-  await h1({ captchaResponse: 'a' }, {});
-  const second = await h2({ captchaResponse: 'b' }, {});
+  // Use a single handler instance (like production does) with a stateful mock
+  // that returns different verdicts on successive calls. This catches regressions
+  // where verdict is hoisted out of the inner handler function scope.
+  const fetchImpl = vi.fn()
+    .mockResolvedValueOnce({ json: () => Promise.resolve({ success: true }) })
+    .mockResolvedValueOnce({ json: () => Promise.resolve({ success: false }) });
+  const handler = makeHandler({ fetchImpl });
+
+  // First invocation should get success: true
+  const first = await handler({ captchaResponse: 'a' }, {});
+  expect(JSON.parse(first.body)).toEqual({ success: true });
+
+  // Second invocation should get success: false (not leak from first)
+  const second = await handler({ captchaResponse: 'b' }, {});
   expect(JSON.parse(second.body)).toEqual({ success: false });
 });
 

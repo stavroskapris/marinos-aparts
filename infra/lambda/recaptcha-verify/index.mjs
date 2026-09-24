@@ -44,7 +44,7 @@ export function makeHandler({ fetchImpl }) {
       return reply(502, { error: 'captcha verify unavailable' });
     }
 
-    return reply(200, { success: verdict && verdict.success === true });
+    return reply(200, { success: !!(verdict && verdict.success === true) });
   };
 }
 
