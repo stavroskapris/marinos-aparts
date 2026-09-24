@@ -1,4 +1,5 @@
 import { test, expect, vi } from 'vitest';
+import type { SendEmailCommand } from '@aws-sdk/client-ses';
 import { makeHandler } from './index.mjs';
 
 const ctx = (alias = 'prod') => ({
@@ -14,12 +15,28 @@ const validEvent = {
 };
 
 function deps({ captchaOk = true, sendOk = true } = {}) {
-  const send = vi.fn(() => (sendOk ? Promise.resolve({}) : Promise.reject(new Error('ses down'))));
+  // The parameter is declared (rather than `vi.fn(() => ...)`) so the mock's
+  // call tuple carries the real argument type: that is what lets sentCommand
+  // below hand back a genuine SendEmailCommand instead of `any`.
+  const send = vi.fn((_command: SendEmailCommand) =>
+    sendOk ? Promise.resolve({}) : Promise.reject(new Error('ses down')),
+  );
   const fetchImpl = vi.fn(() =>
     Promise.resolve({ ok: true, json: () => Promise.resolve({ success: captchaOk }) }),
   );
   return { ses: { send }, fetchImpl, send };
 }
+
+// Reading d.send.mock.calls[0][0] directly is a type error (the tuple may be
+// absent) and, when the handler never sent, fails with an unhelpful
+// "cannot read properties of undefined". This narrows it once and says what
+// actually went wrong, while still handing back a real SendEmailCommand so the
+// assertions below check its genuine .input shape.
+const sentCommand = (d: ReturnType<typeof deps>) => {
+  const call = d.send.mock.calls[0];
+  if (!call) throw new Error('expected ses.send to have been called');
+  return call[0] as SendEmailCommand;
+};
 
 function env() {
   process.env.RECEIVER_PROD = 'prod-inbox@example.com';
@@ -33,17 +50,14 @@ test('sends to the PROD recipient when invoked through the prod alias', async ()
   const d = deps();
   const res = await makeHandler(d)(validEvent, ctx('prod'));
   expect(res.statusCode).toBe(200);
-  const cmd = d.send.mock.calls[0][0];
-  expect(cmd.input.Destination.ToAddresses).toEqual(['prod-inbox@example.com']);
+  expect(sentCommand(d).input.Destination?.ToAddresses).toEqual(['prod-inbox@example.com']);
 });
 
 test('sends to the DEV recipient when invoked through the dev alias', async () => {
   env();
   const d = deps();
   await makeHandler(d)(validEvent, ctx('dev'));
-  expect(d.send.mock.calls[0][0].input.Destination.ToAddresses).toEqual([
-    'staging-inbox@example.com',
-  ]);
+  expect(sentCommand(d).input.Destination?.ToAddresses).toEqual(['staging-inbox@example.com']);
 });
 
 test('rejects with 403 and sends nothing when the captcha fails', async () => {
@@ -83,7 +97,7 @@ test('strips CR and LF from the subject so headers cannot be injected', async ()
   env();
   const d = deps();
   await makeHandler(d)({ ...validEvent, subject: 'Hi\r\nBcc: victim@example.com' }, ctx());
-  expect(d.send.mock.calls[0][0].input.Message.Subject.Data).toBe('Hi Bcc: victim@example.com');
+  expect(sentCommand(d).input.Message?.Subject?.Data).toBe('Hi Bcc: victim@example.com');
 });
 
 test('returns 502 when SES rejects the send', async () => {

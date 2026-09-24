@@ -1,14 +1,13 @@
 import { test, expect, vi } from 'vitest';
 import { makeHandler } from './index.mjs';
 
-const fetchReturning = (body, ok = true) =>
+const fetchReturning = (body: unknown, ok = true) =>
   vi.fn(() => Promise.resolve({ ok, json: () => Promise.resolve(body) }));
 
 test('reports success only when Google says success', async () => {
   process.env.RECAPTCHA_SECRET = 'shhh';
   const res = await makeHandler({ fetchImpl: fetchReturning({ success: true }) })(
     { captchaResponse: 'tok' },
-    {},
   );
   expect(res.statusCode).toBe(200);
   expect(JSON.parse(res.body)).toEqual({ success: true });
@@ -18,7 +17,7 @@ test('reports failure when Google rejects the token', async () => {
   process.env.RECAPTCHA_SECRET = 'shhh';
   const res = await makeHandler({
     fetchImpl: fetchReturning({ success: false, 'error-codes': ['invalid-input-response'] }),
-  })({ captchaResponse: 'bad' }, {});
+  })({ captchaResponse: 'bad' });
   expect(res.statusCode).toBe(200);
   expect(JSON.parse(res.body)).toEqual({ success: false });
 });
@@ -26,7 +25,7 @@ test('reports failure when Google rejects the token', async () => {
 test('rejects a request with no token without calling Google', async () => {
   process.env.RECAPTCHA_SECRET = 'shhh';
   const fetchImpl = fetchReturning({ success: true });
-  const res = await makeHandler({ fetchImpl })({}, {});
+  const res = await makeHandler({ fetchImpl })({});
   expect(res.statusCode).toBe(400);
   expect(fetchImpl).not.toHaveBeenCalled();
 });
@@ -45,10 +44,10 @@ test('two sequential invocations of one handler return independent results', asy
     .mockResolvedValueOnce({ json: () => Promise.resolve({ success: false }) });
   const handler = makeHandler({ fetchImpl });
 
-  const first = await handler({ captchaResponse: 'a' }, {});
+  const first = await handler({ captchaResponse: 'a' });
   expect(JSON.parse(first.body)).toEqual({ success: true });
 
-  const second = await handler({ captchaResponse: 'b' }, {});
+  const second = await handler({ captchaResponse: 'b' });
   expect(JSON.parse(second.body)).toEqual({ success: false });
 });
 
@@ -64,7 +63,7 @@ test('interleaved invocations each get their own verdict (forward insurance)', a
   let slowPromise: Promise<{ success: boolean }>;
   let resolveSlowPromise: (v: { success: boolean }) => void;
 
-  const fetchImpl = vi.fn((url, opts) => {
+  const fetchImpl = vi.fn((_url: string, _opts: RequestInit) => {
     // Determine if this is the 'slow' call (started first) or 'fast' call
     const isSlowCall = !slowPromise;
     if (isSlowCall) {
@@ -81,10 +80,10 @@ test('interleaved invocations each get their own verdict (forward insurance)', a
   const handler = makeHandler({ fetchImpl });
 
   // Start slow invocation (will not resolve until we call resolveSlowPromise)
-  const slowInvocation = handler({ captchaResponse: 'slow' }, {});
+  const slowInvocation = handler({ captchaResponse: 'slow' });
 
   // Start fast invocation while slow is pending
-  const fastInvocation = handler({ captchaResponse: 'fast' }, {});
+  const fastInvocation = handler({ captchaResponse: 'fast' });
 
   // Now resolve the slow invocation with its own result
   resolveSlowPromise!(slowResolve);
@@ -101,7 +100,7 @@ test('surfaces a transport failure as 502', async () => {
   process.env.RECAPTCHA_SECRET = 'shhh';
   const res = await makeHandler({
     fetchImpl: vi.fn(() => Promise.reject(new Error('network'))),
-  })({ captchaResponse: 'tok' }, {});
+  })({ captchaResponse: 'tok' });
   expect(res.statusCode).toBe(502);
 });
 
@@ -109,7 +108,6 @@ test('accepts a JSON string body', async () => {
   process.env.RECAPTCHA_SECRET = 'shhh';
   const res = await makeHandler({ fetchImpl: fetchReturning({ success: true }) })(
     { body: JSON.stringify({ captchaResponse: 'tok' }) },
-    {},
   );
   expect(JSON.parse(res.body)).toEqual({ success: true });
 });
