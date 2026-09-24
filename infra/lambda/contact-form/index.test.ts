@@ -14,15 +14,21 @@ const validEvent = {
   captchaResponse: 'token-abc',
 };
 
-function deps({ captchaOk = true, sendOk = true } = {}) {
+function deps({ captchaOk = true, sendOk = true, captchaStatus = 200 } = {}) {
   // The parameter is declared (rather than `vi.fn(() => ...)`) so the mock's
   // call tuple carries the real argument type: that is what lets sentCommand
   // below hand back a genuine SendEmailCommand instead of `any`.
   const send = vi.fn((_command: SendEmailCommand) =>
     sendOk ? Promise.resolve({}) : Promise.reject(new Error('ses down')),
   );
+  // captchaStatus drives both `ok` and `status`, so one flag covers the
+  // non-2xx-upstream case and any future exercise of the 502 branch.
   const fetchImpl = vi.fn(() =>
-    Promise.resolve({ ok: true, json: () => Promise.resolve({ success: captchaOk }) }),
+    Promise.resolve({
+      ok: captchaStatus >= 200 && captchaStatus < 300,
+      status: captchaStatus,
+      json: () => Promise.resolve({ success: captchaOk }),
+    }),
   );
   return { ses: { send }, fetchImpl, send };
 }
@@ -98,6 +104,19 @@ test('strips CR and LF from the subject so headers cannot be injected', async ()
   const d = deps();
   await makeHandler(d)({ ...validEvent, subject: 'Hi\r\nBcc: victim@example.com' }, ctx());
   expect(sentCommand(d).input.Message?.Subject?.Data).toBe('Hi Bcc: victim@example.com');
+});
+
+test('returns 502 and sends nothing when Google answers non-2xx, even if the body says success', async () => {
+  env();
+  // The fail-open shape: a non-2xx whose body happens to carry a truthy
+  // `success`. Before the res.ok guard this returned 200 and sent the mail, so
+  // the gate authorised a send off an unverified upstream state.
+  const d = deps({ captchaStatus: 500, captchaOk: true });
+  const res = await makeHandler(d)(validEvent, ctx());
+  expect(res.statusCode).toBe(502);
+  // This is the assertion that pins the security property. Checking only the
+  // status code would still pass if the mail had gone out.
+  expect(d.send).not.toHaveBeenCalled();
 });
 
 test('returns 502 when SES rejects the send', async () => {

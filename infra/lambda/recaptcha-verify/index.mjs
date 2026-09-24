@@ -71,6 +71,15 @@ export function makeHandler({ fetchImpl }) {
         // intermediary access logs.
         body: new URLSearchParams({ secret, response: captchaResponse }).toString(),
       });
+      // A non-2xx means the verdict is UNKNOWN, not false. Parsing the body
+      // anyway lets an upstream error page that happens to carry a truthy
+      // `success` through. This handler is no longer a gate, but it IS the
+      // runbook's routing probe, and a probe that answers {success:true} off a
+      // 500 is worse than useless - it is used to decide routing is healthy.
+      if (!res.ok) {
+        console.error(`captcha verify upstream: HTTP ${res && res.status}`);
+        return reply(502, { error: 'captcha verify unavailable' });
+      }
       verdict = await res.json();
     } catch (err) {
       console.error(`captcha verify failed: ${err && err.message}`);

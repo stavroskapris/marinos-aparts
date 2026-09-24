@@ -1,8 +1,8 @@
 import { test, expect, vi } from 'vitest';
 import { makeHandler } from './index.mjs';
 
-const fetchReturning = (body: unknown, ok = true) =>
-  vi.fn(() => Promise.resolve({ ok, json: () => Promise.resolve(body) }));
+const fetchReturning = (body: unknown, ok = true, status = ok ? 200 : 500) =>
+  vi.fn(() => Promise.resolve({ ok, status, json: () => Promise.resolve(body) }));
 
 test('reports success only when Google says success', async () => {
   process.env.RECAPTCHA_SECRET = 'shhh';
@@ -40,8 +40,8 @@ test('two sequential invocations of one handler return independent results', asy
   // where verdict is hoisted, because verdict = await res.json() is immediately
   // followed by reply() with no interposed await, making write-and-read atomic.
   const fetchImpl = vi.fn()
-    .mockResolvedValueOnce({ json: () => Promise.resolve({ success: true }) })
-    .mockResolvedValueOnce({ json: () => Promise.resolve({ success: false }) });
+    .mockResolvedValueOnce({ ok: true, status: 200, json: () => Promise.resolve({ success: true }) })
+    .mockResolvedValueOnce({ ok: true, status: 200, json: () => Promise.resolve({ success: false }) });
   const handler = makeHandler({ fetchImpl });
 
   const first = await handler({ captchaResponse: 'a' });
@@ -70,10 +70,10 @@ test('interleaved invocations each get their own verdict (forward insurance)', a
       slowPromise = new Promise((resolve) => {
         resolveSlowPromise = resolve;
       });
-      return slowPromise.then((v) => ({ json: () => Promise.resolve(v) }));
+      return slowPromise.then((v) => ({ ok: true, status: 200, json: () => Promise.resolve(v) }));
     } else {
       // Fast call resolves immediately
-      return Promise.resolve({ json: () => Promise.resolve(fastResolve) });
+      return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(fastResolve) });
     }
   });
 
@@ -119,6 +119,17 @@ test.each([
   const res = await makeHandler({ fetchImpl })({ body });
   expect(res.statusCode).toBe(400);
   expect(fetchImpl).not.toHaveBeenCalled();
+});
+
+test('reports 502 when Google answers non-2xx, rather than echoing the body', async () => {
+  process.env.RECAPTCHA_SECRET = 'shhh';
+  // A probe that answered {success:true} off a 500 would tell the runbook
+  // routing is healthy when the verdict is actually unknown.
+  const res = await makeHandler({ fetchImpl: fetchReturning({ success: true }, false, 500) })({
+    captchaResponse: 'tok',
+  });
+  expect(res.statusCode).toBe(502);
+  expect(JSON.parse(res.body)).toEqual({ error: 'captcha verify unavailable' });
 });
 
 test('accepts a JSON string body', async () => {

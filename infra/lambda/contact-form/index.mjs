@@ -75,6 +75,15 @@ export function makeHandler({ ses, fetchImpl }) {
         headers: { 'content-type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({ secret, response: payload.captchaResponse }).toString(),
       });
+      // A non-2xx means the verdict is UNKNOWN, not false. Parsing the body
+      // anyway lets an upstream error page that happens to carry a truthy
+      // `success` through, and the gate FAILS OPEN. 502 rather than 403 because
+      // the caller's token may be perfectly good and this is a Google outage,
+      // not a rejection - blaming a legitimate user for one would be wrong.
+      if (!res.ok) {
+        console.error(`captcha verify upstream: HTTP ${res && res.status}`);
+        return reply(502, { error: 'captcha verify unavailable' });
+      }
       verdict = await res.json();
     } catch (err) {
       console.error(`captcha verify failed: ${err && err.message}`);
