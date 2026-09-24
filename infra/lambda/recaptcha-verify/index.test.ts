@@ -31,23 +31,70 @@ test('rejects a request with no token without calling Google', async () => {
   expect(fetchImpl).not.toHaveBeenCalled();
 });
 
-test('does not leak verdicts between invocations', async () => {
+test('two sequential invocations of one handler return independent results', async () => {
   process.env.RECAPTCHA_SECRET = 'shhh';
-  // Use a single handler instance (like production does) with a stateful mock
-  // that returns different verdicts on successive calls. This catches regressions
-  // where verdict is hoisted out of the inner handler function scope.
+  // The original defect mutated a module-scope response object and resolved
+  // before reading the body, so verdicts could leak between warm invocations.
+  // This implementation prevents it by construction: no module-scope mutable state.
+  // This test asserts that two sequential calls to the same handler closure each
+  // get their own independent result. It does not (and cannot) detect a regression
+  // where verdict is hoisted, because verdict = await res.json() is immediately
+  // followed by reply() with no interposed await, making write-and-read atomic.
   const fetchImpl = vi.fn()
     .mockResolvedValueOnce({ json: () => Promise.resolve({ success: true }) })
     .mockResolvedValueOnce({ json: () => Promise.resolve({ success: false }) });
   const handler = makeHandler({ fetchImpl });
 
-  // First invocation should get success: true
   const first = await handler({ captchaResponse: 'a' }, {});
   expect(JSON.parse(first.body)).toEqual({ success: true });
 
-  // Second invocation should get success: false (not leak from first)
   const second = await handler({ captchaResponse: 'b' }, {});
   expect(JSON.parse(second.body)).toEqual({ success: false });
+});
+
+test('interleaved invocations each get their own verdict (forward insurance)', async () => {
+  process.env.RECAPTCHA_SECRET = 'shhh';
+  // With today's code, this cannot fail: verdict is assigned and immediately read
+  // with no interposed await. However, if a future change adds an await between
+  // the verdict assignment and the reply (e.g. a log line, a retry, a middleware
+  // call), this test will catch the leak. It serves as forward insurance for that
+  // plausible future shape.
+  const slowResolve = { success: true };
+  const fastResolve = { success: false };
+  let slowPromise: Promise<{ success: boolean }>;
+  let resolveSlowPromise: (v: { success: boolean }) => void;
+
+  const fetchImpl = vi.fn((url, opts) => {
+    // Determine if this is the 'slow' call (started first) or 'fast' call
+    const isSlowCall = !slowPromise;
+    if (isSlowCall) {
+      slowPromise = new Promise((resolve) => {
+        resolveSlowPromise = resolve;
+      });
+      return slowPromise.then((v) => ({ json: () => Promise.resolve(v) }));
+    } else {
+      // Fast call resolves immediately
+      return Promise.resolve({ json: () => Promise.resolve(fastResolve) });
+    }
+  });
+
+  const handler = makeHandler({ fetchImpl });
+
+  // Start slow invocation (will not resolve until we call resolveSlowPromise)
+  const slowInvocation = handler({ captchaResponse: 'slow' }, {});
+
+  // Start fast invocation while slow is pending
+  const fastInvocation = handler({ captchaResponse: 'fast' }, {});
+
+  // Now resolve the slow invocation with its own result
+  resolveSlowPromise!(slowResolve);
+
+  // Both should get their respective results
+  const slow = await slowInvocation;
+  const fast = await fastInvocation;
+
+  expect(JSON.parse(slow.body)).toEqual({ success: true });
+  expect(JSON.parse(fast.body)).toEqual({ success: false });
 });
 
 test('surfaces a transport failure as 502', async () => {
