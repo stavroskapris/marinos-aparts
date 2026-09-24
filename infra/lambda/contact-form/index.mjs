@@ -9,17 +9,33 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // the reply-to address for good measure.
 const oneLine = (s) => String(s).replace(/[\r\n]+/g, ' ').trim();
 
+// JSON.parse accepts far more than objects: `null`, arrays, bare strings and
+// numbers are all valid JSON documents. `JSON.parse('null')` returned null,
+// which the caller below then dereferenced - an unhandled TypeError on a public
+// endpoint instead of the documented 400. So normalise: readPayload always
+// hands back a plain object.
+//
+// Arrays are collapsed to {} as well, deliberately. They already produced a
+// clean 400 by accident (`[].captchaResponse` is undefined), but an array can
+// never carry the named fields a payload needs, and a single "always a plain
+// object" contract means no call site has to reason about exotic shapes.
+//
+// NOTE: duplicated in the sibling handler rather than shared. recaptcha-verify
+// is deployed as a lone index.mjs (`zip -q ... index.mjs`), so an import from
+// ../shared/ would break its package. Keep the two copies in step.
+const asObject = (v) => (v !== null && typeof v === 'object' && !Array.isArray(v) ? v : {});
+
 function readPayload(event) {
   // Direct (non-proxy) integrations deliver the parsed body as the event itself;
   // a proxy integration delivers it as event.body, a JSON string.
   if (event && typeof event.body === 'string') {
     try {
-      return JSON.parse(event.body);
+      return asObject(JSON.parse(event.body));
     } catch {
       return {};
     }
   }
-  return event || {};
+  return asObject(event);
 }
 
 function validate(p) {

@@ -104,6 +104,23 @@ test('surfaces a transport failure as 502', async () => {
   expect(res.statusCode).toBe(502);
 });
 
+// `null`, arrays, bare strings and numbers are all syntactically valid JSON, so
+// a public endpoint receives them. Every one must produce the documented 400
+// rather than an unhandled TypeError: before readPayload normalised its result,
+// a body of "null" crashed the invocation on the destructure.
+test.each([
+  ['null', 'null'],
+  ['an array', '[]'],
+  ['a bare string', '"nope"'],
+  ['a number', '5'],
+])('rejects a %s body with 400 instead of crashing', async (_label, body) => {
+  process.env.RECAPTCHA_SECRET = 'shhh';
+  const fetchImpl = fetchReturning({ success: true });
+  const res = await makeHandler({ fetchImpl })({ body });
+  expect(res.statusCode).toBe(400);
+  expect(fetchImpl).not.toHaveBeenCalled();
+});
+
 test('accepts a JSON string body', async () => {
   process.env.RECAPTCHA_SECRET = 'shhh';
   const res = await makeHandler({ fetchImpl: fetchReturning({ success: true }) })(

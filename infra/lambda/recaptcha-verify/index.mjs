@@ -17,15 +17,31 @@
 //      stages, so nothing breaks if an older bundle is restored.
 const VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
 
+// JSON.parse accepts far more than objects: `null`, arrays, bare strings and
+// numbers are all valid JSON documents. `JSON.parse('null')` returned null,
+// which the caller below then dereferenced - an unhandled TypeError on a public
+// endpoint instead of the documented 400. So normalise: readPayload always
+// hands back a plain object.
+//
+// Arrays are collapsed to {} as well, deliberately. They already produced a
+// clean 400 by accident (`[].captchaResponse` is undefined), but an array can
+// never carry the named fields a payload needs, and a single "always a plain
+// object" contract means no call site has to reason about exotic shapes.
+//
+// NOTE: duplicated in the sibling handler rather than shared. this handler
+// is deployed as a lone index.mjs (`zip -q ... index.mjs`), so an import from
+// ../shared/ would break its package. Keep the two copies in step.
+const asObject = (v) => (v !== null && typeof v === 'object' && !Array.isArray(v) ? v : {});
+
 function readPayload(event) {
   if (event && typeof event.body === 'string') {
     try {
-      return JSON.parse(event.body);
+      return asObject(JSON.parse(event.body));
     } catch {
       return {};
     }
   }
-  return event || {};
+  return asObject(event);
 }
 
 const reply = (statusCode, body) => ({ statusCode, body: JSON.stringify(body) });

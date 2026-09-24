@@ -107,6 +107,24 @@ test('returns 502 when SES rejects the send', async () => {
   expect(res.statusCode).toBe(502);
 });
 
+// `null`, arrays, bare strings and numbers are all syntactically valid JSON, so
+// a public endpoint receives them. Every one must produce the documented 400
+// rather than an unhandled TypeError: before readPayload normalised its result,
+// a body of "null" crashed the invocation.
+test.each([
+  ['null', 'null'],
+  ['an array', '[]'],
+  ['a bare string', '"nope"'],
+  ['a number', '5'],
+])('rejects a %s body with 400 instead of crashing', async (_label, body) => {
+  env();
+  const d = deps();
+  const res = await makeHandler(d)({ body }, ctx());
+  expect(res.statusCode).toBe(400);
+  expect(d.send).not.toHaveBeenCalled();
+  expect(d.fetchImpl).not.toHaveBeenCalled();
+});
+
 test('accepts a JSON string body, as API Gateway proxy integrations deliver it', async () => {
   env();
   const d = deps();

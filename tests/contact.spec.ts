@@ -34,12 +34,27 @@ test('contact form submits with valid input (network + recaptcha stubbed)', asyn
   // single-use, so /contact is the sole verifier and a pre-submit call would
   // burn the token and break every legitimate submission.
   await page.route('**/validaterecaptcha', (route) => route.abort());
-  await page.route(/amazonaws\.com.*\/contact$/, (route) => route.fulfill(envelope(200, { ok: true })));
+  // Capture the request so this test is self-sufficient: a fixture that answers
+  // {ok:true} without looking at the body would still pass if the client stopped
+  // forwarding captchaResponse. The 403 retry test below also guards that, but a
+  // failure here points straight at the missing field.
+  let sent: Record<string, string> | undefined;
+  await page.route(/amazonaws\.com.*\/contact$/, (route) => {
+    sent = JSON.parse(route.request().postData() || '{}');
+    return route.fulfill(envelope(200, { ok: true }));
+  });
 
   await page.goto('/en/contact');
   await fillValidForm(page);
   await page.locator('#contact-form-submit').click();
   await expect(page.locator('#success_message')).toBeVisible();
+  expect(sent?.captchaResponse).toBeTruthy();
+  expect(sent).toMatchObject({
+    name: 'Jane Doe',
+    email: 'jane@example.com',
+    subject: 'Booking question',
+    captchaResponse: 'test-token',
+  });
 });
 
 test('does not call /validaterecaptcha - the token is single-use and /contact verifies it', async ({ page }) => {
