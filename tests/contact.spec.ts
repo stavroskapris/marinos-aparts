@@ -55,18 +55,63 @@ test('does not call /validaterecaptcha - the token is single-use and /contact ve
   expect(verifyCalls).toBe(0);
 });
 
-test('a 403 captcha-rejected envelope shows the captcha message, not the generic error', async ({ page }) => {
+test('a 403 captcha-rejected envelope shows the captcha message, not the generic error, and the retry works', async ({ page }) => {
   await page.route('**/recaptcha/api.js*', (r) => r.abort());
-  await page.addInitScript(() => { (window as any).grecaptcha = { getResponse: () => 'tok', reset: () => {} }; });
+  // A token that is spent until the widget is reset, which is what a real
+  // rejection leaves behind. If the form does not reset the widget, the retry
+  // resends the same dead token and gets another 403 - the user is stuck until
+  // they reload the page.
+  await page.addInitScript(() => {
+    let token = 'burnt-token';
+    (window as any).resetCount = 0;
+    (window as any).grecaptcha = {
+      getResponse: () => token,
+      reset: () => { (window as any).resetCount += 1; token = 'fresh-token'; },
+    };
+  });
   // The real shape: the integration is non-proxy, so API Gateway answers HTTP
   // 200 and the Lambda's own 403 envelope arrives in the body.
-  await page.route(/amazonaws\.com.*\/contact$/, (r) => r.fulfill(envelope(403, { error: 'captcha rejected' })));
+  const tokensSeen: string[] = [];
+  await page.route(/amazonaws\.com.*\/contact$/, (r) => {
+    const sent = JSON.parse(r.request().postData() || '{}').captchaResponse;
+    tokensSeen.push(sent);
+    return r.fulfill(
+      sent === 'burnt-token' ? envelope(403, { error: 'captcha rejected' }) : envelope(200, { ok: true }),
+    );
+  });
   await page.goto('/en/contact');
   await fillValidForm(page);
+
   await page.locator('#contact-form-submit').click();
   await expect(page.locator('#recaptcha_message')).toBeVisible();
   await expect(page.locator('#error_message')).toBeHidden();
   await expect(page.locator('#success_message')).toBeHidden();
+  // The rejected token is spent, so the widget must have been reset.
+  await expect.poll(() => page.evaluate(() => (window as any).resetCount)).toBe(1);
+
+  // The retry must be able to succeed: a fresh token, not the burnt one again.
+  await page.locator('#contact-form-submit').click();
+  await expect(page.locator('#success_message')).toBeVisible();
+  expect(tokensSeen).toEqual(['burnt-token', 'fresh-token']);
+});
+
+test('an empty captcha does NOT reset the widget - there is no spent token to clear', async ({ page }) => {
+  await page.route('**/recaptcha/api.js*', (r) => r.abort());
+  // getResponse() is empty while the challenge is unsolved (or after grecaptcha
+  // expired it and re-armed itself). Resetting there would wipe a challenge the
+  // user is part-way through solving.
+  await page.addInitScript(() => {
+    (window as any).resetCount = 0;
+    (window as any).grecaptcha = {
+      getResponse: () => '',
+      reset: () => { (window as any).resetCount += 1; },
+    };
+  });
+  await page.goto('/en/contact');
+  await fillValidForm(page);
+  await page.locator('#contact-form-submit').click();
+  await expect(page.locator('#recaptcha_message')).toBeVisible();
+  expect(await page.evaluate(() => (window as any).resetCount)).toBe(0);
 });
 
 test('submitting with no captcha token shows the captcha message and sends nothing', async ({ page }) => {

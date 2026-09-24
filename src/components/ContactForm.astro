@@ -85,6 +85,12 @@ const f = s.contact.form;
       // pre-submit call to /validaterecaptcha would burn the token and make the
       // subsequent /contact verification fail for every legitimate submission.
       // All the client can do without burning the token is check it is present.
+      //
+      // Deliberately NO grecaptcha.reset() here, unlike the 403 branch below.
+      // An empty getResponse() means the widget is holding nothing: either the
+      // challenge is unsolved, or it expired and grecaptcha already cleared
+      // itself and re-armed the checkbox. There is no spent token to clear, and
+      // a reset would wipe a challenge the user is part-way through solving.
       const token = (window.grecaptcha && window.grecaptcha.getResponse()) || '';
       if (!token) { flash('recaptcha_message'); return; }
 
@@ -115,7 +121,16 @@ const f = s.contact.form;
         // converted to a proxy one.
         const parsed = typeof data.body === 'string' ? JSON.parse(data.body) : data;
         if (parsed.ok !== true) {
-          if (data.statusCode === 403 || res.status === 403) { flash('recaptcha_message'); return; }
+          if (data.statusCode === 403 || res.status === 403) {
+            // A 403 means Google rejected this token, so it is spent either way
+            // — wrong, expired, or already consumed. The widget still holds it,
+            // so without a reset every retry would resend the same dead token
+            // and get another 403, leaving the user stuck until they reload.
+            // Resetting hands them a fresh challenge they can actually retry.
+            if (window.grecaptcha) window.grecaptcha.reset();
+            flash('recaptcha_message');
+            return;
+          }
           throw new Error('send rejected');
         }
         form.reset();
