@@ -454,7 +454,6 @@ test('accepts a JSON string body', async () => {
   process.env.RECAPTCHA_SECRET = 'shhh';
   const res = await makeHandler({ fetchImpl: fetchReturning({ success: true }) })(
     { body: JSON.stringify({ captchaResponse: 'tok' }) },
-    {},
   );
   expect(JSON.parse(res.body)).toEqual({ success: true });
 });
