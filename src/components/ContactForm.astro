@@ -74,34 +74,19 @@ const f = s.contact.form;
       return ok;
     };
 
-    // token is passed in (read once by the caller) rather than re-read here, so
-    // the same value is sent to both /validaterecaptcha and /contact.
-    const verifyCaptcha = async (token) => {
-      if (!token) return false;
-      // Content-Type matches the legacy jQuery default (form-urlencoded) so the
-      // request stays CORS-simple (no preflight) and the API Gateway/Lambda sees
-      // the same request shape it always has. A failure returns false rather than
-      // throwing, so the caller can surface feedback instead of dying silently.
-      try {
-        const r = await fetch(endpoints.recaptcha, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
-          body: JSON.stringify({ captchaResponse: token }),
-        });
-        const data = await r.json();
-        const parsed = typeof data.body === 'string' ? JSON.parse(data.body) : data;
-        return parsed.success === true;
-      } catch {
-        return false;
-      }
-    };
-
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!validate()) return;
+
+      // reCAPTCHA response tokens are SINGLE-USE: Google's siteverify consumes a
+      // token on first verification and answers `timeout-or-duplicate` to every
+      // later attempt with the same value. So there can be exactly one verifier,
+      // and it is /contact (the endpoint that actually sends the mail). A
+      // pre-submit call to /validaterecaptcha would burn the token and make the
+      // subsequent /contact verification fail for every legitimate submission.
+      // All the client can do without burning the token is check it is present.
       const token = (window.grecaptcha && window.grecaptcha.getResponse()) || '';
-      const captchaOk = await verifyCaptcha(token);
-      if (!captchaOk) { flash('recaptcha_message'); return; }
+      if (!token) { flash('recaptcha_message'); return; }
 
       show('generic-loader', true);
       try {
@@ -112,16 +97,27 @@ const f = s.contact.form;
           message: $('contact_message').value,
           captchaResponse: token,
         };
+        // Content-Type matches the legacy jQuery default (form-urlencoded) so the
+        // request stays CORS-simple (no preflight) and the body is delivered as a
+        // JSON string, which is what the Lambda parses.
         const res = await fetch(endpoints.contact, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
           body: JSON.stringify(payload),
         });
         show('generic-loader', false);
-        if (!res.ok) throw new Error('send failed');
         const data = await res.json().catch(() => ({}));
+        // The integration is non-proxy, so API Gateway discards the Lambda's
+        // statusCode and answers HTTP 200 with the whole envelope as the body:
+        // {"statusCode":403,"body":"{\"error\":\"captcha rejected\"}"}. The
+        // verdict therefore lives in data.statusCode. res.status is checked as
+        // well so this keeps reading correctly if the integration is ever
+        // converted to a proxy one.
         const parsed = typeof data.body === 'string' ? JSON.parse(data.body) : data;
-        if (parsed.ok !== true) throw new Error('send rejected');
+        if (parsed.ok !== true) {
+          if (data.statusCode === 403 || res.status === 403) { flash('recaptcha_message'); return; }
+          throw new Error('send rejected');
+        }
         form.reset();
         flash('success_message');
         if (window.grecaptcha) window.grecaptcha.reset();
