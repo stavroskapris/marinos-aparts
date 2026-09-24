@@ -16,6 +16,8 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm run build
+        env:
+          PUBLIC_CONTACT_API_BASE: ${{ vars.STAGING_CONTACT_API_BASE }}
       - run: npm run test:unit
       - run: npm test
       - run: npm run parity:text
