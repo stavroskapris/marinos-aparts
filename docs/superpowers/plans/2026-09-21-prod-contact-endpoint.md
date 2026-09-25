@@ -1050,6 +1050,18 @@ gh variable set PROD_CONTACT_API_BASE    --body "https://$API.execute-api.eu-wes
 gh variable list
 ```
 
+> **Set `PROD_CONTACT_API_BASE` only once the `prod` stage exists (Step 5 above), never before.**
+> `STAGING_CONTACT_API_BASE` was set earlier, when the code PR merged, because the `dev` stage
+> already existed and the deploy workflows' verify step blocks every staging deploy until it is
+> present. `PROD_CONTACT_API_BASE` was deliberately *not* set then. It was set by mistake at the
+> same time and removed once the consequence became clear: the verify step checks only that the
+> built bundle matches the variable, not that the endpoint answers. Pointing it at a stage that
+> does not exist yet gives a production deploy that builds, passes verification and ships a
+> contact form posting to a 403, with nothing in the pipeline reporting a problem. That is the
+> same silent-wrong-endpoint failure the verify step exists to prevent, arriving through the
+> variable instead of through the build. Left unset, a premature production deploy fails loudly
+> at the verify step, which is what we want.
+
 - [ ] **Step 7: Append the results to the runbook and commit**
 
 Record the stage names, the deployment id, the four `add-permission` statement ids, and both base URLs.
