@@ -49,7 +49,7 @@ Tasks 1–2 also fix a live security defect. Flagging it explicitly because it i
 - **`/contact` verifies nothing.** The front-end checks the captcha against `/validaterecaptcha`, then makes a *separate* call to `/contact` carrying only `{name, email, subject, message}`. No token reaches `/contact`, and it does not ask for one. With CORS `*` and no auth, anything that can reach the URL can send mail through the SES identity, choosing the subject and the reply-to address.
 - **The verify Lambda always reports success.** `verify()` resolves `'Success'` from inside the `https.request` response callback, before any body is read, and Google's `success` field is never parsed. A wrong or replayed captcha verifies clean, so even the front-end gate is decorative.
 - **Severity is bounded by the SES sandbox:** delivery is limited to already-verified identities (so third parties cannot be spammed) and to 200 messages/24h. The realistic impact is up to 200 attacker-authored emails a day into the business inbox, each with an attacker-chosen reply-to — a phishing vector aimed at whoever reads that inbox, plus exhaustion of the daily quota so genuine enquiries silently fail.
-- **Fix:** `/contact` takes the token and verifies it server-side against Google before sending, rejecting on failure. `/validaterecaptcha` stays for the front-end's pre-submit UX check, but is no longer the only gate.
+- **Fix:** `/contact` takes the token and verifies it server-side against Google before sending, rejecting on failure. **`/contact` is the sole verifier.** reCAPTCHA response tokens are single-use — Google's `siteverify` consumes a token on first verification and returns `{"success":false,"error-codes":["timeout-or-duplicate"]}` for every later attempt — so a pre-submit check against `/validaterecaptcha` cannot coexist with it: the pre-check would burn the token and the real check would then reject every legitimate submission, while the attacker path (post a fresh token straight to `/contact`) would be unaffected. The front-end therefore only checks that a token is *present* before submitting, which does not consume it, and distinguishes "captcha rejected" from "send failed" by reading the `403` in the response envelope. `/validaterecaptcha` stays deployed as the runbook's routing probe and as the rollback surface, with no front-end consumer.
 
 If you would rather ship the endpoint split alone, cut Task 1 Steps 5–8 and Task 2 entirely — but then the new prod endpoint inherits the relay, and the runtime upgrade still has to happen before it can ever be fixed.
 
@@ -393,7 +393,8 @@ git commit -m "feat(lambda): contact handler on SDK v3 with server-side captcha 
 
 **Interfaces:**
 - Consumes: nothing from Task 1 at runtime. (It deliberately does **not** use `aliasEnv` — the secret is the same in both environments, so there is no per-alias config here.)
-- Produces: `handler(event, context)` returning `{ statusCode, body }` with `body` a JSON string of `{ success: boolean }`. Task 3's front-end consumes that shape — note it differs from the old `'"Success"'` string the current front-end tests for.
+- Produces: `handler(event)` — **one parameter, no `context`**, because there is no per-alias config to resolve here. It returns `{ statusCode, body }` with `body` a JSON string of `{ success: boolean }`. Keep the single-parameter signature in the tests too; calling `handler(event, {})` is a type error (`ts(2554)`) and `npx astro check` will fail on it.
+- Consumed by: **nothing in the front-end.** `/contact` is the sole captcha verifier (see *Scope addition*), because reCAPTCHA tokens are single-use. This function exists as the runbook's routing probe and as the rollback surface.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -410,7 +411,6 @@ test('reports success only when Google says success', async () => {
   process.env.RECAPTCHA_SECRET = 'shhh';
   const res = await makeHandler({ fetchImpl: fetchReturning({ success: true }) })(
     { captchaResponse: 'tok' },
-    {},
   );
   expect(res.statusCode).toBe(200);
   expect(JSON.parse(res.body)).toEqual({ success: true });
@@ -420,7 +420,7 @@ test('reports failure when Google rejects the token', async () => {
   process.env.RECAPTCHA_SECRET = 'shhh';
   const res = await makeHandler({
     fetchImpl: fetchReturning({ success: false, 'error-codes': ['invalid-input-response'] }),
-  })({ captchaResponse: 'bad' }, {});
+  })({ captchaResponse: 'bad' });
   expect(res.statusCode).toBe(200);
   expect(JSON.parse(res.body)).toEqual({ success: false });
 });
@@ -428,7 +428,7 @@ test('reports failure when Google rejects the token', async () => {
 test('rejects a request with no token without calling Google', async () => {
   process.env.RECAPTCHA_SECRET = 'shhh';
   const fetchImpl = fetchReturning({ success: true });
-  const res = await makeHandler({ fetchImpl })({}, {});
+  const res = await makeHandler({ fetchImpl })({});
   expect(res.statusCode).toBe(400);
   expect(fetchImpl).not.toHaveBeenCalled();
 });
@@ -437,8 +437,8 @@ test('does not leak verdicts between invocations', async () => {
   process.env.RECAPTCHA_SECRET = 'shhh';
   const h1 = makeHandler({ fetchImpl: fetchReturning({ success: true }) });
   const h2 = makeHandler({ fetchImpl: fetchReturning({ success: false }) });
-  await h1({ captchaResponse: 'a' }, {});
-  const second = await h2({ captchaResponse: 'b' }, {});
+  await h1({ captchaResponse: 'a' });
+  const second = await h2({ captchaResponse: 'b' });
   expect(JSON.parse(second.body)).toEqual({ success: false });
 });
 
@@ -446,7 +446,7 @@ test('surfaces a transport failure as 502', async () => {
   process.env.RECAPTCHA_SECRET = 'shhh';
   const res = await makeHandler({
     fetchImpl: vi.fn(() => Promise.reject(new Error('network'))),
-  })({ captchaResponse: 'tok' }, {});
+  })({ captchaResponse: 'tok' });
   expect(res.statusCode).toBe(502);
 });
 
@@ -454,7 +454,6 @@ test('accepts a JSON string body', async () => {
   process.env.RECAPTCHA_SECRET = 'shhh';
   const res = await makeHandler({ fetchImpl: fetchReturning({ success: true }) })(
     { body: JSON.stringify({ captchaResponse: 'tok' }) },
-    {},
   );
   expect(JSON.parse(res.body)).toEqual({ success: true });
 });
@@ -610,22 +609,13 @@ export const RECAPTCHA_SITE_KEY = '6LcglLUUAAAAAF_UyVCnbs1Jv4aLFlrDigWo0Y28';
 Run: `npx vitest run src/config.test.ts`
 Expected: PASS, 2 tests.
 
-- [ ] **Step 5: Send the captcha token to `/contact` and read the new response shapes**
+- [ ] **Step 5: Make `/contact` the sole verifier and send it the token**
 
-In `src/components/ContactForm.astro`, change the verify check (currently `return data.body === '"Success"'`) to read the new body:
-
-```js
-        const data = await r.json();
-        const parsed = typeof data.body === 'string' ? JSON.parse(data.body) : data;
-        return parsed.success === true;
-```
-
-Then capture the token before submitting and include it in the payload. Replace the `payload` object and the `verifyCaptcha` call site so the token is read once:
+**Delete `verifyCaptcha` and its call entirely.** reCAPTCHA response tokens are single-use, so there can be exactly one verifier, and it is `/contact` — the endpoint that decides whether mail is sent. Calling `/validaterecaptcha` first would consume the token, and `/contact` would then reject every legitimate submission with a 403 while the attacker path stayed open. All the client may do is check the token is **present**, which does not consume it:
 
 ```js
       const token = (window.grecaptcha && window.grecaptcha.getResponse()) || '';
-      const captchaOk = await verifyCaptcha();
-      if (!captchaOk) { flash('recaptcha_message'); return; }
+      if (!token) { flash('recaptcha_message'); return; }
 
       show('generic-loader', true);
       try {
@@ -638,16 +628,20 @@ Then capture the token before submitting and include it in the payload. Replace 
         };
 ```
 
-And replace the success check after the contact fetch, since the handler now returns `{ ok: true }` or `{ error }`:
+Then replace the success check after the contact fetch. The handler now returns `{ ok: true }` or `{ error }`, and the "captcha rejected" / "send failed" distinction the user sees comes from the status code **inside the envelope**, not from `res.status` — the integration is non-proxy, so API Gateway answers HTTP 200 and hands back `{"statusCode":403,"body":"{\"error\":\"captcha rejected\"}"}`:
 
 ```js
-        if (!res.ok) throw new Error('send failed');
         const data = await res.json().catch(() => ({}));
         const parsed = typeof data.body === 'string' ? JSON.parse(data.body) : data;
-        if (parsed.ok !== true) throw new Error('send rejected');
+        if (parsed.ok !== true) {
+          if (data.statusCode === 403 || res.status === 403) { flash('recaptcha_message'); return; }
+          throw new Error('send rejected');
+        }
 ```
 
-> Keep the `Content-Type: application/x-www-form-urlencoded; charset=UTF-8` header on both fetches. It is deliberate — it keeps the request CORS-simple so no preflight is needed, and the body stays a JSON string, which is what `readPayload` in Tasks 1–2 parses.
+`endpoints.recaptcha` stays in `src/config.ts` — the runbook curls it as a routing probe and it is the rollback surface — but nothing in the component uses it.
+
+> Keep the `Content-Type: application/x-www-form-urlencoded; charset=UTF-8` header on the remaining fetch. It is deliberate — it keeps the request CORS-simple so no preflight is needed, and the body stays a JSON string, which is what `readPayload` in Tasks 1–2 parses.
 
 - [ ] **Step 6: Run the e2e suite**
 
@@ -673,27 +667,51 @@ git commit -m "feat(contact): per-environment api base, send captcha token to /c
 - Consumes: `PUBLIC_CONTACT_API_BASE` as read by `src/config.ts` from Task 3.
 - Produces: nothing consumed by later tasks. Task 5's runbook depends on these being in place before the production build is re-run.
 
-- [ ] **Step 1: Add the env var to the staging build step**
+> **Set it at JOB scope, never on the build step alone.** Two later steps rebuild `dist/`: `npm run test:unit` runs `infra/cloudfront/no-stub.test.ts`, which shells out to `npm run build`, and `npm test` rebuilds through `playwright.config.ts`'s `webServer.command` (`npm run build && npm run preview`, with `reuseExistingServer: !process.env.CI`, i.e. always rebuilding in CI). `astro build` empties `outDir` first, so a step-scoped variable leaves the artifact that reaches `aws s3 sync` built with it **unset** — the whole task becomes a silent no-op and production enquiries go to the staging inbox.
 
-In `.github/workflows/deploy-staging.yml`, on the `npm run build` step:
+- [ ] **Step 1: Add the env var at job scope in the staging workflow**
+
+In `.github/workflows/deploy-staging.yml`, on the `deploy` job (alongside `environment:`, not replacing it), and remove any `env:` from the `npm run build` step:
 
 ```yaml
-      - run: npm run build
-        env:
-          PUBLIC_CONTACT_API_BASE: ${{ vars.STAGING_CONTACT_API_BASE }}
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+    env:
+      PUBLIC_CONTACT_API_BASE: ${{ vars.STAGING_CONTACT_API_BASE }}
 ```
 
-- [ ] **Step 2: Add the env var to the production build step**
+- [ ] **Step 2: Add the env var at job scope in the production workflow**
 
-In `.github/workflows/deploy-prod.yml`, on the `npm run build` step:
+Same shape in `.github/workflows/deploy-prod.yml`, keeping the existing `environment:` block:
 
 ```yaml
-      - run: npm run build
-        env:
-          PUBLIC_CONTACT_API_BASE: ${{ vars.PROD_CONTACT_API_BASE }}
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://www.marinos-aparts.gr
+    env:
+      PUBLIC_CONTACT_API_BASE: ${{ vars.PROD_CONTACT_API_BASE }}
 ```
 
 These are repository **variables**, not secrets — the URL is public, it ships in the client bundle. Using `vars` keeps it visible and diffable.
+
+- [ ] **Step 2b: Verify the final artifact, immediately before the sync**
+
+Add this to **both** workflows, after `npm run build:info` and directly before `aws s3 sync`, so it observes the artifact that is actually uploaded rather than an earlier build a later step overwrote:
+
+```yaml
+      - name: Verify the built bundle targets the intended contact API
+        run: |
+          test -n "$PUBLIC_CONTACT_API_BASE" || { echo "PUBLIC_CONTACT_API_BASE is unset"; exit 1; }
+          grep -q "${PUBLIC_CONTACT_API_BASE%/}/contact" dist/en/contact/index.html
+```
+
+The first line matters on its own: GitHub substitutes an **empty string** for an undefined `vars.*`, so a missing or misspelled repository variable would otherwise produce a perfectly valid production build silently pointing at the fallback stage, with nothing failing.
 
 - [ ] **Step 3: Verify the YAML parses**
 
@@ -704,6 +722,17 @@ Expected: no errors.
 
 Run: `npm run build && grep -rc "execute-api" dist/en/contact/index.html`
 Expected: build succeeds; the count is at least 1 (the fallback staging base is baked in, since no env var is set locally).
+
+Then prove the verification step would catch a clobbered build — the defect it exists for:
+
+```bash
+rm -rf dist
+PUBLIC_CONTACT_API_BASE="https://EXAMPLE-PROD.execute-api.eu-west-1.amazonaws.com/prod" npm run build >/dev/null
+npm run test:unit >/dev/null 2>&1   # rebuilds dist without the variable
+PUBLIC_CONTACT_API_BASE="https://EXAMPLE-PROD.execute-api.eu-west-1.amazonaws.com/prod" \
+  grep -q "${PUBLIC_CONTACT_API_BASE%/}/contact" dist/en/contact/index.html; echo "grep exit=$?"
+```
+Expected: `grep exit=1` — the clobbered artifact is rejected. Re-run with the variable `export`ed for the whole shell (which is what job scope produces) and it exits 0.
 
 - [ ] **Step 5: Commit**
 
@@ -868,6 +897,15 @@ cat /tmp/integration-contact.json
 ```
 Keep both files. They hold the exact `uri` to restore.
 
+**Record the integration type in the runbook before going further.** The whole client contract hangs on it and nothing in the repo pins it down: under a **non-proxy** (`AWS`) integration API Gateway discards the Lambda's `statusCode` and returns HTTP 200 with the function's entire return value as the body, so the front-end reads the verdict from `data.statusCode` inside the envelope; under a **proxy** (`AWS_PROXY`) integration the Lambda's `statusCode` becomes the HTTP status and `body` becomes the response body. The code in this repo — `src/components/ContactForm.astro` parsing a nested `data.body` JSON string, and the `tests/contact.spec.ts` fixtures — assumes **non-proxy**.
+
+```bash
+for path in contact validaterecaptcha; do
+  echo "$path: $(jq -r '.type' "/tmp/integration-$path.json")"
+done
+```
+Expected: `AWS` for both (non-proxy). Append the two lines verbatim to `docs/superpowers/runbook-contact-split.md` under a heading "Integration type (verified <date>)", together with a note that the front-end's envelope parsing and the e2e fixtures depend on this answer. **If it reads `AWS_PROXY` instead, stop** — the acceptance criteria in Steps 4–5 below and in Task 7 Step 6 are written for non-proxy and must be re-read, and `ContactForm.astro` would be parsing a body that is no longer nested.
+
 - [ ] **Step 2: Repoint each integration at the aliased function via a stage variable**
 
 ```bash
@@ -919,7 +957,13 @@ curl -s -X POST "https://$API.execute-api.eu-west-1.amazonaws.com/dev/validatere
   -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \
   -d '{"captchaResponse":"invalid"}'
 ```
-Expected: a JSON body containing `"success": false` — proof that the request reached the new function, resolved the `dev` alias, called Google and parsed a real verdict. The old implementation would have answered `"Success"`.
+Expected — and this is a **non-proxy** integration, so read it carefully: **HTTP 200**, with the Lambda's whole envelope as the body:
+
+```json
+{"statusCode":200,"body":"{\"success\":false}"}
+```
+
+The verdict is the escaped `\"success\":false` **inside** `body` — there is no `"success": false` with a space after the colon anywhere in the response, so grep for `success` and read the value, or use `jq -r '.body' | jq '.success'`. Seeing `success` false is proof that the request reached the new function, resolved the `dev` alias, called Google and parsed a real verdict. The old implementation would have answered `"Success"`.
 
 **Rollback if this fails:** restore the `uri` from `/tmp/integration-contact.json` and `/tmp/integration-validaterecaptcha.json` with the same `update-integration --patch-operations op=replace,path=/uri,value=<old uri>`, then `create-deployment --stage-name dev`. The old functions were never touched.
 
@@ -937,7 +981,66 @@ curl -s -X POST "https://$API.execute-api.eu-west-1.amazonaws.com/prod/validater
   -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \
   -d '{"captchaResponse":"invalid"}'
 ```
-Expected: `lambdaAlias=prod`, and a body containing `"success": false`.
+Expected: `lambdaAlias=prod`, and — again non-proxy — **HTTP 200** with the envelope `{"statusCode":200,"body":"{\"success\":false}"}`. Read the verdict out of the nested `body`, as in Step 4.
+
+- [ ] **Step 5b: Throttle both stages and cap Lambda concurrency**
+
+Both stages currently sit at the AWS account default — **10,000 req/sec, 5,000 burst** — which is
+unlimited for a site serving roughly 2,000 requests a day in total. Nothing rate-limits the contact
+endpoints.
+
+Server-side captcha verification (Task 1) is the primary gate, but it does not cover everything:
+`/validaterecaptcha` has no gate at all and makes an outbound call to Google per request, which is a
+free amplification vector; and even a rejected `/contact` costs an invocation plus a Google
+round-trip. The realistic harm is not spam reaching the inbox — the SES sandbox caps that at 200/day
+— it is that a modest flood **exhausts the daily quota and silently breaks legitimate enquiries**.
+
+```bash
+for stage in dev prod; do
+  $AWS apigateway update-stage --rest-api-id $API --stage-name $stage --patch-operations \
+    op=replace,path=/*/*/throttling/rateLimit,value=5 \
+    op=replace,path=/*/*/throttling/burstLimit,value=10
+done
+```
+
+Verification:
+```bash
+$AWS apigateway get-stage --rest-api-id $API --stage-name prod \
+  --query 'methodSettings."*/*".{rate:throttlingRateLimit,burst:throttlingBurstLimit}' --output json
+```
+Expected: `rate: 5.0`, `burst: 10`.
+
+> **This is a global cap, not per-IP.** During an attack it throttles legitimate visitors too. At
+> 5/sec it sits roughly two orders of magnitude above this site's normal contact traffic, so the
+> trade is worth taking — but it is not equivalent to a per-IP limit. See the follow-up below.
+
+Then cap the cost blast radius, so a flood cannot scale out concurrency:
+
+```bash
+for fn in marinos-contact-form marinos-recaptcha-verify; do
+  $AWS lambda put-function-concurrency --function-name $fn --reserved-concurrent-executions 5
+done
+```
+Verification: `$AWS lambda get-function-concurrency --function-name marinos-contact-form` → 5.
+
+- [ ] **Step 5c: Alarm when the contact endpoints are being hammered**
+
+Without this the failure mode is silent: the quota is exhausted, enquiries stop arriving, and nobody
+knows until a guest complains. An alarm is what makes it visible.
+
+```bash
+$AWS cloudwatch put-metric-alarm \
+  --alarm-name marinos-contact-invocations-high \
+  --namespace AWS/Lambda --metric-name Invocations \
+  --dimensions Name=FunctionName,Value=marinos-contact-form \
+  --statistic Sum --period 3600 --evaluation-periods 1 --threshold 50 \
+  --comparison-operator GreaterThanThreshold \
+  --alarm-description "Contact form invocations unusually high — possible abuse or a quota-exhaustion attack"
+```
+
+Set `--alarm-actions <SNS topic ARN>` if a topic exists, or add one; an alarm with no action still
+shows state in the console but will not notify. Threshold 50/hour is far above normal for this site
+— tune it after a week of real data rather than guessing twice.
 
 - [ ] **Step 6: Set the two repository variables**
 
@@ -995,12 +1098,18 @@ curl -s https://www.marinos-aparts.gr/en/contact | grep -o 'execute-api[^"]*/pro
 Expected: the production bundle references `/prod`.
 
 > **`workflow_dispatch` requires the workflow file to exist on the default branch.** `deploy-prod.yml` currently lives only on `astro-migration`, so "Deploy Production" is not dispatchable and does not appear in `gh workflow list`. Until the Task 8 finalize in the cutover runbook merges to `master`, deploy production the way the cutover did:
+> **`export` the variable — do not prefix a single command with it.** `npm run test:unit` shells out to `npm run build` (the no-stub edge-function test) and `npm test` rebuilds through Playwright's `webServer` command, and `astro build` empties `outDir` first. A one-command prefix would leave those rebuilds with the variable unset, and the `dist/` that reaches S3 would fall back to the staging stage — silently, with production enquiries then landing in the staging inbox. Build **last**, and verify the artifact immediately before the sync:
 > ```bash
-> npm ci && PUBLIC_CONTACT_API_BASE="https://8vgfxd8lde.execute-api.eu-west-1.amazonaws.com/prod" npm run build
+> export PUBLIC_CONTACT_API_BASE="https://8vgfxd8lde.execute-api.eu-west-1.amazonaws.com/prod"
+> npm ci
 > npm run test:unit && npm test && npm run parity:text && npm run parity:images
+> npm run build && npm run build:info
+> grep -q "${PUBLIC_CONTACT_API_BASE%/}/contact" dist/en/contact/index.html \
+>   || { echo "dist targets the wrong contact API - do NOT sync"; exit 1; }
 > $AWS s3 sync ./dist s3://marinos-aparts-prod --delete
 > $AWS cloudfront create-invalidation --distribution-id <PROD_DIST_ID> --paths "/*"
 > ```
+> The `grep` is the same assertion `deploy-prod.yml` runs before its own sync. It is the only thing that catches this class of mistake, because a wrongly-targeted build is a perfectly valid site.
 
 - [ ] **Step 5: Submit the form on production and confirm delivery to the business inbox**
 
@@ -1009,7 +1118,29 @@ Expected: success message, and the mail arrives at the **business** inbox with t
 - [ ] **Step 6: Confirm the relay is closed**
 
 From a terminal, POST to `/prod/contact` with a well-formed body and no valid captcha token.
-Expected: **403** and no email delivered. Repeat with the token field omitted entirely: **400**, no email. Before this work the same request would have sent mail.
+
+**The integration is non-proxy (confirmed in Task 6 Step 1), so API Gateway discards the Lambda's status code.** Every one of these calls comes back as **HTTP 200**; the real verdict is the `statusCode` field *inside* the body. Do not read HTTP 200 here as "the relay is still open" — that misreading would look like a regression and invite a rollback of a working fix.
+
+```bash
+BASE="https://8vgfxd8lde.execute-api.eu-west-1.amazonaws.com/prod"
+# invalid token
+curl -s -o /dev/stderr -w '\nHTTP %{http_code}\n' -X POST "$BASE/contact" \
+  -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \
+  -d '{"name":"Probe","email":"probe@example.com","subject":"Relay probe","message":"Checking the relay is closed.","captchaResponse":"not-a-real-token"}'
+# token omitted entirely
+curl -s -o /dev/stderr -w '\nHTTP %{http_code}\n' -X POST "$BASE/contact" \
+  -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' \
+  -d '{"name":"Probe","email":"probe@example.com","subject":"Relay probe","message":"Checking the relay is closed."}'
+```
+
+Expected, in both cases `HTTP 200` at the transport level and:
+
+| probe | body | meaning |
+|---|---|---|
+| invalid token | `{"statusCode":403,"body":"{\"error\":\"captcha rejected\"}"}` | Google rejected the token; nothing sent |
+| token omitted | `{"statusCode":400,"body":"{\"error\":\"captcha required\"}"}` | rejected before Google was called; nothing sent |
+
+And **no email delivered** for either — that is the actual acceptance criterion. Before this work the same requests would have sent mail. (If the two probes instead return HTTP 403 and HTTP 400 with a bare `{"error":...}` body, the integration is proxy, not non-proxy — go back to Task 6 Step 1, because `ContactForm.astro` is then parsing the wrong shape.)
 
 - [ ] **Step 7: Retire the old functions once both environments are confirmed**
 
@@ -1030,6 +1161,7 @@ Record the verification results, the date, and which inbox received which messag
 ## Open items not covered here
 
 - **SES is in sandbox.** 200 messages/24h across both environments, and every recipient must be verified. Moving to production access is an AWS support request and a separate piece of work; until then a burst of form traffic can exhaust the quota and genuine enquiries will fail silently. Consider a CloudWatch alarm on SES `Reputation`/send count.
-- **CORS is `*`** on both endpoints. Now that the captcha is verified server-side this is much less dangerous, but narrowing it to the two site origins is cheap defence in depth.
-- **No rate limiting.** API Gateway usage plans or a per-IP throttle on the stage would cap abuse independently of the captcha.
+- **CORS is `*`** on both endpoints. Now that the captcha is verified server-side this is much less dangerous, but narrowing it to the two site origins is cheap defence in depth — and it is free.
+- **Per-IP rate limiting is NOT planned.** The only mechanism that does it properly here is AWS WAF, which is billed (~$5/month per web ACL plus ~$1 per rule per month). The project constraint is to add nothing paid, so Task 6 Steps 5b/5c use the free levers instead: global stage throttling, reserved concurrency, and a CloudWatch alarm (the account has 0 alarms and 0 SNS topics, so one of each sits inside the free tier). Accept that stage throttling is global rather than per-IP.
+- **There is a WAF web ACL attached to STAGING, and it is NOT an optional cost.** `CreatedByCloudFront-72c774cb`, three AWS managed rule groups. An earlier revision of this plan claimed it was billed at roughly $8/month and suggested detaching it to save money. **That was wrong, and acting on it is impossible.** The staging distribution is on CloudFront's Free pricing plan, which provisions the ACL itself and requires one: clearing `WebACLId` fails with *"Distributions with a pricing plan subscription must have a web ACL resource"*, and the same plan rejects response-headers policies, which is why the staging noindex header had to be a viewer-response function. The $8 figure came from applying standard WAF list pricing ($5 per ACL plus $1 per rule) to an ACL bundled into a pricing plan, and was never checked against the bill. Leave it alone: it is almost certainly free, and dropping it would mean leaving the plan that caps staging's spend. Production having no WAF is a separate question, and adding one there *would* be billed, which is why per-IP rate limiting stays excluded above.
 - **The API is still named `test-api-contact-form`.** Renaming means recreating it and changing both base URLs; not worth it while the stage names carry the meaning.

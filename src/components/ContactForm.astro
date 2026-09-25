@@ -74,31 +74,25 @@ const f = s.contact.form;
       return ok;
     };
 
-    const verifyCaptcha = async () => {
-      const resp = (window.grecaptcha && window.grecaptcha.getResponse()) || '';
-      if (!resp) return false;
-      // Content-Type matches the legacy jQuery default (form-urlencoded) so the
-      // request stays CORS-simple (no preflight) and the API Gateway/Lambda sees
-      // the same request shape it always has. A failure returns false rather than
-      // throwing, so the caller can surface feedback instead of dying silently.
-      try {
-        const r = await fetch(endpoints.recaptcha, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
-          body: JSON.stringify({ captchaResponse: resp }),
-        });
-        const data = await r.json();
-        return data.body === '"Success"';
-      } catch {
-        return false;
-      }
-    };
-
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!validate()) return;
-      const captchaOk = await verifyCaptcha();
-      if (!captchaOk) { flash('recaptcha_message'); return; }
+
+      // reCAPTCHA response tokens are SINGLE-USE: Google's siteverify consumes a
+      // token on first verification and answers `timeout-or-duplicate` to every
+      // later attempt with the same value. So there can be exactly one verifier,
+      // and it is /contact (the endpoint that actually sends the mail). A
+      // pre-submit call to /validaterecaptcha would burn the token and make the
+      // subsequent /contact verification fail for every legitimate submission.
+      // All the client can do without burning the token is check it is present.
+      //
+      // Deliberately NO grecaptcha.reset() here, unlike the 403 branch below.
+      // An empty getResponse() means the widget is holding nothing: either the
+      // challenge is unsolved, or it expired and grecaptcha already cleared
+      // itself and re-armed the checkbox. There is no spent token to clear, and
+      // a reset would wipe a challenge the user is part-way through solving.
+      const token = (window.grecaptcha && window.grecaptcha.getResponse()) || '';
+      if (!token) { flash('recaptcha_message'); return; }
 
       show('generic-loader', true);
       try {
@@ -107,17 +101,38 @@ const f = s.contact.form;
           email: $('contact_email').value,
           subject: $('contact_subject').value,
           message: $('contact_message').value,
+          captchaResponse: token,
         };
+        // Content-Type matches the legacy jQuery default (form-urlencoded) so the
+        // request stays CORS-simple (no preflight) and the body is delivered as a
+        // JSON string, which is what the Lambda parses.
         const res = await fetch(endpoints.contact, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
           body: JSON.stringify(payload),
         });
         show('generic-loader', false);
-        if (!res.ok) throw new Error('send failed');
         const data = await res.json().catch(() => ({}));
-        // Lambda echoes a body; treat an explicit error body as failure.
-        if (typeof data.body === 'string' && data.body.toLowerCase().includes('error')) throw new Error('send rejected');
+        // The integration is non-proxy, so API Gateway discards the Lambda's
+        // statusCode and answers HTTP 200 with the whole envelope as the body:
+        // {"statusCode":403,"body":"{\"error\":\"captcha rejected\"}"}. The
+        // verdict therefore lives in data.statusCode. res.status is checked as
+        // well so this keeps reading correctly if the integration is ever
+        // converted to a proxy one.
+        const parsed = typeof data.body === 'string' ? JSON.parse(data.body) : data;
+        if (parsed.ok !== true) {
+          if (data.statusCode === 403 || res.status === 403) {
+            // A 403 means Google rejected this token, so it is spent either way
+            // — wrong, expired, or already consumed. The widget still holds it,
+            // so without a reset every retry would resend the same dead token
+            // and get another 403, leaving the user stuck until they reload.
+            // Resetting hands them a fresh challenge they can actually retry.
+            if (window.grecaptcha) window.grecaptcha.reset();
+            flash('recaptcha_message');
+            return;
+          }
+          throw new Error('send rejected');
+        }
         form.reset();
         flash('success_message');
         if (window.grecaptcha) window.grecaptcha.reset();
