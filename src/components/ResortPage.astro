@@ -3,6 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Navbar from './Navbar.astro';
 import HeaderBottom from './HeaderBottom.astro';
 import Footer from './Footer.astro';
+import Section from './Section.astro';
+import FactGrid from './FactGrid.astro';
 import Gallery, { type GalleryItem } from './Gallery.astro';
 import type { Locale } from '../i18n/locales';
 
@@ -39,34 +41,25 @@ const {
 
 <BaseLayout lang={lang} title={title} description={description} canonicalPath={canonicalPath}>
   <Navbar lang={lang} canonicalPath={canonicalPath} current={current} />
-  <div class={heroClass}></div>
   <HeaderBottom lang={lang} />
 
-  <section class="tm-section">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-          <div class="tm-2-col-left text-xs-center">
-            <h2 class="tm-gold-text tm-title">{resort.title}</h2>
-            <p>{resort.main}</p>
-          </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-          <h2 class="tm-gold-text tm-title text-xs-center">{resort.facilitiesTitle}</h2>
-          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-7">
-            <div class="facilities"><ul>{facilityCol1.map((label) => <li>{label}</li>)}</ul></div>
-          </div>
-          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-5">
-            <div class="facilities"><ul>{facilityCol2.map((label) => <li>{label}</li>)}</ul></div>
-          </div>
-        </div>
+  <Section>
+    <div class="grid grid--2">
+      <div data-reveal>
+        <h1>{resort.title}</h1>
+        <p class="lead">{resort.main}</p>
       </div>
-      <div class="row tm-margin-t-mid">
-        <h2 class="tm-gold-text tm-title text-xs-center">{resort.gallery}</h2>
-        <Gallery items={items} figureClass={figureClass} />
+      <div data-reveal data-reveal-delay="120">
+        <h2>{resort.facilitiesTitle}</h2>
+        <FactGrid columns={2} items={[...facilityCol1, ...facilityCol2].map((label) => ({ label }))} />
       </div>
     </div>
-  </section>
+  </Section>
+
+  <Section ground="sand">
+    <h2>{resort.gallery}</h2>
+    <Gallery items={items} figureClass={figureClass} />
+  </Section>
 
   <Footer lang={lang} mapFocus={mapFocus} />
 </BaseLayout>

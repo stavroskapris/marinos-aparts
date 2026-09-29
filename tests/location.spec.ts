@@ -4,7 +4,7 @@ test('english location renders beaches gallery with headings and captions', asyn
   await page.goto('/en/location');
   await expect(page.getByRole('heading', { name: 'Sivota' }).first()).toBeVisible();
   await expect(page.locator('#gallery figure')).toHaveCount(12);
-  await expect(page.locator('#gallery h4').filter({ hasText: 'Agia Paraskevi' })).toBeVisible();
+  await expect(page.locator('#gallery h3').filter({ hasText: 'Agia Paraskevi' })).toBeVisible();
   // caption is carried on the anchor for the lightbox
   const first = page.locator('#gallery a').first();
   await expect(first).toHaveAttribute('data-pswp-caption', /Agia Paraskevi/);
@@ -32,5 +32,5 @@ test('location lightbox caption renders anchored at the bottom and is readable',
 test('greek location uses translated beach names', async ({ page }) => {
   await page.goto('/gr/location');
   await expect(page.locator('html')).toHaveAttribute('lang', 'el');
-  await expect(page.locator('#gallery h4').filter({ hasText: 'Αγία Παρασκευή' })).toBeVisible();
+  await expect(page.locator('#gallery h3').filter({ hasText: 'Αγία Παρασκευή' })).toBeVisible();
 });

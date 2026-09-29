@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Navbar from '../../components/Navbar.astro';
 import HeaderBottom from '../../components/HeaderBottom.astro';
 import Footer from '../../components/Footer.astro';
+import Section from '../../components/Section.astro';
 import Gallery, { type GalleryItem } from '../../components/Gallery.astro';
 import { getStaticLocalePaths, isLocale, DEFAULT_LOCALE } from '../../i18n/locales';
 import { t } from '../../i18n/t';
@@ -54,25 +55,19 @@ const description = 'Sivota is a special destination, as one of the most picture
 
 <BaseLayout lang={lang} title={title} description={description} canonicalPath="/location">
   <Navbar lang={lang} canonicalPath="/location" current="location" />
-  <div class="tm-location-img-container"></div>
   <HeaderBottom lang={lang} />
 
-  <section class="tm-section">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-xs-center">
-          <h2 class="tm-gold-text tm-title">{s.location.title}</h2>
-          <p>{s.location.main}</p>
-        </div>
-      </div>
-      <div class="row tm-margin-t-mid">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-xs-center">
-          <h2 class="tm-gold-text tm-title">{s.location.beachTitle}</h2>
-        </div>
-        <Gallery items={items} figureClass="location" />
-      </div>
+  <Section>
+    <div class="container--narrow" data-reveal>
+      <h1>{s.location.title}</h1>
+      <p class="lead">{s.location.main}</p>
     </div>
-  </section>
+  </Section>
+
+  <Section ground="sand">
+    <h2>{s.location.beachTitle}</h2>
+    <Gallery items={items} figureClass="location" />
+  </Section>
 
   <Footer lang={lang} />
 </BaseLayout>

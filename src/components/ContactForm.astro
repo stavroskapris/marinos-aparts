@@ -10,26 +10,26 @@ const s = t(lang);
 const f = s.contact.form;
 ---
 
-<div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 text-xs-center contact-form">
+<div class="contact-form">
   <section>
-    <h3 class="tm-gold-text tm-form-title">{s.contact.title}</h3>
-    <p class="tm-form-description">{s.contact.main}</p>
+    <h3 class="contact-form__title">{s.contact.title}</h3>
+    <p class="contact-form__description">{s.contact.main}</p>
 
-    <form id="contact-form" method="post" class="tm-contact-form" novalidate>
-      <div class="form-group">
-        <input type="text" id="contact_name" name="contact_name" class="form-control" placeholder="Name" />
+    <form id="contact-form" method="post" class="contact-form__form" novalidate>
+      <div class="field">
+        <input type="text" id="contact_name" name="contact_name" class="field__input" placeholder="Name" />
         <div class="field-error" data-for="contact_name" style="color:red;display:none"></div>
       </div>
-      <div class="form-group">
-        <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="Email" />
+      <div class="field">
+        <input type="email" id="contact_email" name="contact_email" class="field__input" placeholder="Email" />
         <div class="field-error" data-for="contact_email" style="color:red;display:none"></div>
       </div>
-      <div class="form-group">
-        <input type="text" id="contact_subject" name="contact_subject" class="form-control" placeholder="Subject" />
+      <div class="field">
+        <input type="text" id="contact_subject" name="contact_subject" class="field__input" placeholder="Subject" />
         <div class="field-error" data-for="contact_subject" style="color:red;display:none"></div>
       </div>
-      <div class="form-group">
-        <textarea id="contact_message" name="contact_message" class="form-control" rows="6" placeholder="Message"></textarea>
+      <div class="field">
+        <textarea id="contact_message" name="contact_message" class="field__input" rows="6" placeholder="Message"></textarea>
         <div class="field-error" data-for="contact_message" style="color:red;display:none"></div>
       </div>
 
@@ -40,11 +40,33 @@ const f = s.contact.form;
         <div id="recaptcha_message" style="color:red;display:none">{s.contact.captchaErrorMessage}</div>
       </div>
 
-      <button type="submit" id="contact-form-submit" class="tm-btn btn-block">{s.contact.submit}</button>
+      <button type="submit" id="contact-form-submit" class="btn btn--primary">{s.contact.submit}</button>
       <div class="g-recaptcha" data-sitekey={RECAPTCHA_SITE_KEY}></div>
     </form>
   </section>
 </div>
+
+<style>
+  .contact-form { max-width: 40rem; margin-inline: auto; }
+  .contact-form__title { font-size: var(--fs-display-l); margin-bottom: var(--sp-3); }
+  .contact-form__description { margin-bottom: var(--sp-6); }
+  .field { margin-bottom: var(--sp-4); }
+  .field__input {
+    display: block; width: 100%; min-height: 44px;
+    padding: var(--sp-3) var(--sp-4);
+    font: inherit; color: var(--c-ink); background: var(--c-white);
+    border: 1px solid var(--c-deep-sea); border-radius: var(--radius-btn);
+  }
+  .field__input:focus-visible { outline: 2px solid var(--c-sivota-blue); outline-offset: 2px; }
+  .contact-form__form :global(.btn) { margin-block: var(--sp-4); }
+  /* Google's widget is a fixed 304px, wider than a 320px viewport's content box.
+     Scaling keeps the whole checkbox visible; clipping would cut its right edge. */
+  @media (max-width: 360px) {
+    .contact-form__form :global(.g-recaptcha) {
+      transform: scale(0.9); transform-origin: 0 0; height: 70px;
+    }
+  }
+</style>
 
 <script
   define:vars={{

@@ -22,18 +22,18 @@ const resolvedItems = await Promise.all(
 );
 ---
 
-<div id="gallery" class="gallery">
+<div id="gallery" class="gallery grid grid--3">
   {resolvedItems.map((item) => (
-    <figure class={figureClass} itemprop="associatedMedia">
-      {item.heading && <h4 class="tm-margin-b-20 tm-gold-text">{item.heading}</h4>}
-      <a
-        href={item.fullSrc}
-        data-pswp-width={item.full.width}
-        data-pswp-height={item.full.height}
-        data-pswp-caption={item.caption ?? ''}
-        itemprop="contentUrl"
+    <figure class:list={['gallery__item', figureClass]} itemprop="associatedMedia">
+      {item.heading && <h3 class="gallery__heading">{item.heading}</h3>}
+      <a class="hover-zoom gallery__link"
+         href={item.fullSrc}
+         data-pswp-width={item.full.width}
+         data-pswp-height={item.full.height}
+         data-pswp-caption={item.caption ?? ''}
+         itemprop="contentUrl"
       >
-        <Image src={item.thumb} alt={item.alt} width={250} height={165} itemprop="thumbnail" />
+        <Image src={item.thumb} alt={item.alt} width={500} height={330} itemprop="thumbnail" />
       </a>
     </figure>
   ))}
@@ -116,4 +116,16 @@ const resolvedItems = await Promise.all(
     color: #fff;
     font-size: 15px;
   }
+</style>
+
+<style>
+  .gallery { margin: 0; }
+  .gallery__item { margin: 0; }
+  .gallery__heading { font-size: var(--fs-display-m); margin-bottom: var(--sp-3); }
+  .gallery__link {
+    display: block; border-radius: var(--radius-card);
+    /* Reserved before the thumbnail decodes so the grid does not shift. */
+    aspect-ratio: 3 / 2;
+  }
+  .gallery__link img { width: 100%; height: 100%; object-fit: cover; }
 </style>

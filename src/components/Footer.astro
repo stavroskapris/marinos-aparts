@@ -89,6 +89,10 @@ const links = [
     border-radius: var(--radius-card);
     padding: var(--sp-3);
     color: var(--c-ink);
+    /* The vendor iframe has a fixed width; inside a 320px viewport it would
+       widen the page, so it scrolls within its own card instead. */
+    min-width: 0;
+    overflow-x: auto;
   }
   /* .on-dark recolours links sand and the focus ring white; neither reads on a white card. */
   .footer__weather :global(a) { color: var(--c-sivota-blue); }

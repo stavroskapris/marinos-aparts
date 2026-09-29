@@ -150,3 +150,76 @@ for (const lang of ['en', 'gr']) {
     });
   }
 }
+
+const PAGES = ['/en/', '/en/kimon/', '/en/irida/', '/en/location/', '/en/contact/',
+               '/gr/', '/gr/kimon/', '/gr/irida/', '/gr/location/', '/gr/contact/'];
+
+test('no Bootstrap or templatemo classes survive on any page', async ({ page }) => {
+  for (const path of PAGES) {
+    await page.goto(path);
+    const stale = await page.evaluate(() => {
+      const bad: string[] = [];
+      for (const el of Array.from(document.querySelectorAll('[class]'))) {
+        for (const cls of Array.from(el.classList)) {
+          if (/^(col-|row$|container-fluid$|tm-|navbar-toggleable|img-fluid|img-rounded|text-xs-|hidden-md-up)/.test(cls)) {
+            bad.push(cls);
+          }
+        }
+      }
+      return Array.from(new Set(bad));
+    });
+    expect(stale, `stale framework classes on ${path}`).toEqual([]);
+  }
+});
+
+for (const width of [320, 390, 768, 1280]) {
+  test(`no page scrolls horizontally at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 });
+    for (const path of PAGES) {
+      await page.goto(path);
+      const overflow = await page.evaluate(() =>
+        document.documentElement.scrollWidth - document.documentElement.clientWidth
+      );
+      expect(overflow, `horizontal overflow on ${path}`).toBeLessThanOrEqual(0);
+    }
+  });
+}
+
+test('no image is wider than the viewport on a phone', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const path of PAGES) {
+    await page.goto(path);
+    const wide = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('img'))
+        .filter((img) => img.getBoundingClientRect().width > window.innerWidth)
+        .map((img) => img.currentSrc || img.src)
+    );
+    expect(wide, `images wider than the viewport on ${path}`).toEqual([]);
+  }
+});
+
+test('every interactive element is at least 44px tall and wide on a phone', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const path of PAGES) {
+    await page.goto(path);
+    const small = await page.evaluate(() => {
+      const out: string[] = [];
+      const sel = 'a[href], button, input:not([type=hidden]), textarea, select, [role=button]';
+      for (const el of Array.from(document.querySelectorAll<HTMLElement>(sel))) {
+        // Third-party embeds (reCAPTCHA, Leaflet's own zoom and attribution controls) are not ours to size.
+        if (el.closest('.g-recaptcha, .leaflet-container, .visually-hidden, .skip-link')) continue;
+        if (el.matches('.skip-link, .visually-hidden')) continue;
+        const r = el.getBoundingClientRect();
+        if (r.width === 0 || r.height === 0) continue; // not rendered
+        // Inline text links inside a sentence are exempt (WCAG 2.5.8 inline exception).
+        const inline = getComputedStyle(el).display === 'inline' && !!el.closest('p, li, span, h1, h2, h3, h4, h5');
+        if (inline) continue;
+        if (r.width < 43.5 || r.height < 43.5) {
+          out.push(`${el.tagName.toLowerCase()}.${el.className || ''} "${(el.textContent || '').trim().slice(0, 20)}" ${Math.round(r.width)}x${Math.round(r.height)}`);
+        }
+      }
+      return out;
+    });
+    expect(small, `undersized touch targets on ${path}`).toEqual([]);
+  }
+});
