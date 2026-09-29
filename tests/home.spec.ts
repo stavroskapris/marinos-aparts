@@ -35,7 +35,7 @@ test('language switcher links to the same page in the other locale', async ({ pa
 
 test('scroll-to-top button exists', async ({ page }) => {
   await page.goto('/en/');
-  await expect(page.locator('a.scroll-top')).toHaveCount(1);
+  await expect(page.locator('button.scroll-top')).toHaveCount(1);
 });
 
 test('footer shows current year and registry number', async ({ page }) => {

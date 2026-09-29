@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { CONTACT } from '../src/site';
 
 // 1101 is the widest layout that is still uncollapsed (the menu collapses at
 // max-width 1100px), so it is where Greek labels are most cramped.
@@ -115,3 +116,37 @@ test('the language switcher keeps its path segments', async ({ page }) => {
   await expect(page.locator('[data-lang-switch="gr"]')).toHaveAttribute('href', '/gr/kimon/');
   await expect(page.locator('[data-lang-switch="gr"]')).toHaveAttribute('hreflang', 'el');
 });
+
+test('the footer keeps its contact details and legal text', async ({ page }) => {
+  await page.goto('/en/');
+  const footer = page.locator('footer.footer');
+  await expect(footer.getByRole('link', { name: CONTACT.phone })).toBeVisible();
+  await expect(footer.getByRole('link', { name: CONTACT.email })).toBeVisible();
+  await expect(footer.getByText(/Marinos-Aparts/)).toBeVisible();
+  await expect(footer.getByText('General Registry Number')).toBeVisible();
+  await expect(footer.getByRole('link', { name: 'stavroskapris' })).toBeVisible();
+  await expect(footer.locator('#osm-map')).toHaveCSS('height', '280px');
+});
+
+test('scroll to top is a button, appears past 500px and does not dirty the URL', async ({ page }) => {
+  await page.goto('/en/');
+  const btn = page.getByRole('button', { name: 'Scroll to top' });
+  await expect(btn).toBeHidden();
+
+  await page.evaluate(() => window.scrollTo(0, 1200));
+  await expect(btn).toBeVisible();
+
+  await btn.click();
+  expect(new URL(page.url()).hash).toBe('');
+});
+
+for (const lang of ['en', 'gr']) {
+  for (const width of [390, 430, 768, 1280]) {
+    test(`the footer does not overflow horizontally at ${width}px on /${lang}/`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/${lang}/`);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      expect(overflow).toBeLessThanOrEqual(0);
+    });
+  }
+}

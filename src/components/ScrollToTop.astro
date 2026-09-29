@@ -1,19 +1,32 @@
 ---
 import Icon from './Icon.astro';
 ---
-<a href="#" class="scroll-top" aria-label="Scroll to top"><Icon name="chevron-up" size={20} /></a>
+<button type="button" class="scroll-top" aria-label="Scroll to top" hidden>
+  <Icon name="chevron-up" size={20} />
+</button>
 
 <script>
-  const btn = document.querySelector('a.scroll-top');
+  const btn = document.querySelector<HTMLButtonElement>('.scroll-top');
   if (btn) {
-    const toggle = () => {
-      (btn as HTMLElement).style.display = window.scrollY > 500 ? 'block' : 'none';
-    };
+    const toggle = () => { btn.hidden = window.scrollY <= 500; };
     toggle();
-    window.addEventListener('scroll', toggle);
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.addEventListener('scroll', toggle, { passive: true });
+    btn.addEventListener('click', () => {
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
     });
   }
 </script>
+
+<style>
+  .scroll-top {
+    position: fixed; right: var(--sp-5); bottom: var(--sp-5); z-index: 40;
+    width: 44px; height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--c-sivota-blue); color: var(--c-white);
+    border: 0; border-radius: var(--radius-btn); cursor: pointer;
+    transition: background var(--dur-fast) var(--ease-out);
+  }
+  .scroll-top[hidden] { display: none; }
+  .scroll-top:hover, .scroll-top:focus-visible { background: var(--c-deep-sea); }
+</style>

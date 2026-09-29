@@ -12,45 +12,98 @@ const { lang, mapFocus } = Astro.props;
 const s = t(lang);
 const base = `/${lang}`;
 const year = new Date().getFullYear();
+const links = [
+  { href: `${base}/`, label: s.nav.home },
+  { href: `${base}/kimon`, label: s.nav.kimon },
+  { href: `${base}/irida`, label: s.nav.irida },
+  { href: `${base}/location`, label: s.nav.location },
+  { href: `${base}/contact`, label: s.nav.contact },
+];
 ---
+<footer class="footer on-dark">
+  <div class="container container--wide">
+    <div class="footer__grid">
+      <div>
+        <h3 class="footer__title">{s.nav.contact}</h3>
+        <ul class="footer__list list-reset">
+          <li><Icon name="map-pin" /><span>{s.footer.address}</span></li>
+          <li class="contact-row"><Icon name="phone" /><a class="contact-link" href={CONTACT.phoneHref}>{CONTACT.phone}</a></li>
+          <li class="contact-row"><Icon name="envelope" /><a class="contact-link" href={CONTACT.emailHref}>{CONTACT.email}</a></li>
+        </ul>
+      </div>
 
-<footer class="tm-footer">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
-        <div class="tm-footer-content-box tm-footer-links-container">
-          <h3 class="tm-title tm-footer-content-box-title">{s.nav.contact}</h3>
-          <nav><ul class="nav">
-            <li class="tm-footer-link"><Icon name="map-pin" /> <span>{s.footer.address}</span></li>
-            <li class="tm-footer-link contact-row"><Icon name="phone" /> <a class="contact-link" href={CONTACT.phoneHref}>{CONTACT.phone}</a></li>
-            <li class="tm-footer-link contact-row"><Icon name="envelope" /> <a class="contact-link" href={CONTACT.emailHref}>{CONTACT.email}</a></li>
-          </ul></nav>
-        </div>
+      <div>
+        <h3 class="footer__title">{s.footer.menu}</h3>
+        <nav aria-label={s.footer.menu}>
+          <ul class="footer__list">
+            {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+          </ul>
+        </nav>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-2">
-        <div class="tm-footer-content-box tm-footer-links-container">
-          <h3 class="tm-title tm-footer-content-box-title">{s.footer.menu}</h3>
-          <nav><ul class="nav">
-            <li><a href={`${base}/`} class="tm-footer-link">{s.nav.home}</a></li>
-            <li><a href={`${base}/kimon`} class="tm-footer-link">{s.nav.kimon}</a></li>
-            <li><a href={`${base}/irida`} class="tm-footer-link">{s.nav.irida}</a></li>
-            <li><a href={`${base}/location`} class="tm-footer-link">{s.nav.location}</a></li>
-            <li><a href={`${base}/contact`} class="tm-footer-link">{s.nav.contact}</a></li>
-          </ul></nav>
-        </div>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-5 col-xl-4">
-        <div class="tm-footer-content-box tm-footer-links-container"><Map focus={mapFocus} /></div>
-      </div>
-      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
-        <div class="tm-footer-content-box tm-footer-links-container"><WeatherWidget lang={lang} /></div>
-      </div>
+
+      <div class="footer__map"><Map focus={mapFocus} /></div>
+      <div class="footer__weather"><WeatherWidget lang={lang} /></div>
     </div>
-    <div class="row">
-      <div class="tm-copyright-col"><p class="tm-copyright-text">{s.footer.registryNo}</p></div>
-      <div class="tm-copyright-col"><p class="tm-created-text">Copyright <span id="current-year">{year}</span> Marinos-Aparts</p></div>
-      <p class="tm-created-text"><small>developed by <a href="https://github.com/stavroskapris" target="_blank" rel="noopener noreferrer">stavroskapris</a></small></p>
+
+    <div class="footer__base">
+      <p>{s.footer.registryNo}</p>
+      <p>Copyright <span id="current-year">{year}</span> Marinos-Aparts</p>
+      <p><small>developed by <a href="https://github.com/stavroskapris" target="_blank" rel="noopener noreferrer">stavroskapris</a></small></p>
     </div>
-    <ScrollToTop />
   </div>
+  <ScrollToTop />
 </footer>
+
+<style>
+  .footer {
+    background: var(--c-deep-sea);
+    color: var(--c-white);
+    padding-block: var(--sp-8) var(--sp-6);
+  }
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.8fr 1.3fr 1fr;
+    gap: var(--sp-7);
+  }
+  .footer__title {
+    color: var(--c-white);
+    font-size: var(--fs-display-m);
+    margin-bottom: var(--sp-4);
+  }
+  .footer__list { display: flex; flex-direction: column; gap: var(--sp-3); }
+  .footer__list li { display: flex; align-items: flex-start; gap: var(--sp-3); }
+  .footer__list li.contact-row { align-items: center; gap: var(--sp-3); }
+  .footer__list :global(.icon) { color: var(--c-sand); margin-top: 0.25em; flex: none; }
+  .footer__list li.contact-row :global(.icon) { margin-top: 0; }
+  .footer__list a { color: var(--c-white); text-decoration: none; min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; overflow-wrap: anywhere; }
+  .footer__list a:hover, .footer__list a:focus-visible { color: var(--c-sand); text-decoration: underline; }
+
+  .footer__map :global(#osm-map) {
+    height: 280px; width: 100%; border-radius: var(--radius-card);
+  }
+
+  /* The okairos widget injects its own inline Arial styling that cannot be
+     overridden, so it is boxed on a light card rather than blended in. */
+  .footer__weather {
+    background: var(--c-white);
+    border-radius: var(--radius-card);
+    padding: var(--sp-3);
+    color: var(--c-ink);
+  }
+  /* .on-dark recolours links sand and the focus ring white; neither reads on a white card. */
+  .footer__weather :global(a) { color: var(--c-sivota-blue); }
+  .footer__weather :global(:focus-visible) { outline-color: var(--c-deep-sea); }
+
+  .footer__base {
+    display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-6);
+    justify-content: space-between; align-items: center;
+    margin-top: var(--sp-7); padding-top: var(--sp-5);
+    border-top: 1px solid rgb(255 255 255 / 0.18);
+    font-size: var(--fs-small); color: rgb(255 255 255 / 0.75);
+  }
+  .footer__base p { margin: 0; }
+  .footer__base a { color: rgb(255 255 255 / 0.9); display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+
+  @media (max-width: 1100px) { .footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .footer__grid { grid-template-columns: minmax(0, 1fr); } }
+</style>
