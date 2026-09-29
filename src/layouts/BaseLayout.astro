@@ -23,9 +23,15 @@ const altHref = (l: Locale) => `${site}/${l}${canonicalPath}/`;
 <html lang={HREFLANG[lang]}>
   <head>
     <script is:inline>
-      // Set before paint: motion.css only hides [data-reveal] under .js, so a
-      // blocked or failed bundle leaves every word on the page visible.
+      // Set before paint: motion.css only hides [data-reveal] under .js, so with
+      // JavaScript off every word on the page stays visible. That alone does not
+      // cover a bundle that fails to load or throws, so a watchdog removes .js
+      // (un-hiding everything, un-animated) unless reveal.ts reports ready.
       document.documentElement.classList.add('js');
+      setTimeout(function () {
+        var root = document.documentElement;
+        if (!root.hasAttribute('data-reveal-ready')) root.classList.remove('js');
+      }, 2500);
     </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7PRPXQ745M"></script>
     <script is:inline>

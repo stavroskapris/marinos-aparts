@@ -24,7 +24,7 @@
   will-change: transform;
 }
 /* :focus-within matters as much as :hover here: a keyboard user tabbing to
-   the link inside a card should get the same affordance. Review Focus item 4. */
+   the link inside a card should get the same affordance (WCAG 2.4.7). */
 .hover-zoom:hover img,
 .hover-zoom:focus-within img {
   transform: scale(1.05);

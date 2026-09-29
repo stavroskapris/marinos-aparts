@@ -1,10 +1,15 @@
 /**
  * One IntersectionObserver for every [data-reveal] on the page.
  *
- * The hidden state lives in CSS behind `.js`, so if this module never runs
- * the content is simply visible. Never move the hiding into JS.
+ * The hidden state lives in CSS behind `.js`. With JavaScript off the class is
+ * never set; if this module fails to load or throws before signalling ready,
+ * the watchdog in BaseLayout removes `.js`. Never move the hiding into JS.
  */
 export function initReveal(): void {
+  // Must stay the first statement: it stops the watchdog in BaseLayout, which
+  // otherwise removes the .js class and shows all content un-animated.
+  document.documentElement.setAttribute('data-reveal-ready', '');
+
   const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');
   if (targets.length === 0) return;
 
