@@ -24,7 +24,7 @@ There is no jQuery and no Bootstrap JS — interactive bits are small vanilla `<
 | `npm run check:links:ci` | Build, serve, crawl for broken internal links, stop |
 | `npx astro check` | Type-check (there is no separate lint step) |
 
-`test:unit`, `test` and `npx astro check` all run **before** the S3 sync in the deploy
+`test:unit`, `test`, `check:links:ci` and `npx astro check` all run **before** the S3 sync in the deploy
 workflows — a failure blocks the deploy, not just the merge.
 
 ## Architecture

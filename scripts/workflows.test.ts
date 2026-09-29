@@ -29,5 +29,6 @@ test('the gates that remain run in every deploy workflow', () => {
     expect(yaml, `${path} must run unit tests`).toMatch(/npm run test:unit/);
     expect(yaml, `${path} must run e2e tests`).toMatch(/npm test/);
     expect(yaml, `${path} must type-check`).toMatch(/astro check/);
+    expect(yaml, `${path} must check links`).toMatch(/npm run check:links:ci/);
   }
 });

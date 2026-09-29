@@ -22,3 +22,4 @@ jobs:
       # bare command - which meant nothing ran it and type errors accumulated
       # unnoticed across three task reviews.
       - run: npx astro check
+      - run: npm run check:links:ci
