@@ -64,3 +64,19 @@ test('reduced motion reveals everything immediately and animates nothing', async
   }
   await context.close();
 });
+
+test('content stays visible if reveal setup throws after signalling ready', async ({ page }) => {
+  // The watchdog is disarmed once data-reveal-ready is set, so this failure
+  // mode is covered only by the catch in initReveal.
+  await page.addInitScript(() => {
+    (window as any).IntersectionObserver = function () {
+      throw new Error('boom');
+    };
+  });
+  await page.goto('/en/');
+  await expect(page.locator('html')).toHaveAttribute('data-reveal-ready', '');
+  await expect(page.locator('html')).not.toHaveClass(/(^|\s)js(\s|$)/);
+  const el = page.locator('[data-reveal]').first();
+  await expect(el).toHaveCSS('opacity', '1');
+  await expect(el).toHaveCSS('transform', 'none');
+});

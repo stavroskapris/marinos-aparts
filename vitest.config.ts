@@ -6,6 +6,9 @@ import { defineConfig } from 'vitest/config';
 // (which throw "test() not expected here" under the Vitest runner).
 export default defineConfig({
   test: {
+    // Several suites run `astro build` into private directories; concurrent
+    // builds collide on Astro's shared cache and one of them fails.
+    fileParallelism: false,
     include: ['src/**/*.test.ts', 'infra/**/*.test.ts', 'scripts/**/*.test.ts'],
   },
 });

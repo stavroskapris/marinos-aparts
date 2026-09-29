@@ -103,10 +103,12 @@ The soak ended on 2026-09-24 and they were flipped back. Changing the status cod
 | Workflow | Trigger | Target |
 |---|---|---|
 | `ci.yml` | pull request into `astro-migration` or `master` | gates only, no deploy |
-| `deploy-staging.yml` | push to `master` | staging bucket |
+| `deploy-staging.yml` | push to `master` or `redesign` | staging bucket |
 | `deploy-prod.yml` | manual (`workflow_dispatch`) | production bucket |
 
 `master` is the trunk. Pushing to it deploys **staging**; production is always manual.
+`redesign` is temporary: it shares the one staging bucket (last push wins) and comes back out of
+the workflow's trigger list when the slice merges.
 
 The legacy `main.yml` (push to `master` → `aws s3 sync ./` of the whole repo root into the old
 bucket) has been deleted. It had to go **before** `astro-migration` merged to `master`, or that
