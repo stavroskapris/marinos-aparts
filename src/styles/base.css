@@ -1,0 +1,61 @@
+/* Reset and element defaults. Paired with tokens.css. */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--c-limestone);
+  color: var(--c-ink);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: var(--lh-heading);
+  color: var(--c-deep-sea);
+  margin: 0 0 var(--sp-4);
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--fs-display-xl); line-height: var(--lh-tight); }
+h2 { font-size: var(--fs-display-l); }
+h3 { font-size: var(--fs-display-m); }
+
+p { margin: 0 0 var(--sp-4); }
+p:last-child { margin-bottom: 0; }
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--c-sivota-blue); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { color: var(--c-deep-sea); }
+
+/* One visible focus treatment for every interactive element. Keyboard users
+   must be able to see where they are; see Review Focus item 4. */
+:focus-visible {
+  outline: 2px solid var(--c-sivota-blue);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+ul { margin: 0; padding: 0; list-style: none; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute; left: var(--sp-4); top: var(--sp-4);
+  z-index: 100; padding: var(--sp-3) var(--sp-4);
+  background: var(--c-white); color: var(--c-deep-sea);
+  border-radius: var(--radius-btn); font-weight: 600;
+  transform: translateY(-200%);
+}
+.skip-link:focus { transform: translateY(0); }
