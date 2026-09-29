@@ -24,8 +24,8 @@ const images = Object.entries(modules)
 
 const items: GalleryItem[] = images.map((img) => ({ thumb: img, full: img, alt: 'Irida Resort' }));
 
-const title = 'Irida Resort | Studios to rent at Sivota - Marinos-Aparts - rooms to let Sivota | Ενοικιαζόμενα δωμάτια Σύβοτα';
-const description = 'Irida Resort is completely renovated and ideally located in the center of the village.';
+const title = s.meta.irida.title;
+const description = s.meta.irida.description;
 
 const facilityCol1 = (['spaciousRooms','kitchen','fridge','airCondition','balcony','tableChairs','hotWater'] as const).map((k) => s.facilities[k]);
 const facilityCol2 = (['wifi','hairDryer','screens','iron','builtInClosets','tv','safe'] as const).map((k) => s.facilities[k]);

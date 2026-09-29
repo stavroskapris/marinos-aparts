@@ -49,8 +49,8 @@ const items: GalleryItem[] = BEACHES.map(({ file, key }) => {
   };
 });
 
-const title = 'Location | Studios to rent at Sivota - Marinos-Aparts - rooms to let Sivota | Ενοικιαζόμενα δωμάτια Σύβοτα';
-const description = 'Sivota is a special destination, as one of the most picturesque villages of Epirus';
+const title = s.meta.location.title;
+const description = s.meta.location.description;
 ---
 
 <BaseLayout lang={lang} title={title} description={description} canonicalPath="/location">

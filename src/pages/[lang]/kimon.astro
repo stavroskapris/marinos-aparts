@@ -24,8 +24,8 @@ const images = Object.entries(modules)
 
 const items: GalleryItem[] = images.map((img) => ({ thumb: img, full: img, alt: 'Kimon Resort' }));
 
-const title = 'Kimon Resort | Studios to rent at Sivota - Marinos-Aparts - rooms to let Sivota | Ενοικιαζόμενα δωμάτια Σύβοτα';
-const description = 'Completely renovated in 2015, KIMON RESORT is set in an idyllic location, surrounded by olive groves, offering tranquility and beauty to holidaymakers';
+const title = s.meta.kimon.title;
+const description = s.meta.kimon.description;
 
 const facilityCol1 = (['spaciousRooms','kitchen','fridge','airCondition','largeClosets','parking','tableChairs','hotWater'] as const).map((k) => s.facilities[k]);
 const facilityCol2 = (['wifi','hairDryer','balcony','screens','iron','yard','tv','safe'] as const).map((k) => s.facilities[k]);

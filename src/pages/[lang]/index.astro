@@ -18,8 +18,8 @@ const langParam = Astro.params.lang;
 const lang = isLocale(langParam) ? langParam : DEFAULT_LOCALE;
 const s = t(lang);
 
-const title = 'Apartments | Studios to rent at Sivota - Marinos-Aparts - rooms to let Sivota | Ενοικιαζόμενα δωμάτια Σύβοτα';
-const description = 'Welcome to Marinos-aparts Rooms in Sivota, where your ultimate satisfaction is our only goal';
+const title = s.meta.home.title;
+const description = s.meta.home.description;
 ---
 
 <BaseLayout lang={lang} title={title} description={description} canonicalPath="">

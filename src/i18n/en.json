@@ -1,4 +1,26 @@
 {
+  "meta": {
+    "home": {
+      "title": "Marinos Aparts | Apartments in Sivota, Greece",
+      "description": "Two small apartment houses on the bay at Sivota, run by the same family for thirty years. Kimon among the olive groves, Irida by the harbour."
+    },
+    "kimon": {
+      "title": "Kimon Resort | Marinos Aparts, Sivota",
+      "description": "Quiet studios and apartments among the olive groves, two hundred metres from Sivota harbour and from Gallikos Molos beach."
+    },
+    "irida": {
+      "title": "Irida Resort | Marinos Aparts, Sivota",
+      "description": "First-floor studios in the centre of Sivota, thirty metres from the harbour, with private balconies and full kitchens."
+    },
+    "location": {
+      "title": "Sivota and its beaches | Marinos Aparts",
+      "description": "Sivota is one of the most picturesque villages of Epirus. The beaches around it, from Mega Ammos to Bella Vraka, are a few minutes away."
+    },
+    "contact": {
+      "title": "Contact and availability | Marinos Aparts",
+      "description": "Ask about availability at Kimon or Irida in Sivota. We reply as soon as we can."
+    }
+  },
   "nav": {
     "home": "Home",
     "kimon": "Kimon Resort",
