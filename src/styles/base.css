@@ -21,6 +21,7 @@ h1, h2, h3, h4 {
   color: var(--c-deep-sea);
   margin: 0 0 var(--sp-4);
   text-wrap: balance;
+  overflow-wrap: break-word;
 }
 
 h1 { font-size: var(--fs-display-xl); line-height: var(--lh-tight); }
@@ -30,20 +31,24 @@ h3 { font-size: var(--fs-display-m); }
 p { margin: 0 0 var(--sp-4); }
 p:last-child { margin-bottom: 0; }
 
-img { max-width: 100%; height: auto; display: block; }
+img, iframe, video, svg, table { max-width: 100%; }
+img { height: auto; display: block; }
+
+button, input, select, textarea { font: inherit; }
 
 a { color: var(--c-sivota-blue); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
 a:hover { color: var(--c-deep-sea); }
 
 /* One visible focus treatment for every interactive element. Keyboard users
-   must be able to see where they are; see Review Focus item 4. */
+   must be able to see where they are (WCAG 2.4.7, and 3:1 contrast per 1.4.11). */
 :focus-visible {
   outline: 2px solid var(--c-sivota-blue);
   outline-offset: 3px;
-  border-radius: 1px;
 }
 
-ul { margin: 0; padding: 0; list-style: none; }
+/* Reset only navigation and opt-in component lists. Prose lists keep their
+   markers, and list-style: none would also drop list semantics in VoiceOver. */
+nav ul, .list-reset { margin: 0; padding: 0; list-style: none; }
 
 .visually-hidden {
   position: absolute; width: 1px; height: 1px;

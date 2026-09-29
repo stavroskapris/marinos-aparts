@@ -12,8 +12,9 @@
 .section { padding-block: var(--section-pad); }
 .section--limestone { background: var(--c-limestone); }
 .section--sand { background: var(--c-sand); }
-.section--deep { background: var(--c-deep-sea); color: var(--c-white); }
-.section--deep h1, .section--deep h2, .section--deep h3 { color: var(--c-white); }
+.section--deep { background: var(--c-deep-sea); }
+.section--deep h1, .section--deep h2, .section--deep h3,
+.on-dark h1, .on-dark h2, .on-dark h3 { color: var(--c-white); }
 .section--tight { padding-block: var(--sp-7); }
 
 .grid { display: grid; gap: var(--sp-6); }
@@ -45,14 +46,14 @@
 
 .btn {
   display: inline-flex; align-items: center; gap: var(--sp-3);
-  /* 44px minimum target height: 13px padding + 13px + ~18px line box. */
+  /* min-height is what guarantees the 44px touch target; padding is cosmetic. */
   padding: 0.8125rem 1.75rem;
   min-height: 44px;
   border: 1px solid transparent;
   border-radius: var(--radius-btn);
   font-size: var(--fs-small); font-weight: 600;
   letter-spacing: 0.1em; text-transform: uppercase;
-  text-decoration: none; cursor: pointer;
+  text-decoration: none; cursor: pointer; overflow-wrap: break-word;
   transition: background var(--dur-fast) var(--ease-out),
               color var(--dur-fast) var(--ease-out),
               border-color var(--dur-fast) var(--ease-out);
@@ -66,4 +67,26 @@
 .btn--ghost { background: transparent; color: var(--c-deep-sea); border-color: currentColor; }
 .btn--ghost:hover, .btn--ghost:focus-visible {
   background: var(--c-deep-sea); color: var(--c-white);
+}
+
+/* Dark contexts: .section--deep, and .on-dark for other dark elements such as
+   the footer. Ratios on --c-deep-sea: white 11.76, sand 9.07. */
+.section--deep, .on-dark { color: var(--c-white); }
+.section--deep :focus-visible, .on-dark :focus-visible,
+.section--deep:focus-visible, .on-dark:focus-visible { outline-color: var(--c-white); }
+.section--deep a, .on-dark a { color: var(--c-sand); }
+.section--deep a:hover, .on-dark a:hover { color: var(--c-white); }
+.section--deep .eyebrow, .on-dark .eyebrow { color: var(--c-sand); }
+
+.section--deep .btn--primary, .on-dark .btn--primary {
+  background: var(--c-white); color: var(--c-deep-sea);
+}
+.section--deep .btn--primary:hover, .section--deep .btn--primary:focus-visible,
+.on-dark .btn--primary:hover, .on-dark .btn--primary:focus-visible {
+  background: var(--c-sand); color: var(--c-deep-sea);
+}
+.section--deep .btn--ghost, .on-dark .btn--ghost { color: var(--c-white); }
+.section--deep .btn--ghost:hover, .section--deep .btn--ghost:focus-visible,
+.on-dark .btn--ghost:hover, .on-dark .btn--ghost:focus-visible {
+  background: var(--c-white); color: var(--c-deep-sea);
 }
