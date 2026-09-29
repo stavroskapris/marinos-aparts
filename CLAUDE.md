@@ -48,9 +48,9 @@ src/
   styles/              # design tokens, base, layout, motion, self-hosted fonts
 public/                # served as-is: img/, robots.txt, favicon
 infra/cloudfront/      # edge functions (ES5) + their unit tests
-scripts/               # build-info writer
+scripts/               # build-info writer, plus workflows.test.ts and build-info.test.ts (collected by vitest.config.ts)
 tests/                 # Playwright specs
-docs/superpowers/      # design spec, plans, parity sign-offs, cutover runbook
+docs/superpowers/      # design spec, plans, the migration's parity sign-offs, cutover runbook
 ```
 
 ## Internationalization

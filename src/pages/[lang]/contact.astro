@@ -5,6 +5,7 @@ import HeaderBottom from '../../components/HeaderBottom.astro';
 import Footer from '../../components/Footer.astro';
 import Section from '../../components/Section.astro';
 import ContactForm from '../../components/ContactForm.astro';
+import { t } from '../../i18n/t';
 import { getStaticLocalePaths, isLocale, DEFAULT_LOCALE } from '../../i18n/locales';
 
 export function getStaticPaths() { return getStaticLocalePaths(); }
@@ -12,6 +13,7 @@ export function getStaticPaths() { return getStaticLocalePaths(); }
 const langParam = Astro.params.lang;
 const lang = isLocale(langParam) ? langParam : DEFAULT_LOCALE;
 
+const s = t(lang);
 const title = 'Contact | Studios to rent at Sivota - Marinos-Aparts - rooms to let Sivota | Ενοικιαζόμενα δωμάτια Σύβοτα';
 const description = 'Check for availability. We will contact you as soon as possible';
 ---
@@ -21,6 +23,9 @@ const description = 'Check for availability. We will contact you as soon as poss
   <HeaderBottom lang={lang} />
 
   <Section>
+    <div class="container--narrow">
+      <h1>{s.nav.contact}</h1>
+    </div>
     <ContactForm lang={lang} />
   </Section>
 

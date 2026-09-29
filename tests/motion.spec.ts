@@ -25,8 +25,13 @@ test('positive control: with JS on and the bundle blocked, reveal CSS hides cont
   await page.route('**/_astro/**/*.js', (route) => route.abort());
   await page.route('**/_astro/*.js', (route) => route.abort());
   await page.goto('/en/');
-  await expect(page.locator('html')).toHaveClass(/(^|\s)js(\s|$)/);
-  await expect(page.locator('[data-reveal]').first()).toHaveCSS('opacity', '0');
+  // One evaluate, straight after goto: the watchdog removes .js at 2500ms, so
+  // separate assertions would each spend round-trips against that timer.
+  const state = await page.evaluate(() => ({
+    hasJs: document.documentElement.classList.contains('js'),
+    opacity: getComputedStyle(document.querySelector('[data-reveal]')!).opacity,
+  }));
+  expect(state).toEqual({ hasJs: true, opacity: '0' });
 });
 
 test('watchdog: a blocked bundle leaves content visible once it fires', async ({ page }) => {

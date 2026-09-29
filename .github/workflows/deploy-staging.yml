@@ -5,6 +5,9 @@ on:
     # `redesign` when it merges to master, or staging keeps deploying from a
     # branch nobody is working on.
     branches: [master, redesign]
+concurrency:
+  group: staging-deploy
+  cancel-in-progress: false
 jobs:
   deploy:
     runs-on: ubuntu-latest
