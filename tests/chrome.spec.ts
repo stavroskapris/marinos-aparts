@@ -142,17 +142,26 @@ test('scroll to top is a button, appears past 500px and does not dirty the URL',
 
 for (const lang of ['en', 'gr']) {
   for (const width of [390, 430, 768, 1280]) {
-    for (const blockWeather of [false, true]) {
-      const name = blockWeather ? 'with the weather script blocked' : 'with the weather widget loaded';
+    for (const variant of ['blocked', 'oversized'] as const) {
+      const name = variant === 'blocked' ? 'with the weather script blocked' : 'with an over-wide weather widget injected';
       test(`the footer stays inside the viewport at ${width}px on /${lang}/ ${name}`, async ({ page }) => {
-        if (blockWeather) await page.route('**/okairos.gr/**', (route) => route.abort());
+        // The loader is https://www.okairos.gr/..., so match the host with a regex;
+        // a '**/okairos.gr/**' glob needs a slash before the dot and never fires.
+        let intercepted = 0;
+        await page.route(/okairos\.gr/, (route) => {
+          intercepted += 1;
+          if (variant === 'blocked') return route.abort();
+          return route.fulfill({
+            contentType: 'application/javascript',
+            body: `var t=document.querySelector('[id^="w_"]');var d=document.createElement('div');d.id='stub-wide';d.style.cssText='width:2400px;height:60px;background:#c00';t.appendChild(d);`,
+          });
+        });
         await page.setViewportSize({ width, height: 900 });
         await page.goto(`/${lang}/`);
         // Measure only after the injected markup exists, or the overflow is missed.
         await page.waitForFunction(() => document.querySelector('#osm-map .leaflet-tile, #osm-map .leaflet-pane'));
-        if (!blockWeather) {
-          await page.waitForFunction(() => document.querySelector('[id^="w_"]')?.children.length, undefined, { timeout: 8000 }).catch(() => {});
-        }
+        if (variant === 'oversized') await page.waitForSelector('#stub-wide', { state: 'attached' });
+        expect(intercepted).toBeGreaterThan(0);
         const m = await page.evaluate(() => {
           const footer = document.querySelector('footer.footer') as HTMLElement;
           const grid = footer.querySelector('.footer__grid') as HTMLElement;
@@ -172,20 +181,29 @@ for (const lang of ['en', 'gr']) {
 }
 
 test('the scroll-to-top button stays above the Leaflet map and clears 3:1 in every state', async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.setViewportSize({ width: 390, height: 700 });
   await page.goto('/en/');
   await page.waitForFunction(() => document.querySelector('#osm-map .leaflet-pane'));
-  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  // Scroll so the map's bottom edge sits at the button's fixed position.
+  await page.evaluate(() => {
+    const m = document.querySelector('#osm-map')!.getBoundingClientRect();
+    window.scrollTo(0, m.top + window.scrollY + m.height - (window.innerHeight - 10));
+  });
   const btn = page.getByRole('button', { name: 'Scroll to top' });
   await expect(btn).toBeVisible();
-  // Move the map under the button, then ask which element is on top there.
-  const top = await page.evaluate(() => {
+  const { overMap, onTop } = await page.evaluate(() => {
+    const m = document.querySelector('#osm-map')!.getBoundingClientRect();
     const b = document.querySelector('.scroll-top') as HTMLElement;
     const r = b.getBoundingClientRect();
-    const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
-    return !!hit && (hit === b || b.contains(hit));
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    const hit = document.elementFromPoint(cx, cy);
+    return {
+      overMap: cx > m.left && cx < m.right && cy > m.top && cy < m.bottom,
+      onTop: !!hit && b.contains(hit),
+    };
   });
-  expect(top).toBe(true);
+  expect(overMap).toBe(true); // the precondition: the map really is beneath the button
+  expect(onTop).toBe(true);
 
   const lum = (rgb: string) => {
     const [r, g, bl] = (rgb.match(/[\d.]+/g) ?? []).slice(0, 3).map(Number).map((v) => {
