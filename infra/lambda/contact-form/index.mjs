@@ -63,8 +63,17 @@ export function makeHandler({ ses, fetchImpl }) {
 
     const payload = readPayload(event);
     const bad = validate(payload);
-    if (bad === 'captcha-missing') return reply(400, { error: 'captcha required' });
-    if (bad) return reply(400, { error: `invalid ${bad}` });
+    // Log the rejection reason, never the submitted values. Without this a 400
+    // and a success were indistinguishable in CloudWatch, since neither wrote a
+    // line: diagnosing a live report meant inferring from invocation duration.
+    if (bad === 'captcha-missing') {
+      console.warn(`rejected ${env}: captcha token absent`);
+      return reply(400, { error: 'captcha required' });
+    }
+    if (bad) {
+      console.warn(`rejected ${env}: invalid ${bad}`);
+      return reply(400, { error: `invalid ${bad}` });
+    }
 
     // Verify server-side. This is the only gate that counts: the endpoint is
     // reachable without going through the form at all.
@@ -114,6 +123,9 @@ export function makeHandler({ ses, fetchImpl }) {
       console.error(`ses send failed: ${err && err.message}`);
       return reply(502, { error: 'send failed' });
     }
+    // Which environment handled it, and therefore which recipient was used.
+    // The alias split is otherwise invisible after the fact.
+    console.log(`sent ${env}`);
     return reply(200, { ok: true });
   };
 }

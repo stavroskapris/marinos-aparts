@@ -151,3 +151,51 @@ test('accepts a JSON string body, as API Gateway proxy integrations deliver it',
   expect(res.statusCode).toBe(200);
   expect(d.send).toHaveBeenCalled();
 });
+
+// Every terminal path must say something. A 400 and a success both returning
+// silently is what made a live report take far longer to diagnose than it
+// should have: with no line either way, the only signal was how long the
+// invocation ran.
+test('every outcome leaves a log line, and none of them leak the submitted values', async () => {
+  env();
+  const lines: string[] = [];
+  const spies = (['log', 'warn', 'error'] as const).map((level) =>
+    vi.spyOn(console, level).mockImplementation((...args: unknown[]) => {
+      lines.push(args.map(String).join(' '));
+    }),
+  );
+
+  const cases: Array<[string, any, ReturnType<typeof deps>]> = [
+    ['success', validEvent, deps()],
+    ['captcha rejected', validEvent, deps({ captchaOk: false })],
+    ['missing token', (({ captchaResponse, ...rest }) => rest)(validEvent), deps()],
+    ['invalid field', { ...validEvent, email: 'not-an-email' }, deps()],
+    ['ses failure', validEvent, deps({ sendOk: false })],
+  ];
+
+  for (const [name, event, d] of cases) {
+    lines.length = 0;
+    await makeHandler(d)(event, ctx('prod'));
+    expect(lines.join('|'), `${name} produced no log line`).not.toBe('');
+  }
+
+  spies.forEach((s) => s.mockRestore());
+});
+
+test('log lines never contain the submitter name, email, subject or message', async () => {
+  env();
+  const lines: string[] = [];
+  const spies = (['log', 'warn', 'error'] as const).map((level) =>
+    vi.spyOn(console, level).mockImplementation((...args: unknown[]) => {
+      lines.push(args.map(String).join(' '));
+    }),
+  );
+
+  await makeHandler(deps({ captchaOk: false }))(validEvent, ctx('prod'));
+  const joined = lines.join(' ');
+  for (const secret of [validEvent.name, validEvent.email, validEvent.subject, validEvent.message]) {
+    expect(joined, `log leaked ${secret}`).not.toContain(secret);
+  }
+
+  spies.forEach((s) => s.mockRestore());
+});
