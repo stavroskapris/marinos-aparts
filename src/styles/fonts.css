@@ -1,0 +1,12 @@
+/* Self-hosted, replacing the Google Fonts CDN link. Removes a third-party
+   request that has drawn GDPR enforcement in the EU, where most of this
+   site's visitors are.
+
+   The variable Fontsource packages do not ship per-subset files (no
+   greek.css). Their index.css declares every subset, Greek included, each
+   with its own unicode-range, so the browser fetches only the subsets a page
+   uses. Half the site is Greek: without the Greek @font-face, /gr/ falls back
+   to a system font with nothing failing. src/styles/fonts.test.ts asserts a
+   Greek unicode-range survives into the built CSS. */
+@import '@fontsource-variable/eb-garamond/index.css';
+@import '@fontsource-variable/manrope/index.css';
