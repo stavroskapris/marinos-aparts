@@ -2138,7 +2138,7 @@ EOF
 This is the task that lets Bootstrap be deleted. It is a **structural** port, not the redesign: pages should look plain and correct. Slices 2 to 5 add each page's designed composition.
 
 **Files:**
-- Modify: `src/pages/[lang]/index.astro`, `kimon.astro`, `irida.astro`, `location.astro`, `contact.astro`, `src/components/ResortPage.astro`, `src/components/Gallery.astro`, `src/components/HeaderBottom.astro`
+- Modify: `src/pages/[lang]/index.astro`, `kimon.astro`, `irida.astro`, `location.astro`, `contact.astro`, `src/components/ResortPage.astro`, `src/components/Gallery.astro`, `src/components/HeaderBottom.astro`, `src/components/ContactForm.astro`
 
 **Interfaces:**
 - Consumes: `Section` from Task 9, layout classes from Task 5.
@@ -2351,14 +2351,40 @@ The thumbnail `width`/`height` went from 250×165 to 500×330 so the tiles are n
 </style>
 ```
 
-- [ ] **Step 8: Run the full suite**
+- [ ] **Step 8: Reclass ContactForm.astro, and nothing else**
+
+The form carries `col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8`, `text-xs-center`, `tm-btn`, `tm-contact-form`, `tm-form-description`, `tm-form-title` and `tm-gold-text`. Step 1's test asserts none of those survive on `/en/contact/`, so they must go.
+
+**This is a class-attribute edit only.** Read this list before touching the file:
+
+- The `<script>` block is untouched, byte-for-byte. It is freshly verified in production.
+- Every `id` attribute is preserved exactly. The script resolves fields with `document.getElementById`, so a renamed id silently breaks submission.
+- The `.field-error` class and every `data-for` attribute are preserved. The script selects `.field-error[data-for="${name}"]`.
+- `g-recaptcha` is preserved. It is Google's hook, not ours.
+- `form-control` and `form-group` may be replaced, since nothing selects them.
+
+Make these substitutions:
+
+| Remove | Replace with |
+|---|---|
+| `col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 text-xs-center contact-form` | `contact-form` |
+| `tm-contact-form` | `contact-form__form` |
+| `tm-gold-text tm-form-title` | `contact-form__title` |
+| `tm-form-description` | `contact-form__description` |
+| `tm-btn btn-block` | `btn btn--primary` |
+| `form-group` | `field` |
+| `form-control` | `field__input` |
+
+Then add a scoped `<style>` block giving `.field`, `.field__input`, `.contact-form__title` and `.contact-form__description` plain, correct styling on the new tokens. Inputs need `width: 100%`, a visible border, `min-height: 44px` and `font: inherit`, which browsers do not inherit for form controls.
+
+- [ ] **Step 9: Run the full suite**
 
 Run: `npx astro check && npm run test:unit && npm test`
 Expected: `astro check` 0 errors; all unit tests pass; all Playwright specs pass, including the two new ones from Step 1.
 
 Existing specs in `tests/home.spec.ts`, `kimon.spec.ts`, `irida.spec.ts`, `location.spec.ts` and `mobile.spec.ts` will have selectors that no longer exist. Update those selectors to the new class names; do not weaken an assertion to make it pass. If a spec asserted something the redesign genuinely removed, delete that assertion and say so in the commit message.
 
-- [ ] **Step 9: Commit**
+- [ ] **Step 10: Commit**
 
 ```bash
 git add -A
@@ -2367,6 +2393,10 @@ refactor(pages): port all five pages off the Bootstrap grid
 
 Structural only: pages look plain but correct, so staging is never broken
 while slices 2-5 add each page's designed composition.
+
+ContactForm is reclassed but its script is byte-for-byte unchanged, along
+with every id, the .field-error class and every data-for attribute, which
+are what that script actually selects on. tests/contact.spec.ts passes.
 
 Gallery thumbnails go from 250x165 to 500x330 so tiles are not upscaled in
 a wider grid; the smallest beach source is 600x400, so 500 wide stays
