@@ -20,6 +20,7 @@
 - Palette hexes are exact: Deep Sea `#0B3C53`, Sivota Blue `#006994`, Olive `#5A6639`, Ink `#1B2A32`, Sand `#E9E1D5`, Limestone `#F7F4EF`.
 - Every foreground/background pair in use must clear **4.5:1**, body-text level, not 3:1.
 - `prefers-reduced-motion: reduce` disables **all** motion, including any autoplay, not merely transforms.
+- **The site is responsive and usable on a phone, and this is enforced, not assumed.** No page may scroll horizontally at 390, 430, 768 or 1280px, in either locale. Every link, button and form control must meet a 44px touch target. No image may render wider than the viewport. Task 13 tests all three. Note that the site being replaced has **no hero image at all below the `md` breakpoint** (`templatemo-style.css:456` sets `background: none`), so mobile is a regression area with a low bar to clear, not a solved problem.
 - `public/img/` stays. Only the **root-level** `img/`, `css/`, `js/`, `*.html` and `sitemap.xml` are legacy and deleted.
 - Import local TS **without** a file extension (`../i18n/t`), `.astro` imports **with** it, JSON **without** an import assertion.
 - Files under `infra/cloudfront/` must remain ES5. Not touched in this slice.
@@ -2170,14 +2171,60 @@ test('no Bootstrap or templatemo classes survive on any page', async ({ page }) 
   }
 });
 
-test('no page scrolls horizontally at phone width', async ({ page }) => {
+const VIEWPORTS = [
+  { name: 'phone', width: 390, height: 844 },
+  { name: 'phone-large', width: 430, height: 932 },
+  { name: 'tablet', width: 768, height: 1024 },
+  { name: 'laptop', width: 1280, height: 800 },
+];
+
+test('no page scrolls horizontally at any supported width, in either locale', async ({ page }) => {
+  for (const vp of VIEWPORTS) {
+    await page.setViewportSize({ width: vp.width, height: vp.height });
+    for (const path of PAGES) {
+      await page.goto(path);
+      const overflow = await page.evaluate(() =>
+        document.documentElement.scrollWidth - document.documentElement.clientWidth
+      );
+      expect(overflow, `horizontal overflow on ${path} at ${vp.name} (${vp.width}px)`).toBeLessThanOrEqual(0);
+    }
+  }
+});
+
+test('every interactive element meets the 44px touch target on phones', async ({ page }) => {
+  // A link or button smaller than roughly 44px square is hard to hit accurately
+  // with a thumb. This is the difference between a site that technically fits a
+  // phone and one that is usable on it.
   await page.setViewportSize({ width: 390, height: 844 });
-  for (const path of PAGES) {
+  for (const path of ['/en/', '/en/kimon/', '/en/location/', '/en/contact/', '/gr/']) {
     await page.goto(path);
-    const overflow = await page.evaluate(() =>
-      document.documentElement.scrollWidth - document.documentElement.clientWidth
+    const tooSmall = await page.evaluate(() => {
+      const bad: string[] = [];
+      const els = document.querySelectorAll('a[href], button, input, select, textarea');
+      for (const el of Array.from(els)) {
+        const r = el.getBoundingClientRect();
+        // Skip elements that are not rendered at all.
+        if (r.width === 0 && r.height === 0) continue;
+        if (r.height < 44 && r.width < 44) {
+          bad.push(`${el.tagName.toLowerCase()}.${el.className || '(no class)'} ${Math.round(r.width)}x${Math.round(r.height)}`);
+        }
+      }
+      return Array.from(new Set(bad));
+    });
+    expect(tooSmall, `touch targets under 44px on ${path}`).toEqual([]);
+  }
+});
+
+test('images never overflow their container on a phone', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const path of ['/en/', '/en/kimon/', '/en/location/']) {
+    await page.goto(path);
+    const overflowing = await page.evaluate(() =>
+      Array.from(document.images)
+        .filter((img) => img.getBoundingClientRect().width > document.documentElement.clientWidth)
+        .map((img) => img.currentSrc || img.src)
     );
-    expect(overflow, `horizontal overflow on ${path}`).toBeLessThanOrEqual(0);
+    expect(overflowing, `images wider than the viewport on ${path}`).toEqual([]);
   }
 });
 ```
