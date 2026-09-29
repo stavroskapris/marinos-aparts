@@ -10,7 +10,7 @@ interface Props {
 const { eyebrow, headline, subline, ctaPrimary, ctaSecondary, showTypeToggle = false } = Astro.props;
 ---
 <section class="hero on-dark">
-  <div class="container hero__inner">
+  <div class="container container--wide hero__inner">
     <span class="eyebrow" data-reveal>{eyebrow}</span>
     <h1 class="hero__headline" data-reveal data-reveal-delay="80">{headline}</h1>
     <p class="hero__subline" data-reveal data-reveal-delay="160">{subline}</p>
@@ -29,42 +29,48 @@ const { eyebrow, headline, subline, ctaPrimary, ctaSecondary, showTypeToggle = f
   )}
 </section>
 
-{showTypeToggle && (
-  <script>
+<script>
+  const toggle = document.querySelector('[data-type-toggle]');
+  if (toggle) {
     const root = document.documentElement;
-    const saved = localStorage.getItem('display-face');
-    if (saved === 'sans') root.setAttribute('data-display', 'sans');
-    document.querySelectorAll<HTMLButtonElement>('[data-display-set]').forEach((btn) => {
+    const buttons = toggle.querySelectorAll<HTMLButtonElement>('[data-display-set]');
+    const sync = (face: string) => {
+      if (face === 'sans') root.setAttribute('data-display', 'sans');
+      else root.removeAttribute('data-display');
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.displaySet === face)));
+    };
+    let saved: string | null = null;
+    try { saved = localStorage.getItem('display-face'); } catch {}
+    sync(saved === 'sans' ? 'sans' : 'serif');
+    buttons.forEach((btn) => {
       btn.addEventListener('click', () => {
-        const face = btn.dataset.displaySet!;
-        if (face === 'sans') root.setAttribute('data-display', 'sans');
-        else root.removeAttribute('data-display');
-        localStorage.setItem('display-face', face);
-        document.querySelectorAll<HTMLButtonElement>('[data-display-set]').forEach((b) =>
-          b.setAttribute('aria-pressed', String(b === btn))
-        );
+        const face = btn.dataset.displaySet ?? 'serif';
+        sync(face);
+        try { localStorage.setItem('display-face', face); } catch {}
       });
     });
-  </script>
-)}
+  }
+</script>
 
 <style>
   .hero {
     position: relative;
     min-height: 100svh;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
     background: var(--c-deep-sea);
     /* The nav overlays this, so leave room for it. */
     padding-block: calc(72px + var(--sp-8)) var(--sp-8);
   }
-  .hero__inner { display: flex; flex-direction: column; align-items: flex-start; max-width: 900px; }
+  .hero__inner { display: flex; flex-direction: column; align-items: flex-start; width: 100%; min-width: 0; }
+  .hero__headline { max-width: 900px; }
   .hero__headline {
     font-size: var(--fs-display-xl);
     line-height: var(--lh-tight);
     color: var(--c-white);
     margin: 0 0 var(--sp-5);
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
   }
   .hero__subline {
     font-size: var(--fs-lead);
@@ -79,7 +85,7 @@ const { eyebrow, headline, subline, ctaPrimary, ctaSecondary, showTypeToggle = f
     position: absolute;
     right: var(--gutter);
     bottom: var(--sp-5);
-    display: flex; align-items: center; gap: var(--sp-2);
+    display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2);
     font-size: var(--fs-eyebrow);
     letter-spacing: 0.12em; text-transform: uppercase;
     color: rgb(255 255 255 / 0.75);
@@ -96,6 +102,11 @@ const { eyebrow, headline, subline, ctaPrimary, ctaSecondary, showTypeToggle = f
   .hero__typetoggle button[aria-pressed='true'] {
     background: var(--c-white);
     color: var(--c-deep-sea);
+  }
+  :global(:root[data-display='sans']) .hero__headline {
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
   }
   @media (max-width: 640px) {
     .hero__typetoggle { position: static; margin: var(--sp-6) var(--gutter) 0; }
