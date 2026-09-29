@@ -11,7 +11,7 @@ const s = t(lang);
 
 <div class="headerbar">
   <div class="container container--wide headerbar__inner">
-    <span><strong>{s.header.reservations}:</strong> <a href={CONTACT.phoneHref}>{CONTACT.phone}</a></span>
+    <span class="headerbar__phone"><strong>{s.header.reservations}:</strong> <a href={CONTACT.phoneHref}>{CONTACT.phone}</a></span>
     <span class="headerbar__social">
       <span set:html={s.header.findus} />
       <a href="https://www.facebook.com/marinosaparts.sivota/" target="_blank" rel="noopener noreferrer" aria-label="Marinos Apartments on Facebook"><Icon name="facebook" /></a>
@@ -27,6 +27,7 @@ const s = t(lang);
     align-items: center; justify-content: space-between;
     padding-block: var(--sp-2);
   }
+  .headerbar__phone a { display: inline-flex; align-items: center; min-height: 44px; }
   .headerbar__social { display: inline-flex; align-items: center; gap: var(--sp-3); }
   .headerbar__social a {
     color: var(--c-deep-sea);

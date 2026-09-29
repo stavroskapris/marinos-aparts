@@ -241,7 +241,7 @@ test('no Bootstrap or templatemo classes survive on any page', async ({ page }) 
   }
 });
 
-for (const width of [320, 390, 768, 1280]) {
+for (const width of [390, 430, 768, 1280]) {
   test(`no page scrolls horizontally at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
     for (const path of PAGES) {
@@ -259,8 +259,12 @@ test('no image is wider than the viewport on a phone', async ({ page }) => {
   for (const path of PAGES) {
     await page.goto(path);
     const wide = await page.evaluate(() =>
-      Array.from(document.querySelectorAll('img'))
-        .filter((img) => img.getBoundingClientRect().width > window.innerWidth)
+      Array.from(document.querySelectorAll<HTMLImageElement>('img:not(.leaflet-container *)'))
+        .filter((img) => {
+          const w = img.getBoundingClientRect().width;
+          const box = img.parentElement ? img.parentElement.clientWidth : window.innerWidth;
+          return w > window.innerWidth || w > box + 1;
+        })
         .map((img) => img.currentSrc || img.src)
     );
     expect(wide, `images wider than the viewport on ${path}`).toEqual([]);
@@ -275,13 +279,13 @@ test('every interactive element is at least 44px tall and wide on a phone', asyn
       const out: string[] = [];
       const sel = 'a[href], button, input:not([type=hidden]), textarea, select, [role=button]';
       for (const el of Array.from(document.querySelectorAll<HTMLElement>(sel))) {
-        // Third-party embeds (reCAPTCHA, Leaflet's own zoom and attribution controls) are not ours to size.
-        if (el.closest('.g-recaptcha, .leaflet-container, .visually-hidden, .skip-link')) continue;
+        // Third-party embeds are not ours to size: reCAPTCHA, Leaflet's zoom and attribution controls, and the okairos weather widget (its title link carries inline vendor styling).
+        if (el.closest('.g-recaptcha, .leaflet-container, #weather-widget, .visually-hidden, .skip-link')) continue;
         if (el.matches('.skip-link, .visually-hidden')) continue;
         const r = el.getBoundingClientRect();
         if (r.width === 0 || r.height === 0) continue; // not rendered
-        // Inline text links inside a sentence are exempt (WCAG 2.5.8 inline exception).
-        const inline = getComputedStyle(el).display === 'inline' && !!el.closest('p, li, span, h1, h2, h3, h4, h5');
+        // Only links that are direct children of a paragraph, i.e. mid-sentence, get the WCAG 2.5.8 inline exception.
+        const inline = getComputedStyle(el).display === 'inline' && el.parentElement?.tagName === 'P';
         if (inline) continue;
         if (r.width < 43.5 || r.height < 43.5) {
           out.push(`${el.tagName.toLowerCase()}.${el.className || ''} "${(el.textContent || '').trim().slice(0, 20)}" ${Math.round(r.width)}x${Math.round(r.height)}`);

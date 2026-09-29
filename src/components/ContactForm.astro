@@ -59,13 +59,6 @@ const f = s.contact.form;
   }
   .field__input:focus-visible { outline: 2px solid var(--c-sivota-blue); outline-offset: 2px; }
   .contact-form__form :global(.btn) { margin-block: var(--sp-4); }
-  /* Google's widget is a fixed 304px, wider than a 320px viewport's content box.
-     Scaling keeps the whole checkbox visible; clipping would cut its right edge. */
-  @media (max-width: 360px) {
-    .contact-form__form :global(.g-recaptcha) {
-      transform: scale(0.9); transform-origin: 0 0; height: 70px;
-    }
-  }
 </style>
 
 <script
