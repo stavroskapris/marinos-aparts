@@ -1,7 +1,9 @@
 name: CI
 on:
   pull_request:
-    branches: [astro-migration, master]
+    # `redesign` is the redesign trunk; slice PRs target it, not master.
+    # Remove it here when the redesign merges to master.
+    branches: [astro-migration, master, redesign]
 jobs:
   build-test:
     runs-on: ubuntu-latest

@@ -1,7 +1,10 @@
 name: Deploy Staging
 on:
   push:
-    branches: [master]
+    # master and redesign share one staging bucket: last push wins. Remove
+    # `redesign` when it merges to master, or staging keeps deploying from a
+    # branch nobody is working on.
+    branches: [master, redesign]
 jobs:
   deploy:
     runs-on: ubuntu-latest
