@@ -130,3 +130,24 @@ test('the hero copy clears the navbar in both faces and locales', async ({ page 
     }
   }
 });
+
+test('the footer social links fit and keep 44px targets on a phone', async ({ page }) => {
+  for (const lang of ['en', 'gr']) {
+    await page.setViewportSize({ width: 390, height: 800 });
+    await page.goto(`/${lang}/`);
+    const m = await page.evaluate(() => {
+      const links = [...document.querySelectorAll('.footer__social a')].map((a) => {
+        const r = a.getBoundingClientRect();
+        return { w: r.width, h: r.height, right: r.right };
+      });
+      return { links, overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth };
+    });
+    expect(m.links.length).toBe(2);
+    expect(m.overflow, `overflow on /${lang}/ at 390px`).toBeLessThanOrEqual(0);
+    for (const l of m.links) {
+      expect(l.w).toBeGreaterThanOrEqual(44);
+      expect(l.h).toBeGreaterThanOrEqual(44);
+      expect(l.right).toBeLessThanOrEqual(390);
+    }
+  }
+});

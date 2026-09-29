@@ -29,6 +29,11 @@ const links = [
           <li><Icon name="map-pin" /><span>{s.footer.address}</span></li>
           <li class="contact-row"><Icon name="phone" /><a class="contact-link" href={CONTACT.phoneHref}>{CONTACT.phone}</a></li>
           <li class="contact-row"><Icon name="envelope" /><a class="contact-link" href={CONTACT.emailHref}>{CONTACT.email}</a></li>
+          <li class="footer__social">
+            <span set:html={s.header.findus} />
+            <a href="https://www.facebook.com/marinosaparts.sivota/" target="_blank" rel="noopener noreferrer" aria-label="Marinos Apartments on Facebook"><Icon name="facebook" /></a>
+            <a href="https://www.instagram.com/marinosaparts/" target="_blank" rel="noopener noreferrer" aria-label="Marinos Apartments on Instagram"><Icon name="instagram" /></a>
+          </li>
         </ul>
       </div>
 
@@ -75,6 +80,10 @@ const links = [
   .footer__list li.contact-row { align-items: center; gap: var(--sp-3); }
   .footer__list :global(.icon) { color: var(--c-sand); margin-top: 0.25em; flex: none; }
   .footer__list li.contact-row :global(.icon) { margin-top: 0; }
+  .footer__list li.footer__social { align-items: center; gap: var(--sp-2); }
+  .footer__list li.footer__social span { margin-right: var(--sp-2); }
+  .footer__list li.footer__social a { justify-content: center; }
+  .footer__list li.footer__social :global(.icon) { margin-top: 0; color: currentColor; }
   .footer__list a { color: var(--c-white); text-decoration: none; min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; overflow-wrap: anywhere; }
   .footer__list a:hover, .footer__list a:focus-visible { color: var(--c-sand); text-decoration: underline; }
 
