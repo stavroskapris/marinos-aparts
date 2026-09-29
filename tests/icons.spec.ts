@@ -18,7 +18,7 @@ test('no leftover <i class="fa"> markup remains', async ({ page }) => {
 });
 
 test('social icons keep their accessible names', async ({ page }) => {
-  await page.goto('/en/');
+  await page.goto('/en/contact/');
   await expect(page.getByLabel('Marinos Apartments on Facebook')).toBeVisible();
   await expect(page.getByLabel('Marinos Apartments on Instagram')).toBeVisible();
 });

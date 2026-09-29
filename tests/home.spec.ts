@@ -57,11 +57,12 @@ test('weather widget container renders for the locale', async ({ page }) => {
 
 test('english home renders intro, welcome, and both resort cards', async ({ page }) => {
   await page.goto('/en/');
-  await expect(page.getByRole('heading', { level: 1, name: /Marinos Aparts/ }).first()).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: /Thirty years in Sivota/ })).toBeVisible();
   await expect(page.locator('p').filter({ hasText: 'two properties on the bay at Sivota' }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Kimon Resort' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Irida Resort' })).toBeVisible();
-  await expect(page.locator('img[src*="kimon-home"], img[src*="kimon/kimon-home"]')).toHaveCount(1);
+  // Astro names the optimised file after whichever identical source it saw first.
+  await expect(page.locator('img[alt="The courtyard at Kimon"]')).toHaveCount(1);
 });
 
 test('greek home renders translated welcome copy', async ({ page }) => {

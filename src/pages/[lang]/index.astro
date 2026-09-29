@@ -1,12 +1,15 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Navbar from '../../components/Navbar.astro';
-import HeaderBottom from '../../components/HeaderBottom.astro';
 import Footer from '../../components/Footer.astro';
+import Hero from '../../components/Hero.astro';
+import PhotoBand from '../../components/PhotoBand.astro';
+import FactGrid from '../../components/FactGrid.astro';
 import Section from '../../components/Section.astro';
 import SplitFeature from '../../components/SplitFeature.astro';
 import { getStaticLocalePaths, isLocale, DEFAULT_LOCALE } from '../../i18n/locales';
 import { t } from '../../i18n/t';
+import kimon13 from '../../assets/kimon/kimon13.jpg';
 import kimonHome from '../../assets/kimon-home.jpg';
 import iridaHome from '../../assets/irida-home.jpg';
 
@@ -23,27 +26,58 @@ const description = s.meta.home.description;
 ---
 
 <BaseLayout lang={lang} title={title} description={description} canonicalPath="">
-  <Navbar lang={lang} canonicalPath="" current="home" />
-  <HeaderBottom lang={lang} />
+  <Navbar lang={lang} canonicalPath="" current="home" overlay />
+
+  <Hero
+    eyebrow={s.home.hero.eyebrow}
+    headline={s.home.hero.headline}
+    subline={s.home.hero.subline}
+    ctaPrimary={{ label: s.home.hero.ctaPrimary, href: `/${lang}/contact` }}
+    ctaSecondary={{ label: s.home.hero.ctaSecondary, href: `/${lang}/kimon` }}
+    showTypeToggle
+  />
+
+  <PhotoBand image={kimon13} alt="The terrace at Kimon, among olive and citrus trees" />
 
   <Section>
     <div class="container--narrow" data-reveal>
-      <span class="eyebrow">{s.nav.home}</span>
-      <h1>{s.home.intro}</h1>
-      <p class="lead">{s.home.welcome}</p>
+      <span class="eyebrow">{s.home.intro2.eyebrow}</span>
+      <h2>{s.home.intro2.heading}</h2>
+      <p class="lead">{s.home.intro2.body}</p>
+    </div>
+  </Section>
+
+  <Section ground="sand" tight>
+    <FactGrid columns={3} items={[
+      { icon: 'map-pin', label: s.home.fact1.label },
+      { icon: 'envelope', label: s.home.fact2.label },
+      { icon: 'check', label: s.home.fact3.label },
+    ]} />
+  </Section>
+
+  <Section>
+    <div class="stack stack--wide">
+      <SplitFeature eyebrow={s.nav.kimon} heading={s.nav.kimon} body={s.home.kimonTitle}
+        href={`/${lang}/kimon`} cta={s.home.readMore} image={kimonHome} alt="The courtyard at Kimon" />
+      <SplitFeature eyebrow={s.nav.irida} heading={s.nav.irida} body={s.home.iridaTitle}
+        href={`/${lang}/irida`} cta={s.home.readMore} image={iridaHome} alt="The front of Irida, with its stone wall and bougainvillea" reverse />
     </div>
   </Section>
 
   <Section ground="sand">
-    <div class="stack stack--wide">
-      <SplitFeature
-        heading={s.nav.kimon} body={s.home.kimonTitle}
-        href={`/${lang}/kimon`} cta={s.home.readMore}
-        image={kimonHome} alt="Kimon Resort" />
-      <SplitFeature
-        heading={s.nav.irida} body={s.home.iridaTitle}
-        href={`/${lang}/irida`} cta={s.home.readMore}
-        image={iridaHome} alt="Irida Resort" reverse />
+    <div class="container--narrow" data-reveal>
+      <span class="eyebrow">{s.home.sivota.eyebrow}</span>
+      <h2>{s.home.sivota.heading}</h2>
+      <p class="lead">{s.home.sivota.body}</p>
+      <a class="btn btn--ghost" href={`/${lang}/location`}>{s.home.sivota.cta}</a>
+    </div>
+  </Section>
+
+  <Section ground="deep">
+    <div class="container--narrow" data-reveal>
+      <h2>{s.home.booking.heading}</h2>
+      <p class="lead">{s.home.booking.body}</p>
+      <a class="btn btn--primary" href={`/${lang}/contact`}>{s.home.booking.cta}</a>
     </div>
   </Section>
 

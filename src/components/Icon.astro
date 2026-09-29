@@ -1,5 +1,5 @@
 ---
-export type IconName = 'map-pin' | 'phone' | 'envelope' | 'chevron-up' | 'spinner' | 'facebook' | 'instagram';
+export type IconName = 'map-pin' | 'phone' | 'envelope' | 'chevron-up' | 'check' | 'spinner' | 'facebook' | 'instagram';
 
 interface Props { name: IconName; size?: number; label?: string; }
 const { name, size = 18, label } = Astro.props;
@@ -27,6 +27,7 @@ const shape: Record<string, string> = isBrand ? filled : stroke;
     <><rect x="2.5" y="5" width="19" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></>
   )}
   {name === 'chevron-up' && <path d="m6 15 6-6 6 6" />}
+  {name === 'check' && <path d="m4 12 5 5L20 6" />}
   {name === 'spinner' && (
     <><circle cx="12" cy="12" r="9" opacity="0.25" /><path d="M21 12a9 9 0 0 0-9-9" /></>
   )}
