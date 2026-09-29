@@ -142,14 +142,83 @@ test('scroll to top is a button, appears past 500px and does not dirty the URL',
 
 for (const lang of ['en', 'gr']) {
   for (const width of [390, 430, 768, 1280]) {
-    test(`the footer does not overflow horizontally at ${width}px on /${lang}/`, async ({ page }) => {
-      await page.setViewportSize({ width, height: 900 });
-      await page.goto(`/${lang}/`);
-      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-      expect(overflow).toBeLessThanOrEqual(0);
-    });
+    for (const blockWeather of [false, true]) {
+      const name = blockWeather ? 'with the weather script blocked' : 'with the weather widget loaded';
+      test(`the footer stays inside the viewport at ${width}px on /${lang}/ ${name}`, async ({ page }) => {
+        if (blockWeather) await page.route('**/okairos.gr/**', (route) => route.abort());
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto(`/${lang}/`);
+        // Measure only after the injected markup exists, or the overflow is missed.
+        await page.waitForFunction(() => document.querySelector('#osm-map .leaflet-tile, #osm-map .leaflet-pane'));
+        if (!blockWeather) {
+          await page.waitForFunction(() => document.querySelector('[id^="w_"]')?.children.length, undefined, { timeout: 8000 }).catch(() => {});
+        }
+        const m = await page.evaluate(() => {
+          const footer = document.querySelector('footer.footer') as HTMLElement;
+          const grid = footer.querySelector('.footer__grid') as HTMLElement;
+          return {
+            footerScroll: footer.scrollWidth, footerClient: footer.clientWidth,
+            docOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+            vw: document.documentElement.clientWidth,
+            rights: Array.from(grid.children).map((c) => Math.round(c.getBoundingClientRect().right)),
+          };
+        });
+        expect(m.footerScroll).toBeLessThanOrEqual(m.footerClient);
+        expect(m.docOverflow).toBeLessThanOrEqual(0);
+        for (const r of m.rights) expect(r).toBeLessThanOrEqual(m.vw);
+      });
+    }
   }
 }
+
+test('the scroll-to-top button stays above the Leaflet map and clears 3:1 in every state', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('/en/');
+  await page.waitForFunction(() => document.querySelector('#osm-map .leaflet-pane'));
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  const btn = page.getByRole('button', { name: 'Scroll to top' });
+  await expect(btn).toBeVisible();
+  // Move the map under the button, then ask which element is on top there.
+  const top = await page.evaluate(() => {
+    const b = document.querySelector('.scroll-top') as HTMLElement;
+    const r = b.getBoundingClientRect();
+    const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+    return !!hit && (hit === b || b.contains(hit));
+  });
+  expect(top).toBe(true);
+
+  const lum = (rgb: string) => {
+    const [r, g, bl] = (rgb.match(/[\d.]+/g) ?? []).slice(0, 3).map(Number).map((v) => {
+      const c = v / 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * bl;
+  };
+  const ratio = (a: string, b: string) => {
+    const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
+    return (x + 0.05) / (y + 0.05);
+  };
+  const footerBg = await page.evaluate(() => getComputedStyle(document.querySelector('footer.footer')!).backgroundColor);
+  const bgOf = () => btn.evaluate((e) => getComputedStyle(e).backgroundColor);
+  expect(ratio(await bgOf(), footerBg)).toBeGreaterThanOrEqual(3);
+  await btn.hover();
+  expect(ratio(await bgOf(), footerBg)).toBeGreaterThanOrEqual(3);
+  await page.mouse.move(0, 0);
+  await btn.focus();
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Shift+Tab');
+  expect(ratio(await bgOf(), footerBg)).toBeGreaterThanOrEqual(3);
+});
+
+test('activating scroll-to-top moves focus to the navigation, not the body', async ({ page }) => {
+  await page.goto('/en/');
+  await page.evaluate(() => window.scrollTo(0, 1200));
+  const btn = page.getByRole('button', { name: 'Scroll to top' });
+  await btn.focus();
+  await page.keyboard.press('Enter');
+  await expect(btn).toBeHidden();
+  const tag = await page.evaluate(() => document.activeElement?.tagName);
+  expect(tag).toBe('A');
+});
 
 const PAGES = ['/en/', '/en/kimon/', '/en/irida/', '/en/location/', '/en/contact/',
                '/gr/', '/gr/kimon/', '/gr/irida/', '/gr/location/', '/gr/contact/'];

@@ -62,7 +62,7 @@ const links = [
   }
   .footer__grid {
     display: grid;
-    grid-template-columns: 1.1fr 0.8fr 1.3fr 1fr;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.8fr) minmax(0, 1.3fr) minmax(0, 1fr);
     gap: var(--sp-7);
   }
   .footer__title {
@@ -78,6 +78,9 @@ const links = [
   .footer__list a { color: var(--c-white); text-decoration: none; min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; overflow-wrap: anywhere; }
   .footer__list a:hover, .footer__list a:focus-visible { color: var(--c-sand); text-decoration: underline; }
 
+  /* Leaflet panes (z 400) and controls (z 1000) share the root stacking
+     context; isolating the map keeps them beneath the scroll-top button. */
+  .footer__map { min-width: 0; isolation: isolate; }
   .footer__map :global(#osm-map) {
     height: 280px; width: 100%; border-radius: var(--radius-card);
   }
@@ -94,6 +97,8 @@ const links = [
     min-width: 0;
     overflow-x: auto;
   }
+  /* Loader failed or is blocked: no empty white bar on the dark footer. */
+  .footer__weather:has(:global([id^="w_"]:empty)) { display: none; }
   /* .on-dark recolours links sand and the focus ring white; neither reads on a white card. */
   .footer__weather :global(a) { color: var(--c-sivota-blue); }
   .footer__weather :global(:focus-visible) { outline-color: var(--c-deep-sea); }

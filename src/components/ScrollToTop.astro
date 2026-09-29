@@ -14,19 +14,29 @@ import Icon from './Icon.astro';
     btn.addEventListener('click', () => {
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+      // The button hides itself while focused, which would drop focus to <body>.
+      document.querySelector<HTMLElement>('[data-nav] a')?.focus({ preventScroll: true });
     });
   }
 </script>
 
 <style>
+  /* Sits over both the light page and the deep-sea footer, so it is a white
+     tile with a deep-sea edge: white on deep-sea 11.76:1, deep-sea edge on
+     white 11.76:1, sand hover on deep-sea 9.07:1. */
   .scroll-top {
-    position: fixed; right: var(--sp-5); bottom: var(--sp-5); z-index: 40;
+    position: fixed; right: var(--sp-5); bottom: var(--sp-5); z-index: 1100;
     width: 44px; height: 44px;
     display: inline-flex; align-items: center; justify-content: center;
-    background: var(--c-sivota-blue); color: var(--c-white);
-    border: 0; border-radius: var(--radius-btn); cursor: pointer;
+    background: var(--c-white); color: var(--c-deep-sea);
+    border: 2px solid var(--c-deep-sea); border-radius: var(--radius-btn); cursor: pointer;
     transition: background var(--dur-fast) var(--ease-out);
   }
   .scroll-top[hidden] { display: none; }
-  .scroll-top:hover, .scroll-top:focus-visible { background: var(--c-deep-sea); }
+  .scroll-top:hover { background: var(--c-sand); }
+  .scroll-top:focus-visible {
+    background: var(--c-sand);
+    outline: 2px solid var(--c-white); outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--c-deep-sea);
+  }
 </style>
