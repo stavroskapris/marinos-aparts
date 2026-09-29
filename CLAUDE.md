@@ -21,12 +21,10 @@ There is no jQuery and no Bootstrap JS — interactive bits are small vanilla `<
 | `npm run preview` | Serve the built `dist/` (most faithful to production) |
 | `npm run test:unit` | Vitest — i18n key parity, helpers, edge-function logic |
 | `npm test` | Playwright e2e — auto-builds and serves, or reuses a server on :4321 |
-| `npm run parity:text` | Diff built copy against the legacy `*.html` reference |
-| `npm run parity:images` | Assert every legacy-referenced image exists in the build |
 | `npm run check:links:ci` | Build, serve, crawl for broken internal links, stop |
 | `npx astro check` | Type-check (there is no separate lint step) |
 
-`test:unit`, `test`, `parity:text` and `parity:images` all run **before** the S3 sync in the deploy
+`test:unit`, `test` and `npx astro check` all run **before** the S3 sync in the deploy
 workflows — a failure blocks the deploy, not just the merge.
 
 ## Architecture
@@ -50,7 +48,7 @@ src/
   styles/              # bootstrap + template CSS
 public/                # served as-is: img/, robots.txt, favicon
 infra/cloudfront/      # edge functions (ES5) + their unit tests
-scripts/               # parity gates, visual-capture helper
+scripts/               # build-info writer
 tests/                 # Playwright specs
 docs/superpowers/      # design spec, plans, parity sign-offs, cutover runbook
 ```
@@ -154,9 +152,6 @@ policies; the runbook uses placeholders for exactly this reason.
   hook, which only exists in Astro 5. On this repo's Astro 4.x it never fires and the build dies
   with `Cannot read properties of undefined (reading 'reduce')`. Don't bump it without upgrading
   Astro.
-- **The root `*.html`, `css/`, `js/`, `img/` and `sitemap.xml` are the legacy site, kept on
-  purpose** as the reference corpus for the parity gates. They are not served, not built, and not
-  edited. They go away once the cutover has soaked.
 - **`src/config.ts` is baked into the build.** The endpoints and reCAPTCHA key are public values,
   so there is no per-environment secret and no runtime config. (Historic note: the legacy deploy
   workflow excluded `js/custom/config/*` from its sync, but the bucket copy was identical to the
