@@ -5,6 +5,7 @@ import '../styles/fonts.css';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/layout.css';
+import '../styles/motion.css';
 
 interface Props {
   lang: Locale;
@@ -21,6 +22,11 @@ const altHref = (l: Locale) => `${site}/${l}${canonicalPath}/`;
 <!DOCTYPE html>
 <html lang={HREFLANG[lang]}>
   <head>
+    <script is:inline>
+      // Set before paint: motion.css only hides [data-reveal] under .js, so a
+      // blocked or failed bundle leaves every word on the page visible.
+      document.documentElement.classList.add('js');
+    </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7PRPXQ745M"></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
@@ -66,5 +72,10 @@ const altHref = (l: Locale) => `${site}/${l}${canonicalPath}/`;
         { '@type': 'ContactPoint', telephone: '+30-6936-772-821', contactType: 'reservations' },
       ],
     })} />
+
+    <script>
+      import { initReveal } from '../scripts/reveal';
+      initReveal();
+    </script>
   </body>
 </html>

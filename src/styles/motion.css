@@ -1,0 +1,52 @@
+/*
+ * Motion. Two rules govern everything here:
+ *
+ * 1. The hidden starting state applies ONLY under .js on <html>, which the
+ *    inline script in BaseLayout sets before first paint. Without that guard,
+ *    a script error or a blocked bundle leaves the page permanently blank.
+ * 2. prefers-reduced-motion disables all of it, not just the transforms.
+ */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.js [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+  transition: opacity var(--dur-slow) var(--ease-out),
+              transform var(--dur-slow) var(--ease-out);
+}
+
+.hover-zoom { overflow: hidden; }
+.hover-zoom img {
+  transition: transform var(--dur) var(--ease-out);
+  will-change: transform;
+}
+/* :focus-within matters as much as :hover here: a keyboard user tabbing to
+   the link inside a card should get the same affordance. Review Focus item 4. */
+.hover-zoom:hover img,
+.hover-zoom:focus-within img {
+  transform: scale(1.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal],
+  .js [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .hover-zoom img,
+  .hover-zoom:hover img,
+  .hover-zoom:focus-within img {
+    transition: none;
+    transform: none;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
