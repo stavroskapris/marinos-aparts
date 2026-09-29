@@ -5,7 +5,8 @@
     "irida": "Irida Resort",
     "location": "Location",
     "contact": "Contact",
-    "book": "Book now"
+    "book": "Book now",
+    "menu": "Menu"
   },
   "header": {
     "reservations": "<strong>Reservations : </strong>+30 6909 025 820",

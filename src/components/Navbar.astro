@@ -1,49 +1,125 @@
 ---
 import type { Locale } from '../i18n/locales';
 import { t } from '../i18n/t';
-import LangSwitcher from './LangSwitcher.astro';
 
 type NavKey = 'home' | 'kimon' | 'irida' | 'location' | 'contact';
-interface Props { lang: Locale; canonicalPath: string; current?: NavKey; }
-const { lang, canonicalPath, current } = Astro.props;
+interface Props { lang: Locale; canonicalPath: string; current?: NavKey; overlay?: boolean; }
+const { lang, canonicalPath, current, overlay = false } = Astro.props;
 const s = t(lang);
 const base = `/${lang}`;
-const active = (key: NavKey) => (current === key ? 'nav-item active' : 'nav-item');
+const links: { key: NavKey; href: string; label: string }[] = [
+  { key: 'home', href: `${base}/`, label: s.nav.home },
+  { key: 'kimon', href: `${base}/kimon`, label: s.nav.kimon },
+  { key: 'irida', href: `${base}/irida`, label: s.nav.irida },
+  { key: 'location', href: `${base}/location`, label: s.nav.location },
+  { key: 'contact', href: `${base}/contact`, label: s.nav.contact },
+];
 ---
+<header class:list={['navbar', overlay && 'navbar--overlay']} data-nav>
+  <div class="container container--wide navbar__inner">
+    <a href={`${base}/`} class="navbar__logo">
+      <img src="/img/nav/logo_marinos.png" alt="Marinos-Aparts" width="150" height="40" />
+    </a>
 
-<div class="tm-header">
-  <div class="container-fluid">
-    <div class="tm-header-inner">
-      <a href={`${base}/`} class="navbar-left tm-site-logo"><img src="/img/nav/logo_marinos.png" alt="Marinos-Aparts" /></a>
-      <nav class="navbar tm-main-nav">
-        <button class="navbar-toggler hidden-md-up" type="button" aria-controls="tmNavbar" aria-expanded="false" aria-label="Toggle navigation">&#9776;</button>
-        <div class="collapse navbar-toggleable-sm" id="tmNavbar">
-          <ul class="nav navbar-nav">
-            <li class={active('home')}><a href={`${base}/`} class="nav-link">{s.nav.home}</a></li>
-            <li class={active('kimon')}><a href={`${base}/kimon`} class="nav-link">{s.nav.kimon}</a></li>
-            <li class={active('irida')}><a href={`${base}/irida`} class="nav-link">{s.nav.irida}</a></li>
-            <li class="nav-item"><a href="https://reservations.bookoncloud.com/welcome/kimon" target="_blank" rel="noopener noreferrer" class="nav-link">{s.nav.book}</a></li>
-            <li class={active('location')}><a href={`${base}/location`} class="nav-link">{s.nav.location}</a></li>
-            <li class={active('contact')}><a href={`${base}/contact`} class="nav-link">{s.nav.contact}</a></li>
-            <li class="nav-item hide-lang-nav-items"><a href={`/en${canonicalPath}/`} data-lang-switch="en" class="nav-link js-langanchor"><img src="/img/nav/en.png" height="13" width="18" alt="en" /></a></li>
-            <li class="nav-item hide-lang-nav-items"><a href={`/gr${canonicalPath}/`} data-lang-switch="gr" class="nav-link js-langanchor"><img src="/img/nav/gr.jpg" height="13" width="18" alt="gr" /></a></li>
-          </ul>
-        </div>
-        <ul class="languagepicker roundborders hide-lang-menu">
-          <LangSwitcher lang={lang} canonicalPath={canonicalPath} />
-        </ul>
-      </nav>
-    </div>
+    <button class="navbar__toggle" type="button" data-nav-toggle
+            aria-controls="nav-menu" aria-expanded="false" aria-label={s.nav.menu}>
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="navbar__menu" id="nav-menu" data-nav-menu>
+      <ul class="navbar__links">
+        {links.map((l) => (
+          <li>
+            <a href={l.href} class:list={['navbar__link', current === l.key && 'is-active']}
+               aria-current={current === l.key ? 'page' : undefined}>{l.label}</a>
+          </li>
+        ))}
+        <li>
+          <a href="https://reservations.bookoncloud.com/welcome/kimon" target="_blank"
+             rel="noopener noreferrer" class="btn btn--primary navbar__book">{s.nav.book}</a>
+        </li>
+      </ul>
+      <ul class="navbar__langs">
+        <li><a href={`/en${canonicalPath}/`} data-lang-switch="en"
+               class:list={['navbar__lang', lang === 'en' && 'is-active']} hreflang="en">EN</a></li>
+        <li><a href={`/gr${canonicalPath}/`} data-lang-switch="gr"
+               class:list={['navbar__lang', lang === 'gr' && 'is-active']} hreflang="el">ΕΛ</a></li>
+      </ul>
+    </nav>
   </div>
-</div>
+</header>
 
 <script>
-  const toggler = document.querySelector('.tm-main-nav .navbar-toggler');
-  const menu = document.getElementById('tmNavbar');
-  if (toggler && menu) {
-    toggler.addEventListener('click', () => {
-      const open = menu.classList.toggle('in');
-      toggler.setAttribute('aria-expanded', String(open));
-    });
-  }
+  import { initNav } from '../scripts/nav';
+  initNav();
 </script>
+
+<style>
+  .navbar {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--c-deep-sea);
+    transition: background var(--dur) var(--ease-out),
+                box-shadow var(--dur) var(--ease-out);
+  }
+  .navbar--overlay { position: fixed; inset-inline: 0; background: transparent; }
+  .navbar--overlay.is-solid {
+    background: var(--c-deep-sea);
+    box-shadow: 0 1px 24px rgb(11 60 83 / 0.28);
+  }
+
+  .navbar__inner {
+    display: flex; align-items: center; gap: var(--sp-6);
+    min-height: 72px;
+  }
+  .navbar__logo { flex: none; line-height: 0; }
+  .navbar__logo img { height: 40px; width: auto; }
+
+  .navbar__menu { flex: 1; display: flex; align-items: center; gap: var(--sp-6); justify-content: flex-end; }
+  .navbar__links, .navbar__langs { display: flex; align-items: center; gap: var(--sp-5); }
+  .navbar__langs { gap: var(--sp-3); padding-left: var(--sp-5); border-left: 1px solid rgb(255 255 255 / 0.25); }
+
+  .navbar__link {
+    color: var(--c-white); text-decoration: none;
+    font-size: var(--fs-small); font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    /* 44px target without enlarging the visual row. */
+    display: inline-flex; align-items: center; min-height: 44px;
+    white-space: nowrap;
+  }
+  .navbar__link:hover, .navbar__link:focus-visible { color: var(--c-sand); }
+  .navbar__link.is-active { box-shadow: inset 0 -2px 0 var(--c-sand); }
+
+  .navbar__lang {
+    color: rgb(255 255 255 / 0.7); text-decoration: none;
+    font-size: var(--fs-eyebrow); letter-spacing: 0.1em; font-weight: 600;
+    display: inline-flex; align-items: center; min-height: 44px; padding-inline: var(--sp-2);
+  }
+  .navbar__lang.is-active { color: var(--c-white); }
+
+  .navbar__book { padding: 0.625rem 1.25rem; min-height: 40px; }
+
+  .navbar__toggle {
+    display: none; margin-left: auto;
+    width: 44px; height: 44px; padding: 10px;
+    background: none; border: 0; cursor: pointer;
+    flex-direction: column; justify-content: space-between;
+  }
+  .navbar__toggle span { display: block; height: 2px; background: var(--c-white); border-radius: 2px; }
+
+  /* Greek nav labels run appreciably longer than English, so the row collapses
+     on available space rather than at a width tuned to the English copy. */
+  @media (max-width: 1100px) {
+    .navbar__toggle { display: flex; }
+    .navbar__menu {
+      position: absolute; inset-inline: 0; top: 100%;
+      flex-direction: column; align-items: stretch; gap: 0;
+      background: var(--c-deep-sea);
+      padding: var(--sp-4) var(--gutter) var(--sp-6);
+      display: none;
+    }
+    .navbar__menu.is-open { display: flex; }
+    .navbar__links { flex-direction: column; align-items: stretch; gap: 0; }
+    .navbar__langs { border-left: 0; padding-left: 0; padding-top: var(--sp-4); }
+    .navbar__book { margin-top: var(--sp-4); align-self: flex-start; }
+  }
+</style>

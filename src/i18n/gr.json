@@ -5,7 +5,8 @@
     "irida": "Irida Resort",
     "location": "Τοποθεσία",
     "contact": "Επικοινωνία",
-    "book": "Κρατήσεις"
+    "book": "Κρατήσεις",
+    "menu": "Μενού"
   },
   "header": {
     "reservations": "<strong>Κρατήσεις : </strong>+30 6909 025 820",
