@@ -64,22 +64,46 @@ submission against each environment, which is the only way to see it.
 
 ---
 
-## Task 6 — integrations, prod stage, throttling. NOT STARTED
+## Task 6 — integrations, prod stage, throttling. DONE 2026-09-25
 
-Nothing below has been done. See the plan for the steps.
+| Step | Outcome |
+|---|---|
+| Integration type | **Recorded: `AWS`, non-proxy.** This was previously inferred, never verified. It is why API Gateway discards the Lambda `statusCode` and returns HTTP 200 with the envelope in the body, and why the client parses `data.body`. |
+| Integrations | Both repointed to `${stageVariables.lambdaAlias}`. Originals captured first as the rollback. |
+| Alias permissions | API Gateway granted invoke on all four function/alias combinations. |
+| Stage variable | `lambdaAlias=dev` set on `dev` **before** deploying, so no deployed integration ever referenced an unset variable. |
+| Deployment | Created, which is the moment the change went live. |
+| `prod` stage | Created from the same deployment with `lambdaAlias=prod`. |
+| Throttling | 5 rps / burst 10 on both stages. Reserved concurrency 5 on both functions. |
+| Alarm | `marinos-contact-invocations-high`, threshold 50/hour. |
 
-Carry forward into it:
+### Two things that cost time, worth knowing in advance
 
-- **Capture each integration's JSON before changing it.** Task 6 Step 1 also records the integration
-  type; the whole client contract depends on proxy versus non-proxy and it is currently inferred
-  rather than verified.
-- **Step 2 rewrites the integrations on the live `dev` stage**, which production uses right now. That
-  is the one step in this runbook that can break the live contact form. The captured JSON is the
-  rollback.
-- **Set `PROD_CONTACT_API_BASE` only after the prod stage exists** (Step 6, with the warning added to
-  the plan). `STAGING_CONTACT_API_BASE` is already set, pointing at `/dev`.
+**Integration edits do not reach a stage until a deployment.** API Gateway serves the last deployed snapshot. That is what makes the safe ordering possible: rewrite integrations, set the stage variable, *then* deploy. Nothing is live in between.
 
-## Task 7 — rebuild and verify end to end. NOT STARTED
+**Propagation lag is real and looks like failure.** Immediately after `create-deployment`, `/dev` still served the *old* handler's responses. A newly created `prod` stage returned `Forbidden`. Both resolved within a minute. Verifying once and concluding the change had failed would have led to rolling back something that was working. **Wait and re-probe before drawing conclusions.**
 
-The final step submits the real contact form, which sends a genuine enquiry to the business inbox.
-That is an operator action.
+## Task 7 — rebuild and verify end to end. DONE 2026-09-29
+
+Production deployed against `/prod` and verified by a real browser submission, which logged `sent PROD` and arrived in the business inbox.
+
+Confirmed in production: the site posts to `/prod`; that stage resolves the `prod` alias; the handler selects `RECEIVER_PROD`; SES accepts; and a POST with no token returns 400 without sending. `/validaterecaptcha` has had **zero invocations** since the cutover, which is the single-verify fix proving itself.
+
+## The email delivery bug, and how it was actually found
+
+Mail landed in junk at Outlook and did not arrive at all at gmail, even though SES reported successful delivery attempts with no bounces.
+
+**Root cause: the messages were completely unauthenticated.** A verified SES domain identity for `marinos-aparts.gr` with DKIM, an SPF `include:amazonses.com`, and a DMARC record were all put in place on 2026-09-25 — and the Lambda was never changed to use them. `SENDER` remained an `@hotmail.com` address, so every message claimed a domain SES had no authority to send for, and none of the DNS work was in the sending path.
+
+**Fix: `SENDER=noreply@marinos-aparts.gr`.** A production submission immediately afterwards arrived in the inbox rather than junk.
+
+Two process lessons, both earned the hard way:
+
+- **Configuring authentication is not the same as using it.** Verify the *sending identity actually changed*, not merely that DNS verified.
+- **One probe is not evidence.** This was first mis-diagnosed as sender reputation needing time, on the strength of a single message from a domain with no sending history, minutes after DKIM verified.
+
+## Still open
+
+- Retire `test-function-contact-form` and `test-function-for-recpatch` after a soak. They are orphaned but intact, and they are the rollback: restore the two integration URIs and redeploy.
+- The alarm has no SNS action, so it changes state but notifies nobody.
+- DMARC aggregate reports now arrive at the business inbox and give real authentication data.
