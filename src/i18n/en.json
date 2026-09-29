@@ -2,7 +2,7 @@
   "meta": {
     "home": {
       "title": "Marinos Aparts | Apartments in Sivota, Greece",
-      "description": "Two small apartment houses on the bay at Sivota, run by the same family for thirty years. Kimon among the olive groves, Irida by the harbour."
+      "description": "Two small apartment houses on the bay at Sivota, with thirty years of hospitality. Kimon among the olive groves, Irida by the harbour."
     },
     "kimon": {
       "title": "Kimon Resort | Marinos Aparts, Sivota",
@@ -41,12 +41,44 @@
   },
   "home": {
     "intro": "Marinos Aparts",
-    "welcome": "Welcome to Marinos-aparts Rooms in Sivota, where your ultimate satisfaction is our only goal. Marinos-aparts, with 30 years of hospitality, consist of 2 separate accommodation, Kimon Resort and Irida Resort. We make sure that all our customers find exactly what suits them for their vacation. So we have single and double room apartments, ideal for couples and families, in the center of the port but also a little further, on the floor or on the ground floor.All of our apartments are spacious and fully refurbished, with stylish furnishings and a private balcony. Feel free to contact us to discuss what is ideal for you to ensure you the most beautiful and easy vacation in Sivota.",
-    "kimonTitle": "Completely refurbished, Kimon Resort is set in an idyllic setting amidst olive groves, offering tranquility and beauty to holidaymakers.",
-    "iridaTitle": "Completely refurbished and located only 30 meters from the port, Irida Resort is ideal for vacationers who want to enjoy the life of Sivota.",
-    "kimonSubTitle": "Only 200 meters from the port and 200 meters from the beach of French Molos, Kimon Resort is ideal for anyone wishing to stay in a quiet accommodation but at the same time not be deprived of the opportunity to leave the car and do everything on foot.",
-    "iridaSubTitle": "The studios, all on the first floor of the property, offer moments of relaxation and total peace of mind. Spacious, bright, cool, with elegant décor and private balconies, they feature the entire package and cater to all holiday needs.",
-    "readMore": "Read More"
+    "hero": {
+      "eyebrow": "Sivota, Epirus",
+      "headline": "Thirty years on the same bay.",
+      "subline": "Two small houses in Sivota. Kimon among the olive groves, Irida thirty metres from the harbour.",
+      "ctaPrimary": "Check availability",
+      "ctaSecondary": "See the rooms"
+    },
+    "intro2": {
+      "eyebrow": "Welcome",
+      "heading": "Two houses, one bay",
+      "body": "Marinos Aparts is two small properties on the bay at Sivota, with thirty years of hospitality behind them. Every apartment is spacious and fully refurbished, with its own balcony. Some suit couples, some suit families, and we are happy to talk through which is right for you."
+    },
+    "fact1": {
+      "label": "Two hundred metres from the harbour and from Gallikos Molos beach"
+    },
+    "fact2": {
+      "label": "Thirty years of hospitality in Sivota"
+    },
+    "fact3": {
+      "label": "Every apartment has its own private balcony"
+    },
+    "sivota": {
+      "eyebrow": "The village",
+      "heading": "One of the most picturesque villages of Epirus",
+      "body": "Sivota sits where the hills meet the Ionian, with a cluster of small islands offshore and beaches that stand out for their variety.",
+      "cta": "Explore Sivota"
+    },
+    "booking": {
+      "heading": "Come and stay",
+      "body": "Tell us your dates and how many of you there are, and we will tell you what we have.",
+      "cta": "Check availability"
+    },
+    "welcome": "Marinos Aparts is two small properties on the bay at Sivota, with thirty years of hospitality behind them.",
+    "kimonTitle": "Completely refurbished, Kimon Resort is set among olive groves, offering quiet and space a short walk from everything.",
+    "iridaTitle": "Completely refurbished and thirty metres from the harbour, Irida Resort suits visitors who want to be in the middle of Sivota.",
+    "kimonSubTitle": "Two hundred metres from the harbour and two hundred from Gallikos Molos beach, Kimon suits anyone who wants somewhere quiet without needing the car.",
+    "iridaSubTitle": "The studios sit on the first floor: bright, cool, with elegant furnishings and private balconies.",
+    "readMore": "Read more"
   },
   "facilities": {
     "spaciousRooms": "Spacious rooms",

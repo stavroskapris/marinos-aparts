@@ -58,7 +58,7 @@ test('weather widget container renders for the locale', async ({ page }) => {
 test('english home renders intro, welcome, and both resort cards', async ({ page }) => {
   await page.goto('/en/');
   await expect(page.getByRole('heading', { level: 1, name: /Marinos Aparts/ }).first()).toBeVisible();
-  await expect(page.locator('p').filter({ hasText: 'Welcome to Marinos-aparts Rooms in Sivota' })).toBeVisible();
+  await expect(page.getByText('thirty years of hospitality').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Kimon Resort' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Irida Resort' })).toBeVisible();
   await expect(page.locator('img[src*="kimon-home"], img[src*="kimon/kimon-home"]')).toHaveCount(1);

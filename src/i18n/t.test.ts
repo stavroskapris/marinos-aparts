@@ -12,6 +12,6 @@ test('locales are en and gr, default en', () => {
 test('t returns locale-specific shared and home strings', () => {
   expect(t('en').nav.home).toBe('Home');
   expect(t('gr').nav.home).toBe('Αρχική');
-  expect(t('en').home.readMore).toBe('Read More');
-  expect(t('en').home.welcome.startsWith('Welcome to Marinos-aparts')).toBe(true);
+  expect(t('en').home.readMore).toBe('Read more');
+  expect(t('en').home.welcome.includes('thirty years of hospitality')).toBe(true);
 });
