@@ -41,7 +41,7 @@ const shape: Record<string, string> = isBrand ? filled : stroke;
 <style>
   .icon { flex: none; }
   .icon--spinner { animation: icon-spin 900ms linear infinite; }
-  /* Review Focus item 2: motion is opt-out at the source, not per-component. */
+  /* WCAG 2.3.3: the spinner is decorative motion, so it stops at the source rather than per consumer. */
   @media (prefers-reduced-motion: reduce) {
     .icon--spinner { animation: none; }
   }

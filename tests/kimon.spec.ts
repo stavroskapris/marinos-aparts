@@ -6,7 +6,7 @@ test('english kimon renders title, facilities, and gallery', async ({ page }) =>
   await expect(page.getByRole('heading', { name: 'Kimon Resort' }).first()).toBeVisible();
   await expect(page.getByText('Free wi-fi Internet')).toBeVisible();           // a facility
   await expect(page.locator('#gallery figure')).toHaveCount(20);               // 20 kimon images
-  await expect(page.locator('.tm-main-nav li.nav-item').filter({ hasText: 'Kimon Resort' })).toHaveClass(/active/);
+  await expect(page.locator('.navbar__link').filter({ hasText: 'Kimon Resort' })).toHaveClass(/is-active/);
 });
 
 test('greek kimon renders translated facilities', async ({ page }) => {

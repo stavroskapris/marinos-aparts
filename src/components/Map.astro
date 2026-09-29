@@ -31,3 +31,8 @@ const { focus } = Astro.props;
     }
   }
 </script>
+
+<style>
+  /* Leaflet needs an explicit height; without one the container collapses to 0. */
+  #osm-map { height: 280px; width: 100%; }
+</style>

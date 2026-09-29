@@ -5,7 +5,7 @@ test('english irida renders title, facilities, and 15-image gallery', async ({ p
   await expect(page.getByRole('heading', { name: 'Irida Resort' }).first()).toBeVisible();
   await expect(page.getByText('Free wi-fi Internet')).toBeVisible();
   await expect(page.locator('#gallery figure')).toHaveCount(15);
-  await expect(page.locator('.tm-main-nav li.nav-item').filter({ hasText: 'Irida Resort' })).toHaveClass(/active/);
+  await expect(page.locator('.navbar__link').filter({ hasText: 'Irida Resort' })).toHaveClass(/is-active/);
   // irida-specific facility must be present
   await expect(page.getByText('Built-in closets')).toBeVisible();
   // kimon-only facilities must be absent on irida

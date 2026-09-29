@@ -21,14 +21,14 @@ test('hreflang alternates point to per-locale urls', async ({ page }) => {
 
 test('navbar links are locale-prefixed', async ({ page }) => {
   await page.goto('/en/');
-  await expect(page.locator('a.tm-site-logo')).toHaveAttribute('href', '/en/');
+  await expect(page.locator('[data-nav] .navbar__logo')).toHaveAttribute('href', '/en/');
   await expect(page.getByRole('link', { name: 'Kimon Resort' }).first()).toHaveAttribute('href', '/en/kimon');
 });
 
 test('language switcher links to the same page in the other locale', async ({ page }) => {
   await page.goto('/en/');
-  await expect(page.locator('.languagepicker a[data-lang-switch="gr"]')).toHaveAttribute('href', '/gr/');
-  await page.locator('.languagepicker a[data-lang-switch="gr"]').click();
+  await expect(page.locator('[data-nav] [data-lang-switch="gr"]')).toHaveAttribute('href', '/gr/');
+  await page.locator('[data-nav] [data-lang-switch="gr"]').click();
   await expect(page).toHaveURL(/\/gr\/$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'el');
 });
@@ -42,7 +42,7 @@ test('footer shows current year and registry number', async ({ page }) => {
   await page.goto('/en/');
   const year = new Date().getFullYear().toString();
   await expect(page.locator('#current-year')).toHaveText(year);
-  await expect(page.locator('.tm-copyright-text')).toContainText('General Registry Number');
+  await expect(page.getByText('General Registry Number')).toBeVisible();
 });
 
 test('leaflet map initializes in the footer', async ({ page }) => {
@@ -57,7 +57,7 @@ test('weather widget container renders for the locale', async ({ page }) => {
 
 test('english home renders intro, welcome, and both resort cards', async ({ page }) => {
   await page.goto('/en/');
-  await expect(page.locator('h2.tm-title')).toContainText('Marinos Aparts');
+  await expect(page.getByRole('heading', { level: 2, name: /Marinos Aparts/ }).first()).toBeVisible();
   await expect(page.locator('p').filter({ hasText: 'Welcome to Marinos-aparts Rooms in Sivota' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Kimon Resort' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Irida Resort' })).toBeVisible();
@@ -74,16 +74,16 @@ test('greek home renders translated welcome copy', async ({ page }) => {
 test('mobile hamburger toggles the nav menu', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 800 });
   await page.goto('/en/');
-  const menu = page.locator('#tmNavbar');
-  await expect(menu).not.toHaveClass(/\bin\b/);
-  await page.locator('.tm-main-nav .navbar-toggler').click();
-  await expect(menu).toHaveClass(/\bin\b/);
-  await expect(page.locator('.tm-main-nav .navbar-toggler')).toHaveAttribute('aria-expanded', 'true');
+  const menu = page.locator('[data-nav-menu]');
+  await expect(menu).not.toHaveClass(/is-open/);
+  await page.locator('[data-nav-toggle]').click();
+  await expect(menu).toHaveClass(/is-open/);
+  await expect(page.locator('[data-nav-toggle]')).toHaveAttribute('aria-expanded', 'true');
 });
 
 test('home nav item is active on the home page', async ({ page }) => {
   await page.goto('/en/');
-  const items = page.locator('.tm-main-nav li.nav-item');
-  await expect(items.filter({ hasText: 'Home' })).toHaveClass(/active/);
-  await expect(items.filter({ hasText: 'Kimon Resort' })).not.toHaveClass(/active/);
+  const items = page.locator('.navbar__link');
+  await expect(items.filter({ hasText: 'Home' })).toHaveClass(/is-active/);
+  await expect(items.filter({ hasText: 'Kimon Resort' })).not.toHaveClass(/is-active/);
 });
