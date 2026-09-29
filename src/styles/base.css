@@ -71,3 +71,10 @@ nav ul, .list-reset { margin: 0; padding: 0; list-style: none; }
   align-items: center;
   min-height: 44px;
 }
+
+/* Centre label/icon against the 44px link instead of the text baseline. */
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}

@@ -7,7 +7,8 @@
  *
  * `phone` is pending confirmation from the owner. It is set to the number
  * that was actually displayed to visitors, in two of the three places.
- * Correcting it is a one-line change here.
+ * Correcting it is a one-line change here. Delete this "pending" note once
+ * the owner answers, so it cannot go stale silently.
  */
 const PHONE = '+30 6909 025 820';
 const EMAIL = 'marinosaparts@gmail.com';
