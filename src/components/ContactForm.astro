@@ -2,6 +2,7 @@
 import type { Locale } from '../i18n/locales';
 import { t } from '../i18n/t';
 import { API_ENDPOINTS, RECAPTCHA_SITE_KEY } from '../config';
+import Icon from './Icon.astro';
 
 interface Props { lang: Locale; }
 const { lang } = Astro.props;
@@ -33,7 +34,7 @@ const f = s.contact.form;
       </div>
 
       <div class="contact-form-messages">
-        <div id="generic-loader" class="text-center" style="display:none">Sending email... <i class="fa fa-spinner fa-spin"></i></div>
+        <div id="generic-loader" class="text-center" style="display:none">Sending email... <Icon name="spinner" /></div>
         <div id="error_message" style="display:none">{s.contact.contactErrorMessage}</div>
         <div id="success_message" style="display:none">{s.contact.contactSuccessMessage}</div>
         <div id="recaptcha_message" style="color:red;display:none">{s.contact.captchaErrorMessage}</div>

@@ -4,6 +4,7 @@ import { t } from '../i18n/t';
 import Map from './Map.astro';
 import WeatherWidget from './WeatherWidget.astro';
 import ScrollToTop from './ScrollToTop.astro';
+import Icon from './Icon.astro';
 
 interface Props { lang: Locale; mapFocus?: 'kimon' | 'irida'; }
 const { lang, mapFocus } = Astro.props;
@@ -19,9 +20,9 @@ const year = new Date().getFullYear();
         <div class="tm-footer-content-box tm-footer-links-container">
           <h3 class="tm-title tm-footer-content-box-title">{s.nav.contact}</h3>
           <nav><ul class="nav">
-            <li class="tm-footer-link"><i class="fas fa-map-marker"></i> <span>{s.footer.address}</span></li>
-            <li class="tm-footer-link"><i class="fa fa-mobile"></i> +30 6909 025 820</li>
-            <li class="tm-footer-link"><i class="fa fa-envelope"></i> marinosaparts@gmail.com</li>
+            <li class="tm-footer-link"><Icon name="map-pin" /> <span>{s.footer.address}</span></li>
+            <li class="tm-footer-link"><Icon name="phone" /> +30 6909 025 820</li>
+            <li class="tm-footer-link"><Icon name="envelope" /> marinosaparts@gmail.com</li>
           </ul></nav>
         </div>
       </div>
