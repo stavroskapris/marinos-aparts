@@ -71,7 +71,7 @@ const links: { key: NavKey; href: string; label: string }[] = [
     display: flex; align-items: center; gap: var(--sp-6);
     min-height: 72px;
   }
-  .navbar__logo { flex: none; line-height: 0; }
+  .navbar__logo { flex: none; line-height: 0; display: inline-flex; align-items: center; min-height: 44px; }
   .navbar__logo img { height: 40px; width: auto; }
 
   .navbar__menu { flex: 1; display: flex; align-items: center; gap: var(--sp-6); justify-content: flex-end; }
@@ -83,7 +83,7 @@ const links: { key: NavKey; href: string; label: string }[] = [
     font-size: var(--fs-small); font-weight: 500;
     letter-spacing: 0.12em; text-transform: uppercase;
     /* 44px target without enlarging the visual row. */
-    display: inline-flex; align-items: center; min-height: 44px;
+    display: inline-flex; align-items: center; min-height: 44px; min-width: 44px;
     white-space: nowrap;
   }
   .navbar__link:hover, .navbar__link:focus-visible { color: var(--c-sand); }
@@ -92,11 +92,12 @@ const links: { key: NavKey; href: string; label: string }[] = [
   .navbar__lang {
     color: rgb(255 255 255 / 0.7); text-decoration: none;
     font-size: var(--fs-eyebrow); letter-spacing: 0.1em; font-weight: 600;
-    display: inline-flex; align-items: center; min-height: 44px; padding-inline: var(--sp-2);
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 44px; min-width: 44px; padding-inline: var(--sp-2);
   }
   .navbar__lang.is-active { color: var(--c-white); }
 
-  .navbar__book { padding: 0.625rem 1.25rem; min-height: 40px; }
+  .navbar__book { padding: 0.625rem 1.25rem; min-height: 44px; }
 
   .navbar__toggle {
     display: none; margin-left: auto;
