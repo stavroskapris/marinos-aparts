@@ -89,7 +89,18 @@ The image set is uneven, and the design must respect that rather than upscale. M
 
 **`src/assets/kimon-home.jpg` is 645×484 and must be replaced** by a crop from a high-resolution Kimon photo. Today the home page shows Kimon at 645px beside Irida at 3648px, which is why that side of the page looks weaker.
 
-Home hero slider uses `irida5`, `kimon20`, `irida10`, `kimon3`, all 4608×3456.
+### 3.1 Amendment, 2026-09-29: the content audit that the resolution audit missed
+
+The inventory above measures **pixels**. After slice 1 reached staging, the owner said the result did not feel modern. Reviewing all 35 apartment photographs by **content** rather than size found the real constraint, and it invalidates the photo-forward direction:
+
+- Roughly **28 of 35** are interior room shots, bathrooms and kitchenettes: inventory documentation, not marketing photography.
+- There is **no sea, no bay, no pool, no exterior lifestyle and no golden hour** imagery at any resolution. A full-viewport hero has nothing to be made of.
+- Only four frames can carry a hero on content: `kimon13` (terrace, olive trees, sky — the only genuinely evocative one), `kimon20` (stone courtyard), `irida5` and `irida6` (balcony with a view).
+- **Nearly every interior is dominated by a strong orange accent wall.** Orange is the direct complement of the Ionian palette's sea blue and will fight it on any page showing a room. The original specimen was built from the balcony and courtyard shots, so this never surfaced before the palette was approved. That was an error in how the specimen was assembled, not in the palette.
+
+**Consequence: the design's centre of gravity moves from photography to typography, colour and motion** (see §4.1). Photographs become supporting evidence shown in restrained, well-cropped contexts, rather than the thing the page is built around.
+
+This is not a workaround to be quietly absorbed. The brief the owner gave — a modern, photo-forward boutique site — is achievable with roughly a half-day of photography at golden hour (the bay, the terrace, the courtyard, one styled room). Absent that, §4.1 is the best available design, not the intended one. Record this so nobody later mistakes the type-led direction for a preference.
 
 Three defects in the current CSS that this work removes: heroes use `background-size: 100% 100%`, a non-uniform stretch, so every hero is distorted; below the `md` breakpoint `templatemo-style.css:456` sets `background: none; height: auto`, so **there is no hero image on mobile at all**; and `col-xs-*` classes throughout the markup are inert, having been removed in Bootstrap 4.
 
@@ -97,13 +108,31 @@ Three defects in the current CSS that this work removes: heroes use `background-
 
 ## 4. Page designs
 
-**Home.** Full-viewport hero slider, four slides, Ken Burns drift, headline, subline, two calls to action, transparent nav. Then a short intro band on Limestone. Then the two houses as alternating split sections, Kimon photo-left, Irida photo-right, photos zooming on hover, copy revealing on scroll, each linking to its page. Then a three-fact row (distance to harbour, family-run, private balconies) with inline SVG icons. Then a full-bleed Sivota band linking to the location page, then a booking band, then the footer.
+**Home.** ~~Full-viewport hero slider, four slides, Ken Burns drift~~, headline, subline, two calls to action, transparent nav. **The hero treatment is superseded by §4.1.** Then a short intro band on Limestone. Then the two houses as alternating split sections, Kimon photo-left, Irida photo-right, photos zooming on hover, copy revealing on scroll, each linking to its page. Then a three-fact row (distance to harbour, family-run, private balconies) with inline SVG icons. Then a full-bleed Sivota band linking to the location page, then a booking band, then the footer.
 
 **Kimon and Irida.** Both keep the shared `ResortPage` scaffold. Hero at 80vh with that property's strongest photo. Intro plus a key-facts row. Facilities become a responsive grid with inline check icons, replacing the two bare `<ul>` columns. Gallery grid gains varied tile sizes, hover zoom and caption reveal; PhotoSwipe itself is unchanged. Then map and booking band.
 
 **Location.** Shaped around the photo constraint rather than fighting it. **No full-viewport hero:** a typographic opening on Limestone with one wide photo band beneath, at a height the source can actually fill. The twelve beaches become a card grid at roughly 400px per card, which those files serve at or above native size. Hover lifts and zooms; click opens the existing lightbox. Then a full-width map, larger than the footer instance.
 
 **Contact.** Short hero band. Form left, contact details and map right. Form JavaScript untouched.
+
+### 4.1 Amendment, 2026-09-29: type-led direction
+
+Following the content audit in §3.1 and the owner's decision, the design's weight moves from photography to typography, colour and motion.
+
+**The hero is typographic, not photographic.** A full-viewport field in the Ionian palette carrying large display type, an eyebrow, a subline and two calls to action, with motion supplied by a staged reveal of the type itself rather than by a Ken Burns slider. Beneath it sits **one** restrained full-bleed photo band using the strongest available frame (`kimon13`: terrace, olive trees, sky), cropped wide, so a photograph still appears above the fold without the page depending on it.
+
+**Rooms appear in a gallery grid**, where the orange accent reads as one detail among many tiles rather than as the page's dominant colour. Interiors never appear full-bleed or as a background behind text.
+
+**`slider.ts` and a photo-slider `Hero` are dropped from the project**, not deferred (superseding Ruling 14, which had moved them to slice 2). Nothing in the remaining slices needs them. `nav.ts`'s `overlay` branch is still required: the typographic hero is a dark field, so the navbar overlays it and solidifies on scroll.
+
+**The display face is now the most consequential remaining decision.** With photography demoted, typography carries the design. The owner is choosing between EB Garamond (serif, approved from the specimen) and a bold sans, judged on the real hero at full size rather than on a specimen board.
+
+Other pages: Kimon and Irida keep an 80vh photo hero, since their own best frames are the point of those pages; Location keeps the typographic opening §4 already specified; Contact keeps a short band.
+
+---
+
+**The okairos weather widget** ~~stays~~ **is replaced (amendment, 2026-09-29).** It renders inside a **cross-origin iframe**, so its white background cannot be styled by us at any specificity, and it declares itself 335px wide inside a 222px grid column. It is replaced by our own block reading Open-Meteo, which is free, needs no API key and returns 645 bytes of JSON. That removes a third-party script and an iframe from all ten pages. Superseded text follows:
 
 **The okairos weather widget stays**, contained in a styled card rather than sitting in the footer grid. It injects its own inline styles (`font: bold 13px/1.2 Arial`) which we cannot control, so it is boxed rather than blended. If it proves unstylable during staging review, we revisit then.
 
