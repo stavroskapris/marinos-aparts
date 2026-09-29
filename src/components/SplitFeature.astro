@@ -33,8 +33,10 @@ const { eyebrow, heading, body, href, cta, image, alt, reverse = false } = Astro
     gap: clamp(2rem, 5vw, 4.5rem);
     align-items: center;
   }
-  /* The image is ordered second in the DOM for reverse, not floated, so the
-     reading order matches the visual order for screen readers too. */
+  /* Reverse swaps the visual order with `order`, not a float. The media link is
+     out of the tab and reading order (tabindex="-1", aria-hidden) and the
+     visible CTA carries the destination, so the swap changes nothing for
+     keyboard or screen reader users. */
   .split--reverse .split__media { order: 2; }
 
   .split__media {

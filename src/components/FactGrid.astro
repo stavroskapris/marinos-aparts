@@ -7,9 +7,9 @@ interface Props {
 }
 const { items, columns = 3 } = Astro.props;
 ---
-<ul class:list={['grid', `grid--${columns}`, 'factgrid', 'list-reset']}>
+<ul role="list" class:list={['grid', `grid--${columns}`, 'factgrid', 'list-reset']}>
   {items.map((item, i) => (
-    <li class="factgrid__item" data-reveal data-reveal-delay={i * 80}>
+    <li class="factgrid__item" data-reveal data-reveal-delay={Math.min(i, 5) * 80}>
       {item.icon && <Icon name={item.icon} size={22} />}
       <span>{item.label}</span>
     </li>
@@ -23,5 +23,6 @@ const { items, columns = 3 } = Astro.props;
     gap: var(--sp-3);
     color: var(--c-ink);
   }
+  .factgrid__item span { overflow-wrap: anywhere; }
   .factgrid__item :global(.icon) { color: var(--c-olive); margin-top: 0.2em; }
 </style>
