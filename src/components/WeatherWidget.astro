@@ -20,3 +20,13 @@ const widget = {
   </div>
   <script type="text/javascript" src={`https://www.okairos.gr/widget/loader/${widget.id}`} is:inline></script>
 </div>
+
+<style>
+  /* Our title link, not the vendor's markup: give it a 44px target. */
+  #weather-widget h2 a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+  }
+</style>

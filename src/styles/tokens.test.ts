@@ -43,6 +43,11 @@ test('every colour pair in use clears AA for body text', () => {
     ['c-white', 'c-deep-sea'],
     ['c-white', 'c-sivota-blue'],
     ['c-white', 'c-olive'],
+    ['c-sivota-blue', 'c-sand'],
+    ['c-olive', 'c-sand'],
+    ['c-sand', 'c-deep-sea'],
+    ['c-limestone', 'c-deep-sea'],
+    ['c-ink', 'c-white'],
   ];
 
   for (const [fg, bg] of pairs) {

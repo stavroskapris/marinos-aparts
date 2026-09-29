@@ -45,7 +45,7 @@ src/
     t.ts locales.ts    # t(lang) lookup; LOCALES, DEFAULT_LOCALE, HREFLANG, isLocale
   config.ts            # contact API endpoints + reCAPTCHA site key (baked at build)
   assets/              # gallery images, optimized by Astro's <Image>
-  styles/              # bootstrap + template CSS
+  styles/              # design tokens, base, layout, motion, self-hosted fonts
 public/                # served as-is: img/, robots.txt, favicon
 infra/cloudfront/      # edge functions (ES5) + their unit tests
 scripts/               # build-info writer
@@ -164,3 +164,12 @@ policies; the runbook uses placeholders for exactly this reason.
   JSON **without** an import assertion.
 - Playwright's chromium is installed without `--with-deps` in some environments; a browser *launch*
   failure is an environment issue, not a test defect.
+- **The palette and its contrast ratios are enforced by `src/styles/tokens.test.ts`.** Changing a
+  hex without re-running it fails the build rather than quietly shipping unreadable text. The
+  threshold is 4.5:1, the body-text level, because these colours carry paragraphs.
+- **Fonts are self-hosted and the Greek subsets are imported explicitly.** Fontsource's default
+  import is Latin only, so dropping the `greek.css` imports makes `/gr/` fall back to a system
+  font with nothing failing. `src/styles/fonts.test.ts` pins it.
+- **Scroll reveals hide their content only under `.js` on `<html>`**, set by an inline script in
+  `BaseLayout` before first paint. Moving the hidden state out from behind that guard makes a
+  blocked or failed bundle render a blank page.

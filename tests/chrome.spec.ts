@@ -297,8 +297,8 @@ test('every interactive element is at least 44px tall and wide on a phone', asyn
       const out: string[] = [];
       const sel = 'a[href], button, input:not([type=hidden]), textarea, select, [role=button]';
       for (const el of Array.from(document.querySelectorAll<HTMLElement>(sel))) {
-        // Third-party embeds are not ours to size: reCAPTCHA, Leaflet's zoom and attribution controls, and the okairos weather widget (its title link carries inline vendor styling).
-        if (el.closest('.g-recaptcha, .leaflet-container, #weather-widget, .visually-hidden, .skip-link')) continue;
+        // Third-party embeds are not ours to size: reCAPTCHA, Leaflet's zoom and attribution controls, and the vendor-injected body of the okairos weather widget. Our own title link in it is not exempt.
+        if (el.closest('.g-recaptcha, .leaflet-container, #weather-widget .completo > div, .visually-hidden, .skip-link')) continue;
         if (el.matches('.skip-link, .visually-hidden')) continue;
         const r = el.getBoundingClientRect();
         if (r.width === 0 || r.height === 0) continue; // not rendered

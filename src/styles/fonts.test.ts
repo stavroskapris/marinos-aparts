@@ -1,6 +1,6 @@
-import { test, expect, beforeAll } from 'vitest';
+import { test, expect, beforeAll, afterAll } from 'vitest';
 import { execSync } from 'node:child_process';
-import { readdirSync, readFileSync, mkdtempSync } from 'node:fs';
+import { readdirSync, readFileSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -18,6 +18,8 @@ beforeAll(() => {
     .map((f) => readFileSync(`${cssDir}/${f}`, 'utf8'))
     .join('\n');
 }, 180_000);
+
+afterAll(() => rmSync(out, { recursive: true, force: true }));
 
 // Read the first family of each stack out of tokens.css, so this test and the
 // token file cannot drift apart. Only that first entry is actually installed;
