@@ -1,0 +1,56 @@
+/*
+ * Design tokens. Values here are enforced by src/styles/tokens.test.ts,
+ * including the contrast ratios: changing a hex without re-running that
+ * test will fail the build rather than quietly shipping unreadable text.
+ */
+:root {
+  /* Palette: "Ionian" */
+  --c-deep-sea: #0B3C53;
+  --c-sivota-blue: #006994;
+  --c-olive: #5A6639;
+  --c-ink: #1B2A32;
+  --c-sand: #E9E1D5;
+  --c-limestone: #F7F4EF;
+  --c-white: #FFFFFF;
+
+  /* Typography. Greek-capable faces only: of Google's 1946 families just 118
+     ship Greek, which is what rules out Playfair, Cormorant and the rest. */
+  --font-display: 'EB Garamond Variable', 'EB Garamond', Georgia, serif;
+  --font-body: 'Manrope Variable', Manrope, system-ui, sans-serif;
+
+  --fs-display-xl: clamp(2.75rem, 6vw, 5rem);
+  --fs-display-l: clamp(2rem, 3.5vw, 3rem);
+  --fs-display-m: clamp(1.5rem, 2.2vw, 2rem);
+  --fs-lead: 1.1875rem;
+  --fs-body: 1.0625rem;
+  --fs-small: 0.8125rem;
+  --fs-eyebrow: 0.6875rem;
+
+  --lh-tight: 1.03;
+  --lh-heading: 1.12;
+  --lh-body: 1.7;
+
+  /* Spacing, 4px base */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+  --sp-9: 6rem;
+  --sp-10: 8rem;
+
+  --section-pad: clamp(4rem, 8vw, 8rem);
+  --container: 1200px;
+  --gutter: clamp(1.25rem, 4vw, 3.5rem);
+
+  --radius-btn: 2px;
+  --radius-card: 3px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 200ms;
+  --dur: 400ms;
+  --dur-slow: 800ms;
+}
