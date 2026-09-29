@@ -1,5 +1,6 @@
 import { test, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { parse } from 'yaml';
 
 const WORKFLOWS = [
   '.github/workflows/ci.yml',
@@ -21,14 +22,28 @@ test('package.json defines no retired parity scripts', () => {
   }
 });
 
-test('the gates that remain run in every deploy workflow', () => {
-  // These are what carries the risk once parity is gone. If one is dropped
-  // from a deploy workflow, a broken build reaches S3.
+// Ordered `run` values of every job's steps. Parsing the YAML (rather than
+// matching raw text) means a commented-out step is absent and a moved step has
+// a different index, so both regressions fail the assertions below.
+function runSteps(path: string): string[] {
+  const doc = parse(readFileSync(path, 'utf8'));
+  return Object.values<any>(doc.jobs).flatMap((job) =>
+    (job.steps ?? []).map((step: any) => (typeof step.run === 'string' ? step.run.trim() : '')),
+  );
+}
+
+test('the gates that remain run in every deploy workflow, before the sync', () => {
+  // These carry the risk once parity is gone. A gate that is missing, disabled
+  // or ordered after the sync lets a broken build reach S3.
+  const GATES = ['npm run test:unit', 'npm test', 'npx astro check', 'npm run check:links:ci'];
   for (const path of ['.github/workflows/deploy-staging.yml', '.github/workflows/deploy-prod.yml']) {
-    const yaml = readFileSync(path, 'utf8');
-    expect(yaml, `${path} must run unit tests`).toMatch(/npm run test:unit/);
-    expect(yaml, `${path} must run e2e tests`).toMatch(/npm test/);
-    expect(yaml, `${path} must type-check`).toMatch(/astro check/);
-    expect(yaml, `${path} must check links`).toMatch(/npm run check:links:ci/);
+    const runs = runSteps(path);
+    const sync = runs.findIndex((r) => r.includes('aws s3 sync'));
+    expect(sync, `${path} must have an aws s3 sync step`).toBeGreaterThan(-1);
+    for (const gate of GATES) {
+      const at = runs.indexOf(gate);
+      expect(at, `${path} must run "${gate}" as a step`).toBeGreaterThan(-1);
+      expect(at, `${path} must run "${gate}" before the sync`).toBeLessThan(sync);
+    }
   }
 });

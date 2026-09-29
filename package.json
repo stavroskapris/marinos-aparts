@@ -13,7 +13,7 @@
     "test": "playwright test",
     "test:unit": "vitest run",
     "check:links": "linkinator http://localhost:4321/en/ http://localhost:4321/gr/ --recurse --silent --skip \"^https?://(www\\.)?(marinos-aparts\\.gr|okairos|kit\\.fontawesome|fonts\\.googleapis|unpkg|photoswipe|facebook|instagram|reservations\\.bookoncloud|googletagmanager|google\\.com|gstatic)\"",
-    "check:links:ci": "astro build && (astro preview & SERVER_PID=$!; trap 'kill $SERVER_PID 2>/dev/null' EXIT; sleep 3 && npm run check:links)",
+    "check:links:ci": "astro build && (astro preview & SERVER_PID=$!; trap 'kill $SERVER_PID 2>/dev/null' EXIT; i=0; until curl -sf http://localhost:4321/en/ >/dev/null; do i=$((i+1)); if [ $i -ge 30 ]; then echo 'preview server did not answer on :4321 within 30s' >&2; exit 1; fi; sleep 1; done; npm run check:links)",
     "build:info": "node scripts/build-info.mjs"
   },
   "dependencies": {
