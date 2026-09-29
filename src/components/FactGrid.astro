@@ -1,0 +1,27 @@
+---
+import Icon, { type IconName } from './Icon.astro';
+
+interface Props {
+  items: { icon?: IconName; label: string }[];
+  columns?: 2 | 3 | 4;
+}
+const { items, columns = 3 } = Astro.props;
+---
+<ul class:list={['grid', `grid--${columns}`, 'factgrid', 'list-reset']}>
+  {items.map((item, i) => (
+    <li class="factgrid__item" data-reveal data-reveal-delay={i * 80}>
+      {item.icon && <Icon name={item.icon} size={22} />}
+      <span>{item.label}</span>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .factgrid__item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sp-3);
+    color: var(--c-ink);
+  }
+  .factgrid__item :global(.icon) { color: var(--c-olive); margin-top: 0.2em; }
+</style>

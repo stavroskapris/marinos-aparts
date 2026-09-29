@@ -1,0 +1,13 @@
+---
+interface Props {
+  ground?: 'limestone' | 'sand' | 'deep';
+  tight?: boolean;
+  width?: 'default' | 'wide' | 'narrow';
+}
+const { ground = 'limestone', tight = false, width = 'default' } = Astro.props;
+---
+<section class:list={['section', `section--${ground}`, tight && 'section--tight']}>
+  <div class:list={['container', width !== 'default' && `container--${width}`]}>
+    <slot />
+  </div>
+</section>
