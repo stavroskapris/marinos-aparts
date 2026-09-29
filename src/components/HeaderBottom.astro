@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '../i18n/locales';
 import { t } from '../i18n/t';
+import { CONTACT } from '../site';
 import Icon from './Icon.astro';
 
 interface Props { lang: Locale; }
@@ -12,7 +13,7 @@ const s = t(lang);
   <div class="container-fluid">
     <div class="row">
       <div class="contact-top">
-        <span set:html={s.header.reservations} />
+        <span><strong>{s.header.reservations}:</strong> <a class="contact-link" href={CONTACT.phoneHref}>{CONTACT.phone}</a></span>
       </div>
       <div class="fb-top">
         <span set:html={s.header.findus} />

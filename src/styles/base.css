@@ -64,3 +64,10 @@ nav ul, .list-reset { margin: 0; padding: 0; list-style: none; }
   transform: translateY(-200%);
 }
 .skip-link:focus { transform: translateY(0); }
+
+/* Phone and email links: keep a 44px touch target. */
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
