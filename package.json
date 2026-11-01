@@ -20,8 +20,8 @@
     "build:info": "node scripts/build-info.mjs"
   },
   "dependencies": {
-    "@astrojs/sitemap": "3.2.1",
-    "astro": "^4.15.0",
+    "@astrojs/sitemap": "3.7.4",
+    "astro": "^7.4.4",
     "leaflet": "^1.9.4",
     "photoswipe": "^5.4.4"
   },
