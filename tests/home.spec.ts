@@ -50,6 +50,20 @@ test('leaflet map initializes in the footer', async ({ page }) => {
   await expect(page.locator('#osm-map.leaflet-container')).toBeVisible();
 });
 
+// Leaflet derives the default marker image path from the CSS url of
+// marker-icon.png. Vite inlines that image as a data URI, so the derivation
+// fails and the markers request /<lang>/marker-icon.png, which does not exist.
+for (const lang of ['en', 'gr']) {
+  test(`map markers load their images on /${lang}/`, async ({ page }) => {
+    await page.goto(`/${lang}/`);
+    const markers = page.locator('#osm-map img.leaflet-marker-icon, #osm-map img.leaflet-marker-shadow');
+    await expect(markers).toHaveCount(4);
+    for (const img of await markers.all()) {
+      await expect.poll(() => img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth)).toBeGreaterThan(0);
+    }
+  });
+}
+
 test('weather widget container renders for the locale', async ({ page }) => {
   await page.goto('/en/');
   await expect(page.locator('#weather-widget')).toBeVisible();
