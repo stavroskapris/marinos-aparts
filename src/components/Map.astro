@@ -8,6 +8,15 @@ const { focus } = Astro.props;
 <script>
   import 'leaflet/dist/leaflet.css';
   import L from 'leaflet';
+  import iconUrl from 'leaflet/dist/images/marker-icon.png?url';
+  import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png?url';
+  import shadowUrl from 'leaflet/dist/images/marker-shadow.png?url';
+
+  // Leaflet guesses the marker image folder from the CSS url of marker-icon.png.
+  // Vite inlines that image as a data URI, the guess fails, and the markers end
+  // up requesting /<lang>/marker-icon.png (403 on S3). Hand it the bundled URLs.
+  L.Icon.Default.imagePath = '';
+  L.Icon.Default.mergeOptions({ iconUrl, iconRetinaUrl, shadowUrl });
 
   const el = document.getElementById('osm-map');
   if (el) {
